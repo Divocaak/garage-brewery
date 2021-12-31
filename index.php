@@ -1,3 +1,6 @@
+<?php 
+    require_once "config.php";
+?>
 <!DOCTYPE html>
 <html lang="cz">
 
@@ -114,9 +117,6 @@
                 Zaškrtnutím čestně prohlašuji, že jsem dotazník vyplnil svědomitě a beru jej vážně.<br>
                 Tudíž mohou zaměstnanci pivovaru použít moje hodnocení za účelem úprav svých receptur.
             </label>
-            <div class="invalid-feedback">
-                You must agree before submitting.
-            </div>
         </div>
         <button type="submit" class="btn btn-primary mt-5">Odeslat hodnocení</button>
     </form>
