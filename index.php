@@ -1,3 +1,6 @@
+<?php 
+    require_once "config.php";
+?>
 <!DOCTYPE html>
 <html lang="cz">
 
@@ -11,100 +14,91 @@
 </head>
 
 <body class="m-5 p-5">
-    <form class="p-5 m-5 needs-validation" novalidate>
+    <form class="p-5 m-5 needs-validation" novalidate action="send.php" method="post"   >
         <h1 class="mb-5">Hodnocení piva</h1>
-        <div class="mb-3 form-floating">
-            <select class="form-select" id="beerSelect" aria-label="Floating label select example">
-              <option selected>pivo</option>
-              <!-- <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option> -->
-            </select>
-            <label for="beerSelect">Označení piva</label>
-        </div>
         <div class="mb-5 form-floating">
-            <select class="form-select" id="batchSelect" aria-label="Floating label select example">
-              <option selected>várka</option>
-              <!-- <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option> -->
+            <select class="form-select" id="batchSelect" name="batchSelect" aria-label="Floating label select example">
+                <?php
+                $sql = "SELECT b.id, t.name, b.name, b.created FROM batches b INNER JOIN beers t ON b.beer_id=t.id;";
+                if ($result = mysqli_query($link, $sql)) {
+                    while ($row = mysqli_fetch_row($result)) {
+                        echo "<option value='" . $row[0] . "'>" . $row[2] . " (" . $row[1] . ", " . $row[3] . ")</option>";
+                    }
+                    mysqli_free_result($result);
+                }
+                mysqli_close($link);
+                ?>
             </select>
             <label for="batchSelect">Označení várky</label>
         </div>
         <div class="mb-3 form-floating">
-            <input type="number" class="form-control" id="temp" required>
+            <input type="number" class="form-control" id="temp" name="temp" required>
             <label for="temp">Odhadovaná teplota piva při konzumaci [°C]</label>
             <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v závislosti na teplotě</div>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
         </div>
         <div class="mb-3 form-floating">
-            <input type="date" class="form-control" id="date" required>
+            <input type="date" class="form-control" id="date" name="date" required>
             <label for="date">Datum konzumace</label>
             <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v čase (krom toho, že klesá pěna)</div>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
         </div>
         <div class="mt-5 form-check">
             <label for="taste" class="form-label">Chuť: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="taste">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="taste" name="taste">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="tasteNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="tasteNote" name="tasteNote" style="height: 100px"></textarea>
             <label for="tasteNote">Poznámky k chuti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="bitterness" class="form-label">Hořkost: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="bitterness">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="bitterness" name="bitterness">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="bitternessNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="bitternessNote" name="bitternessNote" style="height: 100px"></textarea>
             <label for="bitternessNote">Poznámky k hořkosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="scent" class="form-label">Vůně: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="scent">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="scent" name="scent">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="scentNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="scentNote" name="scentNote" style="height: 100px"></textarea>
             <label for="scentNote">Poznámky k vůni</label>
         </div>
         <div class="mt-5 form-check">
             <label for="fullness" class="form-label">Plnost: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="fullness">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="fullness" name="fullness">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="fullnessNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="fullnessNote" name="fullnessNote" style="height: 100px"></textarea>
             <label for="fullnessNote">Poznámky k plnosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="frothiness" class="form-label">Pěnivost: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="frothiness">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="frothiness" name="frothiness">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="frothinessNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="frothinessNote" name="frothinessNote" style="height: 100px"></textarea>
             <label for="frothinessNote">Poznámky k pěnivosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="clarity" class="form-label">Čirost: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="clarity">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="clarity" name="clarity">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="clarityNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="clarityNote" name="clarityNote" style="height: 100px"></textarea>
             <label for="clarityNote">Poznámky k čirosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="overall" class="form-label">Celkové hodnocení: 5 bodů</label>
-            <input type="range" class="form-range" min="0" max="10" value="5" id="overall">
+            <input type="range" class="form-range" min="0" max="10" value="5" id="overall" name="overall">
         </div>
         <div class="form-floating">
-            <textarea class="form-control" id="overallNote" style="height: 100px"></textarea>
+            <textarea class="form-control" id="overallNote" name="overallNote" style="height: 100px"></textarea>
             <label for="overallNote">Poznámky k pivu</label>
         </div>
         <div class="mt-5 form-floating">
-            <input type="text" class="form-control" id="person">
+            <input type="text" class="form-control" id="person" name="person">
             <label for="person">Tvoje jméno</label>
             <div id="personHelp" class="form-text">Nepovinný údaj, budeme rádi, když se podepíšeš!</div>
         </div>
@@ -114,20 +108,13 @@
                 Zaškrtnutím čestně prohlašuji, že jsem dotazník vyplnil svědomitě a beru jej vážně.<br>
                 Tudíž mohou zaměstnanci pivovaru použít moje hodnocení za účelem úprav svých receptur.
             </label>
-            <div class="invalid-feedback">
-                You must agree before submitting.
-            </div>
         </div>
         <button type="submit" class="btn btn-primary mt-5">Odeslat hodnocení</button>
     </form>
     <script>
         (function() {
             'use strict'
-
-            // Fetch all the forms we want to apply custom Bootstrap validation styles to
             var forms = document.querySelectorAll('.needs-validation')
-
-            // Loop over them and prevent submission
             Array.prototype.slice.call(forms)
                 .forEach(function(form) {
                     form.addEventListener('submit', function(event) {
@@ -135,7 +122,6 @@
                             event.preventDefault()
                             event.stopPropagation()
                         }
-
                         form.classList.add('was-validated')
                     }, false)
                 })

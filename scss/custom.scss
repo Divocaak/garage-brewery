@@ -1,13 +1,15 @@
-$_outlines: black;
+$_outlines: #ffff88;
 $_inner: #ffb16e; //#fd7e14;
-$primary: $_inner;
+
+/* $primary: $_inner;
 $component-active-bg: $_inner;
-$input-bg: $_inner;
-$input-border-color: $_outlines;
+$input-bg: $_inner; */
+
 $input-border-width: 3px;
+$input-border-color: $_outlines;
 $form-select-border-color: $_outlines;
-$form-range-thumb-bg: $_inner;
-$form-range-track-bg: #ffd3ad;
+$form-range-thumb-bg: $_outlines;
+// $form-range-track-bg: #ffd3ad;
 @import "../bootstrap/scss/_functions";
 @import "../bootstrap/scss/_variables";
 @import "../bootstrap/scss/bootstrap";
