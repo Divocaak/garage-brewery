@@ -73,9 +73,18 @@ body {
     float: right;
 }
 
-.content-car {
-    position: absolute;
-    left: 40vw;
-    top: 25vh;
-    z-index: 4;
+.car-img {
+    position: relative;
+    left: 50vw;
+    top: 5vh;
+}
+
+.content-shape-left-car {
+    clip-path: polygon(80% 0%, 100% 50%, 100% 100%, 0 100%, 0 0);
+    background: linear-gradient(37deg, #1c1c1c 0%, #1c1c1c 70%, rgba(0, 212, 255, 0) 51%, rgba(0, 212, 255, 0) 100%) !important;
+}
+
+.content-mask-left-car {
+    clip-path: polygon(50% 0, 80% 0, 100% 50%, 100% 100%);
+    background: linear-gradient(37deg, rgba(255, 193, 7, 1) 0%, rgba(255, 193, 7, 1) 70%, rgba(0, 212, 255, 0) 70%, rgba(0, 212, 255, 0) 100%) !important;
 }
