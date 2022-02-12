@@ -13,7 +13,7 @@
     <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5">
+<body class="m-5 p-5 text-light">
     <form class="p-5 m-5 needs-validation" novalidate action="send.php" method="post">
         <a href="../index.php">Zpět</a>
         <h1 class="mb-5">Hodnocení piva</h1>
