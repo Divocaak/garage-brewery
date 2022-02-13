@@ -13,7 +13,7 @@
     <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5">
+<body class="m-5 p-5 text-light">
     <form class="p-5 m-5 needs-validation" novalidate action="send.php" method="post">
         <a href="../index.php">Zpět</a>
         <h1 class="mb-5">Hodnocení piva</h1>
@@ -34,12 +34,12 @@
         </div>
         <div class="mb-3 form-floating">
             <input type="number" class="form-control" id="temp" name="temp" required>
-            <label for="temp">Odhadovaná teplota piva při konzumaci [°C]</label>
+            <label for="temp" class="text-dark">Odhadovaná teplota piva při konzumaci [°C]</label>
             <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v závislosti na teplotě</div>
         </div>
         <div class="mb-3 form-floating">
             <input type="date" class="form-control" id="date" name="date" required>
-            <label for="date">Datum konzumace</label>
+            <label for="date" class="text-dark">Datum konzumace</label>
             <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v čase (krom toho, že klesá pěna)</div>
         </div>
         <div class="mt-5 form-check">
@@ -48,7 +48,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="tasteNote" name="tasteNote" style="height: 100px"></textarea>
-            <label for="tasteNote">Poznámky k chuti</label>
+            <label for="tasteNote" class="text-dark">Poznámky k chuti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="bitterness" class="form-label">Hořkost: 5 bodů</label>
@@ -56,7 +56,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="bitternessNote" name="bitternessNote" style="height: 100px"></textarea>
-            <label for="bitternessNote">Poznámky k hořkosti</label>
+            <label for="bitternessNote" class="text-dark">Poznámky k hořkosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="scent" class="form-label">Vůně: 5 bodů</label>
@@ -64,7 +64,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="scentNote" name="scentNote" style="height: 100px"></textarea>
-            <label for="scentNote">Poznámky k vůni</label>
+            <label for="scentNote" class="text-dark">Poznámky k vůni</label>
         </div>
         <div class="mt-5 form-check">
             <label for="fullness" class="form-label">Plnost: 5 bodů</label>
@@ -72,7 +72,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="fullnessNote" name="fullnessNote" style="height: 100px"></textarea>
-            <label for="fullnessNote">Poznámky k plnosti</label>
+            <label for="fullnessNote" class="text-dark">Poznámky k plnosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="frothiness" class="form-label">Pěnivost: 5 bodů</label>
@@ -80,7 +80,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="frothinessNote" name="frothinessNote" style="height: 100px"></textarea>
-            <label for="frothinessNote">Poznámky k pěnivosti</label>
+            <label for="frothinessNote" class="text-dark">Poznámky k pěnivosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="clarity" class="form-label">Čirost: 5 bodů</label>
@@ -88,7 +88,7 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="clarityNote" name="clarityNote" style="height: 100px"></textarea>
-            <label for="clarityNote">Poznámky k čirosti</label>
+            <label for="clarityNote" class="text-dark">Poznámky k čirosti</label>
         </div>
         <div class="mt-5 form-check">
             <label for="overall" class="form-label">Celkové hodnocení: 5 bodů</label>
@@ -96,11 +96,11 @@
         </div>
         <div class="form-floating">
             <textarea class="form-control" id="overallNote" name="overallNote" style="height: 100px"></textarea>
-            <label for="overallNote">Poznámky k pivu</label>
+            <label for="overallNote" class="text-dark">Poznámky k pivu</label>
         </div>
         <div class="mt-5 form-floating">
             <input type="text" class="form-control" id="person" name="person">
-            <label for="person">Tvoje jméno</label>
+            <label for="person" class="text-dark">Tvoje jméno</label>
             <div id="personHelp" class="form-text">Nepovinný údaj, budeme rádi, když se podepíšeš!</div>
         </div>
         <div class="mt-5 form-check">

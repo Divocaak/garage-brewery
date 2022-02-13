@@ -10,13 +10,13 @@ require_once "../config.php";
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../styles/custom.min.css" rel="stylesheet">
-    <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="pt-3">
+<body class="p-5 bg-dark text-light">
     <h1>Feedback</h1>
-    <table class="table table-hover table-striped table-sm">
-        <thead class="table-dark">
+    <div class="table-responsive">
+    <table class="table table-hover table-dark table-striped table-sm">
+        <thead class="table-info">
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Várka</th>
@@ -112,6 +112,7 @@ require_once "../config.php";
             ?>
         </tfoot>
     </table>
+        </div>
 </body>
 
 </html>
