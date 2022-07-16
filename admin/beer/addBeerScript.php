@@ -6,6 +6,7 @@ $sql = "INSERT INTO beer (label) VALUES ('" . $_POST["label"] . "');";
 if (!mysqli_query($link, $sql)) {
     $e = $sql . "<br>" . mysqli_error($link);
 }
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>

@@ -6,6 +6,7 @@ $sql = "UPDATE beer SET label='" . $_POST["label"] . "' WHERE id=" . $_GET["beer
 if (!mysqli_query($link, $sql)) {
     $e = $sql . "<br>" . mysqli_error($link);
 }
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>

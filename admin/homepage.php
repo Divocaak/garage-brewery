@@ -16,7 +16,7 @@
 <body class="m-5 p-5 text-light">
     <h1>Pivovar Garáž admin</h1>
     <a class="btn btn-primary" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
-    <a class="btn btn-primary" href=""><i class="bi bi-cup pe-2"></i>Várky</a>
+    <a class="btn btn-primary" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
     <a class="btn btn-primary" href=""><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
     <a class="btn btn-primary" href=""><i class="bi bi-person pe-2"></i>Uživatelé</a>
     <a class="btn btn-primary" href=""><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>

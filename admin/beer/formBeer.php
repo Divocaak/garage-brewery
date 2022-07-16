@@ -17,10 +17,10 @@ session_start();
 <body class="m-5 p-5 text-light">
     <h1><?php echo $_GET["add"] ? "Přidat" : "Upravit"; ?> pivo</h1>
     <a class="btn btn-outline-primary" href="beerList.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <form class="needs-validation" novalidate action=<?php echo $_GET["add"] ? "addBeerScript.php" : "editBeerScript.php?beerId=" . $_GET["beerId"]; ?> method="post">
+    <form class="needs-validation mt-3" novalidate action=<?php echo $_GET["add"] ? "addBeerScript.php" : "editBeerScript.php?beerId=" . $_GET["beerId"]; ?> method="post">
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !$_GET["add"] ? $_SESSION["beers"][$_GET["beerId"]]["label"] : ""; ?>">
-            <label for="label">Název</label>
+            <label for="label" class="form-label">Název</label>
         </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo $_GET["add"] ? "plus-circle" : "pencil"; ?>"></i><?php echo $_GET["add"] ? "Přidat" : "Upravit"; ?> Pivo</button>
     </form>
