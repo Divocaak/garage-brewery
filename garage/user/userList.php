@@ -1,22 +1,25 @@
 <?php
+require_once "../../config.php";
 session_start();
-    require_once "../../config.php";
+if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+    header("Location: login.php");
+}
 
-    $sql = "SELECT id, mail, f_name, l_name, instagram, created, employee FROM user;";
-    $users = [];
-    if ($result = mysqli_query($link, $sql)) {
-        while ($row = mysqli_fetch_row($result)) {
-            $users[$row[0]] = [
-                "mail" => $row[1],
-                "name" => $row[2] . " " . $row[3],
-                "instagram" => $row[4],
-                "created" => $row[5],
-                "employee" => $row[6]
-            ];
-        }
-        mysqli_free_result($result);
+$sql = "SELECT id, mail, f_name, l_name, instagram, created, employee FROM user;";
+$users = [];
+if ($result = mysqli_query($link, $sql)) {
+    while ($row = mysqli_fetch_row($result)) {
+        $users[$row[0]] = [
+            "mail" => $row[1],
+            "name" => ($row[2] . " " . $row[3]),
+            "instagram" => $row[4],
+            "created" => $row[5],
+            "employee" => $row[6]
+        ];
     }
-    mysqli_close($link);
+    mysqli_free_result($result);
+}
+mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -40,7 +43,7 @@ session_start();
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Jméno</th>
-                    <th scope="col">E-Mail</th>
+                    <th scope="col">E-mail</th>
                     <th scope="col">Instagram</th>
                     <th scope="col">Vytvořeno</th>
                     <th scope="col">Zaměstnanec</th>
@@ -48,15 +51,14 @@ session_start();
             </thead>
             <tbody>
                 <?php
-                $_SESSION["beers"] = $beers;
-                foreach($users as $key => $user){
+                foreach ($users as $key => $user) {
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . $user["name"] . '</td>
                             <td>' . $user["mail"] . '</td>
                             <td>' . $user["instagram"] . '</td>
-                            <td>' . DateTime::createFromFormat("Y-m-d H:i:s", $user["created"])->format("d. m. Y, H:i:s") . '</td>
-                            <td>' . $user["employee"] == "1" ? '<i class="bi bi-check-circle-fill text-success">' : '<i class="bi bi-exclamation-circle-fill text-danger"></i>' . '</td>
+                            <td>' . DateTime::createFromFormat("Y-m-d H:m:i", $user["created"])->format("d. m. Y (H:m:i)") . '</td>
+                            <td>' . ($user["employee"] == "1" ? '<i class="bi bi-check-circle-fill text-success">' : '<i class="bi bi-exclamation-circle-fill text-danger"></i>') . '</td>
                         </tr>';
                 }
                 ?>

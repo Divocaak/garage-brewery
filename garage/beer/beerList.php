@@ -1,16 +1,19 @@
 <?php
+require_once "../../config.php";
 session_start();
-    require_once "../../config.php";
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
+    header("Location: ../user/login.php");
+}
 
-    $sql = "SELECT id, label FROM beer;";
-    $beers = [];
-    if ($result = mysqli_query($link, $sql)) {
-        while ($row = mysqli_fetch_row($result)) {
-            $beers[$row[0]] = ["label" => $row[1]];
-        }
-        mysqli_free_result($result);
+$sql = "SELECT id, label FROM beer;";
+$beers = [];
+if ($result = mysqli_query($link, $sql)) {
+    while ($row = mysqli_fetch_row($result)) {
+        $beers[$row[0]] = ["label" => $row[1]];
     }
-    mysqli_close($link);
+    mysqli_free_result($result);
+}
+mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -42,7 +45,7 @@ session_start();
             <tbody>
                 <?php
                 $_SESSION["beers"] = $beers;
-                foreach($beers as $key => $beer){
+                foreach ($beers as $key => $beer) {
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . $beer["label"] . '</td>

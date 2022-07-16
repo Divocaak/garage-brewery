@@ -1,6 +1,9 @@
 <?php
 require_once "../../config.php";
 session_start();
+if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+    header("Location: ../user/login.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="cz">

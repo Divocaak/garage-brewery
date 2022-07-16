@@ -1,26 +1,29 @@
 <?php
+require_once "../../config.php";
 session_start();
-    require_once "../../config.php";
+if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+    header("Location: ../user/login.php");
+}
 
-    $sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
-    $batches = [];
-    if ($result = mysqli_query($link, $sql)) {
-        while ($row = mysqli_fetch_row($result)) {
-            $batches[$row[0]] = [
-                "beerId" => $row[1],
-                "beerLabel" => $row[2],
-                "batchLabel" => $row[3],
-                "created" => $row[4],
-                "thirds" => $row[5],
-                "pints" => $row[6],
-                "statusId" => $row[7],
-                "statusLabel" => $row[8],
-                "statusColor" => $row[9]
-            ];
-        }
-        mysqli_free_result($result);
+$sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
+$batches = [];
+if ($result = mysqli_query($link, $sql)) {
+    while ($row = mysqli_fetch_row($result)) {
+        $batches[$row[0]] = [
+            "beerId" => $row[1],
+            "beerLabel" => $row[2],
+            "batchLabel" => $row[3],
+            "created" => $row[4],
+            "thirds" => $row[5],
+            "pints" => $row[6],
+            "statusId" => $row[7],
+            "statusLabel" => $row[8],
+            "statusColor" => $row[9]
+        ];
     }
-    mysqli_close($link);
+    mysqli_free_result($result);
+}
+mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -57,7 +60,7 @@ session_start();
             <tbody>
                 <?php
                 $_SESSION["batches"] = $batches;
-                foreach($batches as $key => $batch){
+                foreach ($batches as $key => $batch) {
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . $batch["beerLabel"] . '</td>
