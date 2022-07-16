@@ -16,6 +16,7 @@ session_start();
 
 <body class="m-5 p-5 text-light">
     <h1>Přihlásit se</h1>
+    <a class="btn btn-outline-primary" href="../../index.html"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action="loginScript.php" method="post">
         <div class="form-floating mb-3">
             <input type="email" class="form-control" id="email" name="email" required maxlength="100" >
