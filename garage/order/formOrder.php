@@ -1,7 +1,7 @@
 <?php
 require_once "../../config.php";
 session_start();
-if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
 }
 ?>
@@ -17,72 +17,79 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-(admin only) id_customer
-(admin only) id_employee
-id_batch
-thirds
-pints
-
-id_beer
-label
-thirds
-pints
-id_status
-
-label
-
-beer => label
-
 <body class="m-5 p-5 text-light">
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
-    <a class="btn btn-outline-primary" href="orderList.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a> <!-- TODO ošetřit že jsem admin, jinak vracet na homepage -->
+    <a class="btn btn-outline-primary" href="<?php echo ($_SESSION["currentUser"]["employee"]) ? "orderList.php" : "../homepage.php"; ?>"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a> <!-- TODO ošetřit že jsem admin, jinak vracet na homepage -->
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addOrderScript.php" : "editOrderScript.php?orderId=" . $_GET["orderId"]; ?> method="post">
         <div class="mb-3 form-floating">
-            <select class="form-select" id="beer" name="beer">
+            <select class="form-select" id="batch" name="batch">
                 <?php
-                $sql = "SELECT id, label FROM beer;";
+                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds, ba.pints, be.label FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
                 if ($result = mysqli_query($link, $sql)) {
                     while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beerId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
+                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " (" . $row[5] . ", " . $row[2] . ", třetinek: " . $row[3] . ", půllitrů:" . $row[4] . ")</option>";
                     }
                     mysqli_free_result($result);
                 }
                 ?>
             </select>
-            <label for="beer" class="form-label">Pivo</label>
+            <label for="batch" class="form-label">Várka</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] : ""; ?>">
-            <label for="label" class="form-label">Název</label>
+            <input type="number" class="form-control" id="thirds" name="thirds" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : ""; ?>">
+            <label for="label" class="form-label">Třetinek [ks]</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="created" name="created" required value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["created"] : ""; ?>">
-            <label for="created" class="form-label">Vařeno</label>
+            <input type="number" class="form-control" id="pints" name="pints" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : ""; ?>">
+            <label for="pints" class="form-label">Půllitrů [ks]</label>
         </div>
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="thirds" name="thirds" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["thirds"] : ""; ?>">
-            <label for="label" class="form-label">Třetinky [ks]</label>
-        </div>
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="pints" name="pints" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["pints"] : ""; ?>">
-            <label for="pints" class="form-label">Půllitry [ks]</label>
-        </div>
-        <div class="mb-3 form-floating">
-            <select class="form-select" id="status" name="status">
-                <?php
-                $sql = "SELECT id, label FROM status_batch;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
-                    }
-                    mysqli_free_result($result);
+        <?php
+        if ($_SESSION["currentUser"]["employee"]) {
+            echo '<div class="mb-3 form-floating">
+                <select class="form-select" id="user" name="user">';
+            $sql = "SELECT id, f_name, l_name, mail FROM user;";
+            if ($result = mysqli_query($link, $sql)) {
+                while ($row = mysqli_fetch_row($result)) {
+                    echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["customer"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " " . $row[2] . " (" . $row[3] . ")</option>";
                 }
-                mysqli_close($link);
-                ?>
-            </select>
-            <label for="status" class="form-label">Status</label>
-        </div>
+                mysqli_free_result($result);
+            }
+            echo '</select>
+                <label for="user" class="form-label">Zákazník</label>
+                </div>';
+
+            echo '<div class="mb-3 form-floating">
+                <select class="form-select" id="employee" name="employee">';
+            echo "<option value='0' selected></option>";
+            $sql = "SELECT id, f_name, l_name FROM user WHERE employee=1;";
+            if ($result = mysqli_query($link, $sql)) {
+                while ($row = mysqli_fetch_row($result)) {
+                    echo "<option value='" . $row[0] . "'" . ((!isset($_GET["add"]) && $_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] != null) ? ($_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " " . $row[2] . "</option>";
+                }
+                mysqli_free_result($result);
+            }
+            echo '</select>
+                <label for="employee" class="form-label">Řeší</label>
+                </div>';
+
+            echo '<div class="mb-3 form-floating">
+                <select class="form-select" id="status" name="status">';
+            $sql = "SELECT id, label FROM status_order";
+            if ($result = mysqli_query($link, $sql)) {
+                while ($row = mysqli_fetch_row($result)) {
+                    echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["status"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . "</option>";
+                }
+                mysqli_free_result($result);
+            }
+            echo '</select>
+                <label for="status" class="form-label">Status</label>
+                </div>';
+        }
+        ?>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</button>
+        <?php if (!$_SESSION["currentUser"]["employee"]) {
+            echo "<p>Upozorňujeme, že objednávku po odeslání nelze upravit, jedině zrušit</p>";
+        } ?>
     </form>
 </body>
 

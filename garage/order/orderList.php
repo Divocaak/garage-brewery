@@ -5,8 +5,8 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name, b.label, b.thirds, b.pints, bs.label, bs.color, os.label, os.color
-        FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id INNER JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
+$sql = "SELECT bo.id, bo.thirds, bo.pints, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name, b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color
+        FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
         INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;";
 $orders = [];
 if ($result = mysqli_query($link, $sql)) {
@@ -15,26 +15,29 @@ if ($result = mysqli_query($link, $sql)) {
             "thirds" => $row[1],
             "pints" => $row[2],
             "customer" => [
-                "mail" => $row[3],
-                "name" => ($row[4] . " " . $row[5]),
-                "instagram" => $row[6]
+                "id" => $row[3],
+                "mail" => $row[4],
+                "name" => ($row[5] . " " . $row[6]),
+                "instagram" => $row[7]
             ],
             "employee" => [
-                "id" => $row[7],
-                "name" => ($row[8] . " " . $row[9]),
+                "id" => $row[8],
+                "name" => ($row[9] . " " . $row[10]),
             ],
             "batch" => [
-                "label" => $row[10],
-                "thirds" => $row[11],
-                "pints" => $row[12],
+                "id" => $row[11],
+                "label" => $row[12],
+                "thirds" => $row[13],
+                "pints" => $row[14],
                 "status" => [
-                    "label" => $row[13],
-                    "color" => $row[14]
+                    "label" => $row[15],
+                    "color" => $row[16]
                 ]
             ],
             "status" => [
-                "label" => $row[15],
-                "color" => $row[16]
+                "id" => $row[17],
+                "label" => $row[18],
+                "color" => $row[19]
             ]
         ];
     }
@@ -65,6 +68,7 @@ mysqli_close($link);
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Zákazník</th>
+                    <th scope="col"></th>
                     <th scope="col">Várka</th>
                     <th scope="col">Status várky</th>
                     <th scope="col">Třetinky [ks/várka ks]</th>
@@ -79,9 +83,11 @@ mysqli_close($link);
                 <?php
                 $_SESSION["orders"] = $orders;
                 foreach ($orders as $key => $order) {
+                    // TODO customer info btn
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
-                            <td>' . $order["customer"]["name"] . '<a class="btn btn-info"><i class="bi bi-search"></i></a></td>
+                            <td>' . $order["customer"]["name"] . '</td>
+                            <td><a class="btn btn-info"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["batch"]["status"]["color"] . ';">' . $order["batch"]["status"]["label"] . '</td>
                             <td>' . $order["thirds"] . "/" . $order["batch"]["thirds"] . '</td>
@@ -125,7 +131,7 @@ mysqli_close($link);
             });
 
             $("#confDeleteBtn").click(function() {
-                window.location = "delOrderScript?id=" + orderId;
+                window.location = "delOrderScript.php?id=" + orderId;
             });
         });
     </script>
