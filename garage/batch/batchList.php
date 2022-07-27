@@ -106,7 +106,7 @@ mysqli_close($link);
             });
 
             $("#confDeleteBtn").click(function() {
-                window.location = "delBatchScript?id=" + batchId;
+                window.location = "delBatchScript.php?id=" + batchId;
             });
         });
     </script>

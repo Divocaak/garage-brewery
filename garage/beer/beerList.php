@@ -86,7 +86,7 @@ mysqli_close($link);
             });
 
             $("#confDeleteBtn").click(function() {
-                window.location = "delBeerScript?id=" + beerId;
+                window.location = "delBeerScript.php?id=" + beerId;
             });
         });
     </script>
