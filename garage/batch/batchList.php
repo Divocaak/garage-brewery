@@ -65,7 +65,7 @@ mysqli_close($link);
                             <th scope="row">' . $key . '</th>
                             <td>' . $batch["beerLabel"] . '</td>
                             <td>' . $batch["batchLabel"] . '</td>
-                            <td>' . DateTime::createFromFormat("Y-m-d", $batch["created"])->format("d. m. Y") . '</td>
+                            <td>' . date_format(date_create($batch["created"]), 'd. m. Y') . '</td>
                             <td>' . $batch["thirds"] . '</td>
                             <td>' . $batch["pints"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $batch["statusColor"] . ';">' . $batch["statusLabel"] . '</td>

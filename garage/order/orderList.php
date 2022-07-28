@@ -5,7 +5,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name, b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color
+$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name, b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color
         FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
         INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;";
 $orders = [];
@@ -14,30 +14,31 @@ if ($result = mysqli_query($link, $sql)) {
         $orders[$row[0]] = [
             "thirds" => $row[1],
             "pints" => $row[2],
+            "created" => $row[3],
             "customer" => [
-                "id" => $row[3],
-                "mail" => $row[4],
-                "name" => ($row[5] . " " . $row[6]),
-                "instagram" => $row[7]
+                "id" => $row[4],
+                "mail" => $row[5],
+                "name" => ($row[6] . " " . $row[7]),
+                "instagram" => $row[8]
             ],
             "employee" => [
-                "id" => $row[8],
-                "name" => ($row[9] . " " . $row[10]),
+                "id" => $row[9],
+                "name" => ($row[10] . " " . $row[11]),
             ],
             "batch" => [
-                "id" => $row[11],
-                "label" => $row[12],
-                "thirds" => $row[13],
-                "pints" => $row[14],
+                "id" => $row[12],
+                "label" => $row[13],
+                "thirds" => $row[14],
+                "pints" => $row[15],
                 "status" => [
-                    "label" => $row[15],
-                    "color" => $row[16]
+                    "label" => $row[16],
+                    "color" => $row[17]
                 ]
             ],
             "status" => [
-                "id" => $row[17],
-                "label" => $row[18],
-                "color" => $row[19]
+                "id" => $row[18],
+                "label" => $row[19],
+                "color" => $row[20]
             ]
         ];
     }
@@ -67,6 +68,7 @@ mysqli_close($link);
             <thead class="table-dark">
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Vytvořeno</th>
                     <th scope="col">Zákazník</th>
                     <th scope="col"></th>
                     <th scope="col">Várka</th>
@@ -86,6 +88,7 @@ mysqli_close($link);
                     // TODO customer info btn
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
+                            <td>' . date_format(date_create($order["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . $order["customer"]["name"] . '</td>
                             <td><a class="btn btn-info"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>

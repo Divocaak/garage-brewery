@@ -57,7 +57,7 @@ mysqli_close($link);
                             <td>' . $user["name"] . '</td>
                             <td>' . $user["mail"] . '</td>
                             <td>' . $user["instagram"] . '</td>
-                            <td>' . DateTime::createFromFormat("Y-m-d H:m:i", $user["created"])->format("d. m. Y (H:m:i)") . '</td>
+                            <td>' . date_format(date_create($user["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . ($user["employee"] == "1" ? '<i class="bi bi-check-circle-fill text-success">' : '<i class="bi bi-exclamation-circle-fill text-danger"></i>') . '</td>
                         </tr>';
                 }
