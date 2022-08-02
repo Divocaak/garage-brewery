@@ -1,5 +1,5 @@
 <?php
-require_once "../config.php";
+require_once "config.php";
 session_start();
 if (!isset($_SESSION["currentUser"])) {
     header("Location: user/login.php");
@@ -55,14 +55,14 @@ mysqli_close($link);
                 <a class="btn btn-primary" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
                 <a class="btn btn-primary" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
                 <a class="btn btn-primary" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
-                <a class="btn btn-primary" href=""><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
                 <a class="btn btn-primary" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
     } else {
         echo '<a class="btn btn-primary" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
     }
     ?>
+    <a class="btn btn-primary" href="feedback/form.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
 
-<div class="table-responsive">
+    <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
             <caption>Moje objednávky</caption>
             <thead class="table-dark">
