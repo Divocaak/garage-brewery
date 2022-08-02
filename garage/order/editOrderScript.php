@@ -2,6 +2,11 @@
 require_once "../config.php";
 session_start();
 
+// BUG Warning: Undefined array key "employee" in /Users/divocak/develop/garage-brewery/garage/order/editOrderScript.php on line 5
+if($_POST["employee"] == 0){
+    $_POST["employee"] = "NULL";
+}
+
 $values = (!isset($_GET["cancel"]) ? ("id_batch=" . $_POST["batch"] . ", thirds=" . $_POST["thirds"] . ", pints=" . $_POST["pints"] . ", id_customer=" . $_POST["user"] . ", id_employee=" . $_POST["employee"] . ", id_status=" . $_POST["status"]) : "id_status=4");
 
 $e = "";
@@ -34,3 +39,13 @@ mysqli_close($link);
 </body>
 
 </html>
+
+#ffc107
+#198754
+#495057
+
+#20c997
+#d63384
+#198754
+#dc3545
+#fd7e14
