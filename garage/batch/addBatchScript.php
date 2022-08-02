@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 
 $e = "";
 $sql = "INSERT INTO batch (id_beer, label, created" . (($_POST["thirds"] != "") ? ", thirds" : "") . (($_POST["pints"] != "") ? ", pints" : "") . ", id_status)

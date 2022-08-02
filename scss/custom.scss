@@ -13,6 +13,8 @@ $form-range-thumb-bg: $_outlines;
 // $form-range-track-bg: #ffd3ad;
 @import "../bootstrap/scss/_functions";
 @import "../bootstrap/scss/_variables";
+$input-disabled-bg: $gray-500;
+$form-select-disabled-bg: $gray-500;
 $modal-content-color: $light;
 $modal-content-bg: $dark;
 $form-label-color: $dark;

@@ -1,8 +1,13 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
 
 $userId = ($_SESSION["currentUser"]["employee"]) ? $_POST["user"] : $_SESSION["currentUser"]["id"];
+
+// BUG Warning: Undefined array key "employee" in /Users/divocak/develop/garage-brewery/garage/order/addOrderScript.php on line 7
+if($_POST["employee"] == 0){
+    $_POST["employee"] = "NULL";
+}
 
 $e = "";
 $sql = "INSERT INTO beer_order (id_customer, id_batch, thirds, pints" . (($_SESSION["currentUser"]["employee"]) ? ", id_employee, id_status" : "") . ") 

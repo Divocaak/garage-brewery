@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 
 $e = "";
 $sql = "INSERT INTO beer (label) VALUES ('" . $_POST["label"] . "');";

@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 
 $e = "";
 $sql = "UPDATE batch SET id_beer=" . $_POST["beer"] . ", label='" . $_POST["label"] . "', created='" . $_POST["created"] . "',

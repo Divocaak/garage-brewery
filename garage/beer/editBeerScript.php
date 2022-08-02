@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 
 $e = "";
 $sql = "UPDATE beer SET label='" . $_POST["label"] . "' WHERE id=" . $_GET["beerId"] . ";";

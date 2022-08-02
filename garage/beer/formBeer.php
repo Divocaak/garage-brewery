@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
 if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
     header("Location: ../user/login.php");

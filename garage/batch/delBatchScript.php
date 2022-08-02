@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 
 $e = "";
 $sql = "DELETE FROM batch WHERE id=" . $_GET["id"] . ";";
