@@ -43,8 +43,8 @@ mysqli_close($link);
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Jméno</th>
-                    <th scope="col">E-mail</th>
-                    <th scope="col">Instagram</th>
+                    <th scope="col"><i class="bi bi-envelope pe-2"></i>E-mail</th>
+                    <th scope="col"><i class="bi bi-instagram pe-2"></i>Instagram</th>
                     <th scope="col">Vytvořeno</th>
                     <th scope="col">Zaměstnanec</th>
                 </tr>
@@ -58,7 +58,7 @@ mysqli_close($link);
                             <td>' . $user["mail"] . '</td>
                             <td>' . $user["instagram"] . '</td>
                             <td>' . date_format(date_create($user["created"]), 'd. m. Y H:i:s') . '</td>
-                            <td>' . ($user["employee"] == "1" ? '<i class="bi bi-check-circle-fill text-success">' : '<i class="bi bi-exclamation-circle-fill text-danger"></i>') . '</td>
+                            <td>' . ($user["employee"] == "1" ? '<i class="bi bi-check-circle-fill text-success">' : '<i class="bi bi-x-circle-fill text-danger"></i>') . '</td>
                         </tr>';
                 }
                 ?>

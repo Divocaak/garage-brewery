@@ -85,12 +85,11 @@ mysqli_close($link);
                 <?php
                 $_SESSION["orders"] = $orders;
                 foreach ($orders as $key => $order) {
-                    // TODO customer info btn
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($order["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . $order["customer"]["name"] . '</td>
-                            <td><a class="btn btn-info"><i class="bi bi-search"></i></a></td>
+                            <td><a class="btn btn-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["batch"]["status"]["color"] . ';">' . $order["batch"]["status"]["label"] . '</td>
                             <td>' . $order["thirds"] . "/" . $order["batch"]["thirds"] . '</td>
@@ -110,7 +109,7 @@ mysqli_close($link);
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Opravdu?</h5>
+                    <h5 class="modal-title">Opravdu?</h5>
                 </div>
                 <div class="modal-body">
                     Skutečně chcete odstranit várku ze systému?
@@ -123,10 +122,49 @@ mysqli_close($link);
         </div>
     </div>
 
+    <div class="modal fade" id="customerDetailModal" tabindex="-1" aria-labelledby="customerDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Zákazník</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <p id="customerName"></p>
+                        </div>
+                        <div class="col-1">
+                            <i class="bi bi-envelope"></i>
+                        </div>
+                        <div class="col-11">
+                            <p id="customerMail"></p>
+                        </div>
+                        <div class="col-1">
+                            <i class="bi bi-instagram"></i>
+                        </div>
+                        <div class="col-11">
+                            <p id="customerInstagram"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
+            $(".customerDetailBtn").click(function() {
+                $("#customerName").text($(this).data("customerName"));
+                $("#customerMail").text($(this).data("customerMail"));
+                $("#customerInstagram").text($(this).data("customerInstagram"));
+                $('#customerDetailModal').modal('show');
+            });
+
             var orderId;
             $(".deleteBtn").click(function() {
                 orderId = $(this).data("orderId");
