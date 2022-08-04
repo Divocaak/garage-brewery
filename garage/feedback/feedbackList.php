@@ -1,5 +1,73 @@
 <?php
 require_once "../config.php";
+session_start();
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
+    header("Location: ../user/login.php");
+}
+
+$sums = [
+    "temperature" => [],
+    "taste" => [],
+    "bitterness" => [],
+    "scent" => [],
+    "fullness" => [],
+    "frothiness" => [],
+    "clarity" => [],
+    "overall" => []
+];
+$feedbacks = [];
+
+$sql = "SELECT id, id_order, g_temperature, date_consumed, date_added, g_taste, n_taste, g_bitterness, n_bitterness, g_scent, n_scent, g_fullness,
+        n_fullness, g_frothiness, n_frothiness, g_clarity, n_clarity, g_overall, n_overall FROM feedback";
+if ($result = mysqli_query($link, $sql)) {
+    while ($row = mysqli_fetch_row($result)) {
+        $feedbacks[$row[0]] = [
+            "id_order" => $row[1],
+            "temperature" => $row[2],
+            "dateConsumed" => $row[3],
+            "dateAdded" => $row[4],
+            "taste" => [
+                "guess" => $row[5],
+                "note" => $row[6]
+            ],
+            "bitterness" => [
+                "guess" => $row[7],
+                "note" => $row[8]
+            ],
+            "scent" => [
+                "guess" => $row[9],
+                "note" => $row[10]
+            ],
+            "fullness" => [
+                "guess" => $row[11],
+                "note" => $row[12]
+            ],
+            "frothiness" => [
+                "guess" => $row[13],
+                "note" => $row[14]
+            ],
+            "clarity" => [
+                "guess" => $row[15],
+                "note" => $row[16]
+            ],
+            "overall" => [
+                "guess" => $row[17],
+                "note" => $row[18]
+            ]
+        ];
+
+        array_push($sums["temperature"], $row[2]);
+        array_push($sums["taste"], $row[5]);
+        array_push($sums["bitterness"], $row[7]);
+        array_push($sums["scent"], $row[9]);
+        array_push($sums["fullness"], $row[11]);
+        array_push($sums["frothiness"], $row[13]);
+        array_push($sums["clarity"], $row[15]);
+        array_push($sums["overall"], $row[17]);
+    }
+    mysqli_free_result($result);
+}
+mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -20,9 +88,9 @@ require_once "../config.php";
         <table class="table table-hover table-dark table-striped table-sm">
             <thead class="table-info">
                 <tr>
-                    <th scope="col">id</th>
+                    <th scope="col">#</th>
                     <th scope="col">Várka</th>
-                    <th scope="col">Teplota při konzumaci</th>
+                    <th scope="col">Teplota při konzumaci [°C]</th>
                     <th scope="col">Datum konzumace</th>
                     <th scope="col">Datum hodnocení</th>
                     <th scope="col">Chuť</th>
@@ -39,78 +107,47 @@ require_once "../config.php";
                     <th scope="col">Čirost pozn.</th>
                     <th scope="col">Celkově</th>
                     <th scope="col">Celkově pozn.</th>
-                    <th scope="col">Jméno</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                $nums = [];
-                $sql = "SELECT f.id, b.name, b.created, t.name, f.g_temperature, f.date_consumed, f.date_added, f.g_taste, f.n_taste, f.g_bitterness, f.n_bitterness,
-            f.g_scent, f.n_scent, f.g_fullness, f.n_fullness, f.g_frothiness, f.n_frothiness, f.g_clarity, f.n_clarity, f.g_overall, f.n_overall, f.tester
-            FROM feedbacks f INNER JOIN batches b ON f.batch_id=b.id INNER JOIN beers t ON b.beer_id=t.id;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<tr>
-                    <th scope='row'>" . $row[0] . "</th>
-                    <td><b>" . $row[1] . "</b> (" . $row[3] . ", " . $row[2] . ")</td>
-                    <td>" . $row[4] . " °C</td>
-                    <td>" . str_replace("00:00:00", "", $row[5]) . "</td>
-                    <td>" . $row[6] . "</td>
-                    <td>" . $row[7] . "</td>
-                    <td>" . $row[8] . "</td>
-                    <td>" . $row[9] . "</td>
-                    <td>" . $row[10] . "</td>
-                    <td>" . $row[11] . "</td>
-                    <td>" . $row[12] . "</td>
-                    <td>" . $row[13] . "</td>
-                    <td>" . $row[14] . "</td>
-                    <td>" . $row[15] . "</td>
-                    <td>" . $row[16] . "</td>
-                    <td>" . $row[17] . "</td>
-                    <td>" . $row[18] . "</td>
-                    <td>" . $row[19] . "</td>
-                    <td>" . $row[20] . "</td>
-                    <td>" . $row[21] . "</td>
-                    </tr>";
-
-                        $nums["temperature"][] = $row[4];
-                        $nums["taste"][] = $row[7];
-                        $nums["bitterness"][] = $row[9];
-                        $nums["scent"][] = $row[11];
-                        $nums["fullness"][] = $row[13];
-                        $nums["frothiness"][] = $row[15];
-                        $nums["clarity"][] = $row[17];
-                        $nums["overall"][] = $row[19];
-                    }
-                    mysqli_free_result($result);
+                foreach ($feedbacks as $key => $feedback) {
+                    echo '<tr>
+                            <th scope="row">' . $key . '</th>
+                            <td>' . $feedback["id_order"] . '</td>
+                            <td>' . $feedback["temperature"] . '</td>
+                            <td>' . date_format(date_create($feedback["dateConsumed"]), 'd. m. Y') . '</td>
+                            <td>' . date_format(date_create($feedback["dateAdded"]), 'd. m. Y H:i:s') . '</td>
+                            <td>' . $feedback["taste"]["guess"] . '</td>
+                            <td>' . $feedback["taste"]["note"] . '</td>
+                            <td>' . $feedback["bitterness"]["guess"] . '</td>
+                            <td>' . $feedback["bitterness"]["note"] . '</td>
+                            <td>' . $feedback["scent"]["guess"] . '</td>
+                            <td>' . $feedback["scent"]["note"] . '</td>
+                            <td>' . $feedback["fullness"]["guess"] . '</td>
+                            <td>' . $feedback["fullness"]["note"] . '</td>
+                            <td>' . $feedback["frothiness"]["guess"] . '</td>
+                            <td>' . $feedback["frothiness"]["note"] . '</td>
+                            <td>' . $feedback["clarity"]["guess"] . '</td>
+                            <td>' . $feedback["clarity"]["note"] . '</td>
+                            <td>' . $feedback["overall"]["guess"] . '</td>
+                            <td>' . $feedback["overall"]["note"] . '</td>
+                            </tr>';
                 }
-                mysqli_close($link);
                 ?>
             </tbody>
             <tfoot>
                 <?php
                 echo "<tr>
-            <th scope='row'></th>
-            <td></td>
-            <td>" . array_sum($nums["temperature"]) / count($nums["temperature"]) . " °C</td>
-            <td></td>
-            <td></td>
-            <td>" . array_sum($nums["taste"]) / count($nums["taste"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["bitterness"]) / count($nums["bitterness"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["scent"]) / count($nums["scent"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["fullness"]) / count($nums["fullness"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["frothiness"]) / count($nums["frothiness"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["clarity"]) / count($nums["clarity"]) . "</td>
-            <td></td>
-            <td>" . array_sum($nums["overall"]) / count($nums["overall"]) . "</td>
-            <td></td>
-            <td></td>
-            </tr>";
+                <th scope='row'></th>
+                <td></td>
+                <td>" . array_sum($sums["temperature"]) / count($sums["temperature"]) . " °C</td>
+                <td></td>
+                <td></td>";
+                foreach ($sums as $key => $sum) {
+                    echo "<td>" . array_sum($sums) / count($sums[$key]) . "</td><td></td>";
+                }
+                echo "<td></td></tr>";
                 ?>
             </tfoot>
         </table>

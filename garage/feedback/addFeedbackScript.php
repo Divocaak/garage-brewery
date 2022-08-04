@@ -1,58 +1,47 @@
 <?php
 require_once "../config.php";
 
-echo json_encode($_POST);
-
-/* 
-| id_order      | int          | NO   |     | NULL              |                   |
-| g_temperature | float        | NO   |     | NULL              |                   |
-| date_consumed | date         | NO   |     | NULL              |                   |
-| g_taste       | int          | NO   |     | NULL              |                   |
-| n_taste       | varchar(100) | YES  |     | NULL              |                   |
-| g_bitterness  | int          | NO   |     | NULL              |                   |
-| n_bitterness  | varchar(100) | YES  |     | NULL              |                   |
-| g_scent       | int          | NO   |     | NULL              |                   |
-| n_scent       | varchar(100) | YES  |     | NULL              |                   |
-| g_fullness    | int          | NO   |     | NULL              |                   |
-| n_fullness    | varchar(100) | YES  |     | NULL              |                   |
-| g_frothiness  | int          | NO   |     | NULL              |                   |
-| n_frothiness  | varchar(100) | YES  |     | NULL              |                   |
-| g_clarity     | int          | NO   |     | NULL              |                   |
-| n_clarity     | varchar(100) | YES  |     | NULL              |                   |
-| g_overall     | int          | NO   |     | NULL              |                   |
-| n_overall     | varchar(100) | YES  |     | NULL              |                   |
-
-    "orderId": "3",
-    "temp": "12",
-    "date": "2022-08-11",
-    "taste": "5",
-    "tasteNote": "",
-    "bitterness": "5",
-    "bitternessNote": "",
-    "scent": "5",
-    "scentNote": "",
-    "fullness": "5",
-    "fullnessNote": "",
-    "frothiness": "5",
-    "frothinessNote": "",
-    "clarity": "5",
-    "clarityNote": "",
-    "overall": "5",
-    "overallNote": ""
- */
+$keys = [
+    "n_taste",
+    "n_bitterness",
+    "n_scent",
+    "n_fullness",
+    "n_frothiness",
+    "n_clarity",
+    "n_overall"
+];
 
 $e = "";
-$sql = "INSERT INTO feedbacks (batch_id, g_temperature, date_consumed, g_taste, n_taste, g_bitterness, n_bitterness,
-g_scent, n_scent, g_fullness, n_fullness, g_frothiness, n_frothiness, g_clarity, n_clarity, g_overall, n_overall, tester)
-VALUES (" . $_POST["batchSelect"] . ", " . $_POST["temp"] . ", '" . $_POST["date"] . "', " . $_POST["taste"] . ", '". $_POST["tasteNote"] . "', "
-. $_POST["bitterness"] . ", '" . $_POST["bitternessNote"] . "', " . $_POST["scent"] . ", '" . $_POST["scentNote"] . "', "
-. $_POST["fullness"] . ", '" . $_POST["fullnessNote"] . "', " . $_POST["frothiness"] . ", '" . $_POST["frothinessNote"] . "', "
-. $_POST["clarity"] . ", '" . $_POST["clarityNote"] . "', " . $_POST["overall"] . ", '" . $_POST["overallNote"] . "', '" . $_POST["person"] . "');";
-echo $sql;
-/* if (!mysqli_query($link, $sql)) {
+$sql = "INSERT INTO feedback (id_order, g_temperature, date_consumed, g_taste, g_bitterness, g_scent, g_fullness, g_frothiness, g_clarity, g_overall" . getPostKeys($keys) . ")
+VALUES (" . $_POST["orderId"] . ", " . $_POST["temp"] . ", '" . $_POST["date"] . "', " . $_POST["taste"] . ", " . $_POST["bitterness"] . ", "
+. $_POST["scent"] . ", " . $_POST["fullness"] . ", " . $_POST["frothiness"] . ", " . $_POST["clarity"] . ", " . $_POST["overall"] . getPostValues($keys) . ");
+UPDATE beer_order SET id_status=5 WHERE id=" . $_POST["orderId"] . ";";
+if (!mysqli_multi_query($link, $sql)) {
     $e = $sql . "<br>" . mysqli_error($link);
 }
-mysqli_close($link); */
+mysqli_close($link);
+
+function getPostKeys($keysToCheck)
+{
+    $toRet = "";
+    foreach ($keysToCheck as $key) {
+        if (isset($_POST[$key]) && $_POST[$key] != "") {
+            $toRet .= (", " . $key);
+        }
+    }
+    return $toRet;
+}
+
+function getPostValues($keysToCheck)
+{
+    $toRet = "";
+    foreach ($keysToCheck as $key) {
+        if (isset($_POST[$key]) && $_POST[$key] != "") {
+            $toRet .= (", '" . $_POST[$key] . "'");
+        }
+    }
+    return $toRet;
+}
 ?>
 
 <!DOCTYPE html>
