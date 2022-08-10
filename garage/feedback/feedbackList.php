@@ -5,65 +5,95 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sums = [
-    "temperature" => [],
-    "taste" => [],
-    "bitterness" => [],
-    "scent" => [],
-    "fullness" => [],
-    "frothiness" => [],
-    "clarity" => [],
-    "overall" => []
-];
-$feedbacks = [];
-
-$sql = "SELECT id, id_order, g_temperature, date_consumed, date_added, g_taste, n_taste, g_bitterness, n_bitterness, g_scent, n_scent, g_fullness,
-        n_fullness, g_frothiness, n_frothiness, g_clarity, n_clarity, g_overall, n_overall FROM feedback";
+$feedbacksSorted = [];
+$sql = "SELECT f.id, o.id_batch, f.g_temperature, f.date_consumed, f.date_added, f.g_taste, f.n_taste, f.g_bitterness, f.n_bitterness, f.g_scent, f.n_scent, f.g_fullness,
+        f.n_fullness, f.g_frothiness, f.n_frothiness, f.g_clarity, f.n_clarity, f.g_overall, f.n_overall, f.id_order, b.label, b.created, b.thirds, b.pints, o.thirds, o.pints, o.created,
+        c.id, c.f_name, c.l_name, c.mail, c.instagram, e.f_name, e.l_name
+        FROM feedback f INNER JOIN beer_order o ON f.id_order=o.id INNER JOIN batch b ON o.id_batch=b.id INNER JOIN user c ON o.id_customer=c.id LEFT JOIN user e ON o.id_employee=e.id;";
 if ($result = mysqli_query($link, $sql)) {
     while ($row = mysqli_fetch_row($result)) {
-        $feedbacks[$row[0]] = [
-            "id_order" => $row[1],
-            "temperature" => $row[2],
-            "dateConsumed" => $row[3],
-            "dateAdded" => $row[4],
-            "taste" => [
-                "guess" => $row[5],
-                "note" => $row[6]
+        if (!isset($feedbacksSorted[$row[1]])) {
+            $feedbacksSorted[$row[1]] = [
+                "batch" => [
+                    "id" => $row[1],
+                    "label" => $row[20],
+                    "created" => $row[21],
+                    // TODO use thirds/pints
+                    "thirds" => $row[22],
+                    "pints" => $row[23]
+                ],
+                "feedbacks" => [],
+                "sums" => [
+                    "taste" => [],
+                    "bitterness" => [],
+                    "scent" => [],
+                    "fullness" => [],
+                    "frothiness" => [],
+                    "clarity" => [],
+                    "overall" => []
+                ]
+            ];
+        }
+
+        $feedbacksSorted[$row[1]]["feedbacks"][$row[0]] = [
+            "data" => [
+                "temperature" => $row[2],
+                "dateConsumed" => $row[3],
+                "dateAdded" => $row[4],
+                "taste" => [
+                    "guess" => $row[5],
+                    "note" => $row[6]
+                ],
+                "bitterness" => [
+                    "guess" => $row[7],
+                    "note" => $row[8]
+                ],
+                "scent" => [
+                    "guess" => $row[9],
+                    "note" => $row[10]
+                ],
+                "fullness" => [
+                    "guess" => $row[11],
+                    "note" => $row[12]
+                ],
+                "frothiness" => [
+                    "guess" => $row[13],
+                    "note" => $row[14]
+                ],
+                "clarity" => [
+                    "guess" => $row[15],
+                    "note" => $row[16]
+                ],
+                "overall" => [
+                    "guess" => $row[17],
+                    "note" => $row[18]
+                ],
             ],
-            "bitterness" => [
-                "guess" => $row[7],
-                "note" => $row[8]
+            "customer" => [
+                // TODO use
+                "id" => $row[27],
+                "name" => $row[28] . " " . $row[29],
+                "mail" => $row[30],
+                "instagram" => $row[31]
             ],
-            "scent" => [
-                "guess" => $row[9],
-                "note" => $row[10]
-            ],
-            "fullness" => [
-                "guess" => $row[11],
-                "note" => $row[12]
-            ],
-            "frothiness" => [
-                "guess" => $row[13],
-                "note" => $row[14]
-            ],
-            "clarity" => [
-                "guess" => $row[15],
-                "note" => $row[16]
-            ],
-            "overall" => [
-                "guess" => $row[17],
-                "note" => $row[18]
+            // TODO use
+            "employee" => $row[32] . " " . $row[33],
+            "order" => [
+                // TODO use
+                "id" => $row[19],
+                "thirds" => $row[24],
+                "pints" => $row[25],
+                "created" => $row[26],
             ]
         ];
 
-        array_push($sums["temperature"], $row[2]);
-        array_push($sums["taste"], $row[5]);
-        array_push($sums["bitterness"], $row[7]);
-        array_push($sums["scent"], $row[9]);
-        array_push($sums["fullness"], $row[11]);
-        array_push($sums["frothiness"], $row[13]);
-        array_push($sums["clarity"], $row[15]);
-        array_push($sums["overall"], $row[17]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["taste"], $row[5]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["bitterness"], $row[7]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["scent"], $row[9]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["fullness"], $row[11]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["frothiness"], $row[13]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["clarity"], $row[15]);
+        array_push($feedbacksSorted[$row[1]]["sums"]["overall"], $row[17]);
     }
     mysqli_free_result($result);
 }
@@ -85,71 +115,54 @@ mysqli_close($link);
     <h1>Hodnocení várek</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <div class="table-responsive">
-        <table class="table table-hover table-dark table-striped table-sm">
-            <thead class="table-info">
+        <table class="mt-3 table table-striped table-hover table-dark">
+            <caption>Zpětná vazba</caption>
+            <thead>
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Várka</th>
                     <th scope="col">Teplota při konzumaci [°C]</th>
                     <th scope="col">Datum konzumace</th>
-                    <th scope="col">Datum hodnocení</th>
                     <th scope="col">Chuť</th>
-                    <th scope="col">Chuť pozn.</th>
                     <th scope="col">Hořkost</th>
-                    <th scope="col">Hořkost pozn.</th>
                     <th scope="col">Vůně</th>
-                    <th scope="col">Vůně pozn.</th>
                     <th scope="col">Plnost</th>
-                    <th scope="col">Plnost pozn.</th>
                     <th scope="col">Pěnivost</th>
-                    <th scope="col">Pěnivost pozn.</th>
                     <th scope="col">Čirost</th>
-                    <th scope="col">Čirost pozn.</th>
                     <th scope="col">Celkově</th>
-                    <th scope="col">Celkově pozn.</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                foreach ($feedbacks as $key => $feedback) {
-                    echo '<tr>
-                            <th scope="row">' . $key . '</th>
-                            <td>' . $feedback["id_order"] . '</td>
-                            <td>' . $feedback["temperature"] . '</td>
-                            <td>' . date_format(date_create($feedback["dateConsumed"]), 'd. m. Y') . '</td>
-                            <td>' . date_format(date_create($feedback["dateAdded"]), 'd. m. Y H:i:s') . '</td>
-                            <td>' . $feedback["taste"]["guess"] . '</td>
-                            <td>' . $feedback["taste"]["note"] . '</td>
-                            <td>' . $feedback["bitterness"]["guess"] . '</td>
-                            <td>' . $feedback["bitterness"]["note"] . '</td>
-                            <td>' . $feedback["scent"]["guess"] . '</td>
-                            <td>' . $feedback["scent"]["note"] . '</td>
-                            <td>' . $feedback["fullness"]["guess"] . '</td>
-                            <td>' . $feedback["fullness"]["note"] . '</td>
-                            <td>' . $feedback["frothiness"]["guess"] . '</td>
-                            <td>' . $feedback["frothiness"]["note"] . '</td>
-                            <td>' . $feedback["clarity"]["guess"] . '</td>
-                            <td>' . $feedback["clarity"]["note"] . '</td>
-                            <td>' . $feedback["overall"]["guess"] . '</td>
-                            <td>' . $feedback["overall"]["note"] . '</td>
-                            </tr>';
+                // <td>' . date_format(date_create($feedback["dateAdded"]), 'd. m. Y H:i:s') . '</td>
+                $noteBadge = '<span class="ms-2 badge badge-primary bg-secondary"><i class="bi bi-chat-left-dots-fill"></i></span>';
+                foreach ($feedbacksSorted as $batchKey => $feedbackSorted) {
+                    echo '<tr><th scope="row" colspan="11" class="text-primary">' . $feedbackSorted["batch"]["label"] . " (vařeno " . date_format(date_create($feedbackSorted["batch"]["created"]), 'd. m. Y') . ")" . '</th></tr>';
+                    foreach ($feedbackSorted["feedbacks"] as $key => $feedback) {
+                        echo '<tr>
+                        <th scope="row">' . $key . '</th>
+                        <td>' . $feedback["data"]["temperature"] . '</td>
+                        <td>' . date_format(date_create($feedback["data"]["dateConsumed"]), 'd. m. Y') . '</td>
+                        <td>' . $feedback["data"]["taste"]["guess"] . ($feedback["data"]["taste"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["bitterness"]["guess"] . ($feedback["data"]["bitterness"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["scent"]["guess"] . ($feedback["data"]["scent"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["fullness"]["guess"] . ($feedback["data"]["fullness"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["frothiness"]["guess"] . ($feedback["data"]["frothiness"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["clarity"]["guess"] . ($feedback["data"]["clarity"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td>' . $feedback["data"]["overall"]["guess"] . ($feedback["data"]["overall"]["note"] != "" ? $noteBadge : "") . '</td>
+                        <td><a class="btn btn-outline-info detailBtn" data-feedback-id=' . $key . ' data-batch-id=' . $batchKey . '><i class="bi bi-search"></i></a></td>
+                        </tr>';
+                    }
+                    echo '<tr class="fw-bold"><th scope="row" colspan="3"></th>';
+                    foreach ($feedbackSorted["sums"] as $key => $sum) {
+                        if ($key != "temperature") {
+                            echo "<td class='text-primary'>⌀ " . array_sum($sum) / count($feedbackSorted["sums"][$key]) . "</td>";
+                        }
+                    }
+                    echo '<td></td></tr>';
                 }
                 ?>
             </tbody>
-            <tfoot>
-                <?php
-                echo "<tr>
-                <th scope='row'></th>
-                <td></td>
-                <td>" . array_sum($sums["temperature"]) / count($sums["temperature"]) . " °C</td>
-                <td></td>
-                <td></td>";
-                foreach ($sums as $key => $sum) {
-                    echo "<td>" . array_sum($sums) / count($sums[$key]) . "</td><td></td>";
-                }
-                echo "<td></td></tr>";
-                ?>
-            </tfoot>
         </table>
     </div>
 </body>

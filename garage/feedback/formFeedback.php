@@ -111,7 +111,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_overall" class="text-dark">Poznámky k pivu celkově</label>
                 </div>
             </div>
-            <div class="col-6 pt-4 mt-5">
+            <div class="col-6 pt-4 d-flex align-items-center justify-content-center">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="check" required>
                     <label class="form-check-label text-muted" for="check">
