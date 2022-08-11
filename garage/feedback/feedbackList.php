@@ -165,12 +165,27 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
     </div>
 
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
                 </div>
                 <div class="modal-body">
+                    <h6 class="text-primary">Objednávka</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <p id="detailOrderId"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailOrderCreated"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailOrderThirds"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailOrderPints"></p>
+                        </div>
+                    </div>
                     <h6 class="text-primary">Várka</h6>
                     <div class="row">
                         <div class="col-6">
@@ -200,7 +215,37 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                         </div>
                     </div>
                     <h6 class="text-primary">Řešil</h6>
-                            <p id="detailEmployee"></p>
+                    <p id="detailEmployee"></p>
+                    <h6 class="text-primary">Hodnocení</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <p id="detailFeedbackConsumed"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailFeedbackAdded"></p>
+                        </div>
+                        <div class="col-12">
+                            <p id="detailTemperature"></p>
+                        </div>
+                        <?php
+                        $scoreKey = ["Taste", "Bitterness", "Scent", "Fullness", "Frothiness", "Clarity", "Overall"];
+                        foreach ($scoreKey as $score) {
+                            echo '<div class="col-6"><p id="detail' . $score . 'Guess"></p></div>
+                                <div class="col-6"><p id="detail' . $score . 'Average"></p></div>
+                                <div class="col-12 pb-4"><p id="detail' . $score . 'Note"></p></div>';
+                        }
+                        ?>
+
+                        <div class="col-6">
+                            <p id="detailBitternessGuess"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailBitternessAverage"></p>
+                        </div>
+                        <div class="col-12">
+                            <p id="detailBitternessNote"></p>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
@@ -219,6 +264,11 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                     feedbackId: $(this).data("feedbackId")
                 }, function(data) {
                     var dataDecoded = JSON.parse(data);
+                    $("#detailOrderId").text("id: " + dataDecoded["feedback"]["order"]["id"]);
+                    $("#detailOrderCreated").text("objednáno: " + dataDecoded["feedback"]["order"]["created"]);
+                    $("#detailOrderThirds").text("třetinky: " + dataDecoded["feedback"]["order"]["thirds"] + " z " + dataDecoded["batch"]["thirds"]);
+                    $("#detailOrderPints").text("půllitry: " + dataDecoded["feedback"]["order"]["pints"] + " z " + dataDecoded["batch"]["pints"]);
+
                     $("#detailBatchId").text("id: " + dataDecoded["batch"]["id"]);
                     $("#detailBatchLabel").text(dataDecoded["batch"]["label"]);
                     $("#detailBatchCreated").text("vytvořeno: " + dataDecoded["batch"]["created"]);
@@ -229,6 +279,21 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                     $("#detailCustomerInstagram").text(dataDecoded["feedback"]["customer"]["instagram"]);
 
                     $("#detailEmployee").text(dataDecoded["feedback"]["employee"]);
+
+                    $("#detailFeedbackConsumed").text("konzumováno: " + dataDecoded["feedback"]["data"]["dateConsumed"]);
+                    $("#detailFeedbackAdded").text("ohodnoceno: " + dataDecoded["feedback"]["data"]["dateAdded"]);
+                    $("#detailTemperature").text("teplota při konzumaci (zhruba): " + dataDecoded["feedback"]["data"]["temperature"] + " °C");
+
+                    var scoreKeys = ["Taste", "Bitterness", "Scent", "Fullness", "Frothiness", "Clarity", "Overall"];
+                    var scoreTrans = ["chuť", "hořkost", "vůně", "plnost", "pěnivost", "čirost", "celkově"];
+                    for (i = 0; i < scoreKeys.length; ++i) {
+                        var jsonKey = scoreKeys[i].toLowerCase();
+                        $("#detail" + scoreKeys[i] + "Guess").text(scoreTrans[i] + ": " + dataDecoded["feedback"]["data"][jsonKey]["guess"]);
+                        var sum = 0;
+                        $.each(dataDecoded["sums"][jsonKey],function(){sum += parseFloat(this) || 0;})
+                        $("#detail" + scoreKeys[i] + "Average").text("⌀ " + (sum / dataDecoded["sums"][jsonKey].length));
+                        $("#detail" + scoreKeys[i] + "Note").text(dataDecoded["feedback"]["data"][jsonKey]["note"]);
+                    }
                 });
 
                 $('#detailModal').modal('show');
