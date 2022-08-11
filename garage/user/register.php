@@ -14,7 +14,7 @@ session_start();
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Zaregistrovat se</h1>
     <a class="btn btn-outline-primary" href="login.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action="registerScript.php" method="post">

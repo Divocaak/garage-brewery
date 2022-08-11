@@ -17,7 +17,7 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> pivo</h1>
     <a class="btn btn-outline-primary" href="beerList.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addBeerScript.php" : "editBeerScript.php?beerId=" . $_GET["beerId"]; ?> method="post">

@@ -46,20 +46,20 @@ mysqli_close($link);
     <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Pivovar Garáž <?php echo $_SESSION["currentUser"]["employee"] ? "<span class='text-primary fw-bold'>administrace</span>" : ""; ?></h1>
     <p>Přihlášen jako <span class="text-primary"><?php echo $_SESSION["currentUser"]["mail"] ?></span></p>
     <a class="btn btn-outline-danger" href="user/logoutScript.php"><i class="bi bi-x-circle pe-2"></i>Odhlásit se</a>
     <?php
     if ($_SESSION["currentUser"]["employee"]) {
-        echo '<a class="btn btn-primary" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
-                <a class="btn btn-primary" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
-                <a class="btn btn-primary" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
-                <a class="btn btn-primary" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
-                <a class="btn btn-primary" href="feedback/feedbackList.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
-                <a class="btn btn-primary" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
+        echo '<a class="btn btn-primary m-1" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
+                <a class="btn btn-primary m-1" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
+                <a class="btn btn-primary m-1" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
+                <a class="btn btn-primary m-1" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
+                <a class="btn btn-primary m-1" href="feedback/feedbackList.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
+                <a class="btn btn-primary m-1" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
     } else {
-        echo '<a class="btn btn-primary" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
+        echo '<a class="btn btn-primary m-1" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
     }
     ?>
 

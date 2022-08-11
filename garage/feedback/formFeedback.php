@@ -17,7 +17,7 @@ if (!isset($_SESSION["currentUser"])) {
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Hodnocení várky</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action="addFeedbackScript.php" method="post">
@@ -41,7 +41,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v čase (krom toho, že klesá pěna)</div>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="taste" class="form-label text-muted">Chuť: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="taste" name="taste">
@@ -51,7 +51,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_taste" class="text-dark">Poznámky k chuti</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="bitterness" class="form-label text-muted">Hořkost: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="bitterness" name="bitterness">
@@ -61,7 +61,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_bitterness" class="text-dark">Poznámky k hořkosti</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="scent" class="form-label text-muted">Vůně: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="scent" name="scent">
@@ -71,7 +71,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_scent" class="text-dark">Poznámky k vůni</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="fullness" class="form-label text-muted">Plnost: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="fullness" name="fullness">
@@ -81,7 +81,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_fullness" class="text-dark">Poznámky k plnosti</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="frothiness" class="form-label text-muted">Pěnivost: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="frothiness" name="frothiness">
@@ -91,7 +91,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_frothiness" class="text-dark">Poznámky k pěnivosti</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="clarity" class="form-label text-muted">Čirost: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="clarity" name="clarity">
@@ -101,7 +101,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_clarity" class="text-dark">Poznámky k čirosti</label>
                 </div>
             </div>
-            <div class="col-6 pt-4">
+            <div class="col-12 col-md-6 pt-4">
                 <div class="form-check">
                     <label for="overall" class="form-label text-muted">Celkové hodnocení: <span class="text-primary fw-bold">5</span> bodů</label>
                     <input type="range" class="form-range" min="0" max="10" value="5" id="overall" name="overall">
@@ -111,7 +111,7 @@ if (!isset($_SESSION["currentUser"])) {
                     <label for="n_overall" class="text-dark">Poznámky k pivu celkově</label>
                 </div>
             </div>
-            <div class="col-6 pt-4 d-flex align-items-center justify-content-center">
+            <div class="col-12 col-md-6 pt-4 d-flex align-items-center justify-content-center">
                 <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="check" required>
                     <label class="form-check-label text-muted" for="check">

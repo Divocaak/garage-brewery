@@ -109,7 +109,7 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Hodnocení várek</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <div class="table-responsive">
@@ -282,7 +282,7 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
 
                     $("#detailFeedbackConsumed").text("konzumováno: " + dataDecoded["feedback"]["data"]["dateConsumed"]);
                     $("#detailFeedbackAdded").text("ohodnoceno: " + dataDecoded["feedback"]["data"]["dateAdded"]);
-                    $("#detailTemperature").text("teplota při konzumaci (zhruba): " + dataDecoded["feedback"]["data"]["temperature"] + " °C");
+                    $("#detailTemperature").html("teplota při konzumaci (zhruba): " + dataDecoded["feedback"]["data"]["temperature"] + "&nbsp;°C");
 
                     var scoreKeys = ["Taste", "Bitterness", "Scent", "Fullness", "Frothiness", "Clarity", "Overall"];
                     var scoreTrans = ["chuť", "hořkost", "vůně", "plnost", "pěnivost", "čirost", "celkově"];
