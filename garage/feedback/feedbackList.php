@@ -18,7 +18,6 @@ if ($result = mysqli_query($link, $sql)) {
                     "id" => $row[1],
                     "label" => $row[20],
                     "created" => $row[21],
-                    // TODO use thirds/pints
                     "thirds" => $row[22],
                     "pints" => $row[23]
                 ],
@@ -70,16 +69,13 @@ if ($result = mysqli_query($link, $sql)) {
                 ],
             ],
             "customer" => [
-                // TODO use
                 "id" => $row[27],
                 "name" => $row[28] . " " . $row[29],
                 "mail" => $row[30],
                 "instagram" => $row[31]
             ],
-            // TODO use
             "employee" => $row[32] . " " . $row[33],
             "order" => [
-                // TODO use
                 "id" => $row[19],
                 "thirds" => $row[24],
                 "pints" => $row[25],
@@ -98,6 +94,8 @@ if ($result = mysqli_query($link, $sql)) {
     mysqli_free_result($result);
 }
 mysqli_close($link);
+
+$_SESSION["feedbacks"] = $feedbacksSorted;
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -165,6 +163,78 @@ mysqli_close($link);
             </tbody>
         </table>
     </div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detail</h5>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-primary">Várka</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <p id="detailBatchId"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailBatchLabel"></p>
+                        </div>
+                        <div class="col-12">
+                            <p id="detailBatchCreated"></p>
+                        </div>
+                    </div>
+                    <h6 class="text-primary">Zákazník</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <p id="detailCustomerId"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailCustomerName"></p>
+                        </div>
+                        <div class="col-6">
+                            <p id="detailCustomerMail"></p>
+                        </div>
+                        <div class="col-6">
+                            <i class="bi bi-instagram"></i>
+                            <p id="detailCustomerInstagram"></p>
+                        </div>
+                    </div>
+                    <h6 class="text-primary">Řešil</h6>
+                            <p id="detailEmployee"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".detailBtn").click(function() {
+                $.post("getFeedbackData.php", {
+                    batchId: $(this).data("batchId"),
+                    feedbackId: $(this).data("feedbackId")
+                }, function(data) {
+                    var dataDecoded = JSON.parse(data);
+                    $("#detailBatchId").text("id: " + dataDecoded["batch"]["id"]);
+                    $("#detailBatchLabel").text(dataDecoded["batch"]["label"]);
+                    $("#detailBatchCreated").text("vytvořeno: " + dataDecoded["batch"]["created"]);
+
+                    $("#detailCustomerId").text("id: " + dataDecoded["feedback"]["customer"]["id"]);
+                    $("#detailCustomerName").text(dataDecoded["feedback"]["customer"]["name"]);
+                    $("#detailCustomerMail").text(dataDecoded["feedback"]["customer"]["mail"]);
+                    $("#detailCustomerInstagram").text(dataDecoded["feedback"]["customer"]["instagram"]);
+
+                    $("#detailEmployee").text(dataDecoded["feedback"]["employee"]);
+                });
+
+                $('#detailModal').modal('show');
+            });
+        });
+    </script>
 </body>
 
 </html>

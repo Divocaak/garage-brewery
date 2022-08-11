@@ -3,6 +3,7 @@ require_once "../config.php";
 session_start();
 
 // BUG Warning: Undefined array key "employee" in /Users/divocak/develop/garage-brewery/garage/order/editOrderScript.php on line 5
+// úprava objednávky za zákazníka (prázdný employee, proto error)
 if($_POST["employee"] == 0){
     $_POST["employee"] = "NULL";
 }
