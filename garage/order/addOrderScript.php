@@ -4,9 +4,7 @@ session_start();
 
 $userId = ($_SESSION["currentUser"]["employee"]) ? $_POST["user"] : $_SESSION["currentUser"]["id"];
 
-// BUG Warning: Undefined array key "employee" in /Users/divocak/develop/garage-brewery/garage/order/addOrderScript.php on line 7
-// přidání objednávky za zákazníka (prázdný employee, proto error)
-if($_POST["employee"] == 0){
+if(!isset($_POST["employee"]) || $_POST["employee"] == 0){
     $_POST["employee"] = "NULL";
 }
 
