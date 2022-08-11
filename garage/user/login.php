@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
 ?>
 <!DOCTYPE html>
@@ -14,8 +14,8 @@ session_start();
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
-    <h1>Přihlásit se</h1>
+<body class="m-md-5 p-md-5 p-3 text-light">
+    <h1><span class="text-primary">Pivovar Garáž</span> -&nbsp;přihlásit&nbsp;se</h1>
     <a class="btn btn-outline-primary" href="../../index.html"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action="loginScript.php" method="post">
         <div class="form-floating mb-3">

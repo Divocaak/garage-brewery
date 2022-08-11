@@ -1,6 +1,10 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
+
+if(!isset($_POST["employee"]) || $_POST["employee"] == 0){
+    $_POST["employee"] = "NULL";
+}
 
 $values = (!isset($_GET["cancel"]) ? ("id_batch=" . $_POST["batch"] . ", thirds=" . $_POST["thirds"] . ", pints=" . $_POST["pints"] . ", id_customer=" . $_POST["user"] . ", id_employee=" . $_POST["employee"] . ", id_status=" . $_POST["status"]) : "id_status=4");
 
@@ -24,7 +28,7 @@ mysqli_close($link);
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="text-center m-5 p-5 text-light">
+<body class="text-center m-md-5 p-md-5 p-3 text-light">
     <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
     <p><?php echo $e == "" ? ('<i class="pe-2 bi bi-check-circle-fill text-success"></i>' . (!isset($_GET["cancel"]) ? "Objednávka byla upravena" : "Objednávka byla zrušena")) : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $e) ?></p>
     <a class="btn btn-primary" href="<?php echo !isset($_GET["cancel"]) ? "orderList.php" : "../homepage.php"; ?>">

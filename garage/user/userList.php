@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
 if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
     header("Location: login.php");
@@ -33,7 +33,7 @@ mysqli_close($link);
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Uživatelé</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <div class="table-responsive">

@@ -1,11 +1,11 @@
 <?php
-require_once "../config.php";
+require_once "config.php";
 session_start();
 if (!isset($_SESSION["currentUser"])) {
     header("Location: user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.label, bs.label, bs.color, os.id, os.label, os.color
+$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id, b.label, bs.label, bs.color, os.id, os.label, os.color
         FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
         WHERE id_customer=" . $_SESSION["currentUser"]["id"] . ";";
 $myOrders = [];
@@ -16,16 +16,17 @@ if ($result = mysqli_query($link, $sql)) {
             "pints" => $row[2],
             "created" => $row[3],
             "batch" => [
-                "label" => $row[4],
+                "id" => $row[4],
+                "label" => $row[5],
                 "status" => [
-                    "label" => $row[5],
-                    "color" => $row[6]
+                    "label" => $row[6],
+                    "color" => $row[7]
                 ]
             ],
             "status" => [
-                "id" => $row[7],
-                "label" => $row[8],
-                "color" => $row[9]
+                "id" => $row[8],
+                "label" => $row[9],
+                "color" => $row[10]
             ]
         ];
     }
@@ -45,24 +46,24 @@ mysqli_close($link);
     <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1>Pivovar Garáž <?php echo $_SESSION["currentUser"]["employee"] ? "<span class='text-primary fw-bold'>administrace</span>" : ""; ?></h1>
     <p>Přihlášen jako <span class="text-primary"><?php echo $_SESSION["currentUser"]["mail"] ?></span></p>
     <a class="btn btn-outline-danger" href="user/logoutScript.php"><i class="bi bi-x-circle pe-2"></i>Odhlásit se</a>
     <?php
     if ($_SESSION["currentUser"]["employee"]) {
-        echo '<a class="btn btn-primary" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
-                <a class="btn btn-primary" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
-                <a class="btn btn-primary" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
-                <a class="btn btn-primary" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
-                <a class="btn btn-primary" href=""><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
-                <a class="btn btn-primary" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
+        echo '<a class="btn btn-primary m-1" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
+                <a class="btn btn-primary m-1" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
+                <a class="btn btn-primary m-1" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
+                <a class="btn btn-primary m-1" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
+                <a class="btn btn-primary m-1" href="feedback/feedbackList.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
+                <a class="btn btn-primary m-1" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
     } else {
-        echo '<a class="btn btn-primary" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
+        echo '<a class="btn btn-primary m-1" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
     }
     ?>
 
-<div class="table-responsive">
+    <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
             <caption>Moje objednávky</caption>
             <thead class="table-dark">
@@ -80,6 +81,14 @@ mysqli_close($link);
             <tbody>
                 <?php
                 foreach ($myOrders as $key => $myOrder) {
+
+                    $btn = "";
+                    if($myOrder["status"]["id"] == 3){
+                        $btn = '<form action="feedback/formFeedback.php" method="post"><button class="btn btn-primary" name="orderId" value="' . $key . '"><i class="bi bi-graph-up-arrow pe-2"></i>Ohodnotit</button></form>';
+                    }else if($myOrder["status"]["id"] == 1){
+                        $btn = '<a class="btn btn-outline-danger deleteBtn" data-order-id=' . $key . '><i class="bi bi-trash"></i></a>';
+                    }
+                    
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($myOrder["created"]), 'd. m. Y H:i:s') . '</td>
@@ -88,7 +97,7 @@ mysqli_close($link);
                             <td>' . $myOrder["thirds"] . '</td>
                             <td>' . $myOrder["pints"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</td>
-                            <td>' . ($myOrder["status"]["id"] != 4 ? ('<a class="btn btn-outline-danger deleteBtn" data-order-id=' . $key . '><i class="bi bi-trash"></i></a>') : "") . '</td>
+                            <td>' . $btn . '</td>
                         </tr>';
                 }
                 ?>

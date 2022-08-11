@@ -1,5 +1,5 @@
 <?php
-require_once "../../config.php";
+require_once "../config.php";
 session_start();
 if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
@@ -17,7 +17,7 @@ if (!isset($_SESSION["currentUser"])) {
     <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-5 p-5 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light">
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
     <a class="btn btn-outline-primary" href="<?php echo ($_SESSION["currentUser"]["employee"]) ? "orderList.php" : "../homepage.php"; ?>"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addOrderScript.php" : "editOrderScript.php?orderId=" . $_GET["orderId"]; ?> method="post">
