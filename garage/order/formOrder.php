@@ -14,10 +14,9 @@ if (!isset($_SESSION["currentUser"])) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
-    <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-md-5 p-md-5 p-3 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
     <a class="btn btn-outline-primary" href="<?php echo ($_SESSION["currentUser"]["employee"]) ? "orderList.php" : "../homepage.php"; ?>"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addOrderScript.php" : "editOrderScript.php?orderId=" . $_GET["orderId"]; ?> method="post">

@@ -43,10 +43,9 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../styles/custom.min.css" rel="stylesheet">
-    <link href="../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-md-5 p-md-5 p-3 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Pivovar Garáž <?php echo $_SESSION["currentUser"]["employee"] ? "<span class='text-primary fw-bold'>administrace</span>" : ""; ?></h1>
     <p>Přihlášen jako <span class="text-primary"><?php echo $_SESSION["currentUser"]["mail"] ?></span></p>
     <a class="btn btn-outline-danger" href="user/logoutScript.php"><i class="bi bi-x-circle pe-2"></i>Odhlásit se</a>

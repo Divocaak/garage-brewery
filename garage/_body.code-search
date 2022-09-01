@@ -1,0 +1,131 @@
+# Query: <body
+# Flags: CaseSensitive WordMatch
+# Including: .php
+# ContextLines: 1
+
+25 results - 25 files
+
+garage/homepage.php:
+  48  
+  49: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  50      <h1>Pivovar Garáž <?php echo $_SESSION["currentUser"]["employee"] ? "<span class='text-primary fw-bold'>administrace</span>" : ""; ?></h1>
+
+garage/batch/addBatchScript.php:
+  24  
+  25: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  26      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/batch/batchList.php:
+  39  
+  40: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  41      <h1>Várky</h1>
+
+garage/batch/delBatchScript.php:
+  23  
+  24: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  25      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/batch/editBatchScript.php:
+  24  
+  25: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  26      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/batch/formBatch.php:
+  19  
+  20: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  21      <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> várku</h1>
+
+garage/beer/addBeerScript.php:
+  23  
+  24: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  25      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/beer/beerList.php:
+  29  
+  30: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  31      <h1>Piva</h1>
+
+garage/beer/delBeerScript.php:
+  23  
+  24: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  25      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/beer/editBeerScript.php:
+  23  
+  24: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  25      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/beer/formBeer.php:
+  19  
+  20: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  21      <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> pivo</h1>
+
+garage/feedback/addFeedbackScript.php:
+  58  
+  59: <body class="text-center m-5 p-5 text-light bg-dark">
+  60      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/feedback/feedbackList.php:
+  111  
+  112: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  113      <h1>Hodnocení várek</h1>
+
+garage/feedback/formFeedback.php:
+  19  
+  20: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  21      <h1>Hodnocení várky</h1>
+
+garage/order/addOrderScript.php:
+  31  
+  32: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  33      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/order/delOrderScript.php:
+  23  
+  24: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  25      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/order/editOrderScript.php:
+  30  
+  31: <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+  32      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/order/formOrder.php:
+  19  
+  20: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  21      <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
+
+garage/order/orderList.php:
+  60  
+  61: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  62      <h1>Objednávky</h1>
+
+garage/settings/settings.php:
+  15  
+  16: <body class="m-5 p-5 text-light bg-dark">
+  17      <h1>Nastavení</h1>
+
+garage/user/login.php:
+  16  
+  17: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  18      <h1><span class="text-primary">Pivovar Garáž</span> -&nbsp;přihlásit&nbsp;se</h1>
+
+garage/user/loginScript.php:
+  39  
+  40: <body class="text-center m-5 p-5 text-light bg-dark">
+  41      <h1 class="pb-3 ms-2">Přihlášení se nezdařilo</h1>
+
+garage/user/register.php:
+  16  
+  17: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  18      <h1>Zaregistrovat se</h1>
+
+garage/user/registerScript.php:
+  28  
+  29: <body class="text-center m-5 p-5 text-light bg-dark">
+  30      <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
+
+garage/user/userList.php:
+  35  
+  36: <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
+  37      <h1>Uživatelé</h1>
