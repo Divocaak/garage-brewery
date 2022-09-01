@@ -17,16 +17,15 @@
     <!-- TODO tiny images -->
     <div id="mainImage">
         <div id="mainImageFooter">
-            <img id="logo" class="rounded-circle" src="imgs/logo.jpg">
+            <img id="logo" class="rounded-circle d-none d-md-block" src="imgs/logo.jpg">
+            <img id="logo-sm" class="rounded-circle d-md-none img-fluid" src="imgs/logo.jpg">
         </div>
     </div>
 
     <!-- NOTE about -->
-    <div class="content-block row" id="about">
-        <div class="col-12 text-center pt-5 mt-5">
+    <div class="content-block row d-flex align-items-center" id="about">
+        <div class="col-12 col-md-6 px-5">
             <h1>O nás</h1>
-        </div>
-        <div class="col-6 px-5">
             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla,
                 ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis
                 viverra
@@ -35,38 +34,69 @@
                 Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
             <p class="text-primary">Nejsme korporát, nejsme komerční!</p>
         </div>
-        <div class="col-6 px-5">
+        <div class="col-12 col-md-6 px-5">
             <img class="img-fluid" src="imgs/about.jpg">
         </div>
     </div>
 
     <!-- NOTE e-garage -->
     <div class="content-block" id="egarage">
-        <div class="content-bg-image" style="background-image: url('imgs/egarage.jpg');"></div>
-        <div class="content-shape content-shape-right">
-            <div class="content-mask content-mask-right"></div>
-            <div class="m-5 p-5">
+        <div class="d-none d-md-block">
+            <div class="content-bg-image" style="background-image: url('imgs/egarage.jpg');"></div>
+            <div class="content-shape content-shape-right">
+                <div class="content-mask content-mask-right"></div>
+                <div class="m-5 p-5">
+                    <h1>Elektronická Garáž</h1>
+                    <p>Elektronická garáž je náš <span class="text-primary">na míru ušitý informační systém</span>,
+                        který
+                        slouží nejen Vám, jakožto zákazníkům
+                        k
+                        <span class="text-primary">objednávce piv</span>, <span class="text-primary">sledování uvařených
+                            várek</span> nebo <span class="text-primary">získání podrobnějších informací</span> o
+                        pivech,
+                        ale také
+                        nám
+                        pivovraníkům, k <span class="text-primary">vyřizování objednávek</span>, sledování <span
+                            class="text-primary">naskladněných piv</span> a další. Jednoduše se <span
+                            class="text-primary">registruj</span> a
+                        <span class="text-primary">vstup</span> do naší Garáže!
+                    </p>
+                    <a href="garage/homepage.php" class="btn btn-primary">Vstoupit do Garáže</a>
+                </div>
+            </div>
+        </div>
+        <div class="d-sm-block d-md-none row">
+            <div class="col-12 p-5">
+                <img class="img-fluid" src="imgs/egarage.jpg">
+            </div>
+            <div class="col-12 px-5">
                 <h1>Elektronická Garáž</h1>
-                <p>Elektronická garáž je náš <span class="text-primary">na míru ušitý informační systém</span>, který slouží nejen Vám, jakožto zákazníkům
-                    k
-                <span class="text-primary">objednávce piv</span>, <span class="text-primary">sledování uvařených várek</span> nebo <span class="text-primary">získání podrobnějších informací</span> o pivech, ale také
-                    nám
-                    pivovraníkům, k <span class="text-primary">vyřizování objednávek</span>, sledování <span class="text-primary">naskladněných piv</span> a další. Jednoduše se <span class="text-primary">registruj</span> a
-                    <span class="text-primary">vstup</span> do naší Garáže!</p>
-                <a href="garage/homepage.php" class="btn btn-primary">Vstoupit do Garáže</a>
+                    <p>Elektronická garáž je náš <span class="text-primary">na míru ušitý informační systém</span>,
+                        který
+                        slouží nejen Vám, jakožto zákazníkům
+                        k
+                        <span class="text-primary">objednávce piv</span>, <span class="text-primary">sledování uvařených
+                            várek</span> nebo <span class="text-primary">získání podrobnějších informací</span> o
+                        pivech,
+                        ale také
+                        nám
+                        pivovraníkům, k <span class="text-primary">vyřizování objednávek</span>, sledování <span
+                            class="text-primary">naskladněných piv</span> a další. Jednoduše se <span
+                            class="text-primary">registruj</span> a
+                        <span class="text-primary">vstup</span> do naší Garáže!
+                    </p>
+                    <a href="garage/homepage.php" class="btn btn-primary">Vstoupit do Garáže</a>
             </div>
         </div>
     </div>
 
     <!-- NOTE socials -->
-    <div class="content-block row" id="socials">
-        <div class="col-12 text-center pt-5 mt-5">
-            <h1>Komunita</h1>
-        </div>
-        <div class="col-6 px-5">
+    <div class="content-block row d-flex align-items-center" id="socials">
+        <div class="col-12 col-md-6 px-5">
             <img class="img-fluid" src="imgs/social.jpg">
         </div>
-        <div class="col-6 px-5">
+        <div class="col-12 col-md-6 px-5">
+            <h1>Komunita</h1>
             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla,
                 ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis
                 viverra
@@ -82,12 +112,29 @@
 
     <!-- NOTE beers -->
     <div class="content-block" id="beers">
-        <div class="content-bg-image" style="background-image: url('imgs/beers.jpg');"></div>
-        <div class="content-shape content-shape-left">
-            <div class="content-mask content-mask-left"></div>
-            <div class="m-5 p-5">
+        <div class="d-none d-md-block">
+            <div class="content-bg-image" style="background-image: url('imgs/beers.jpg');"></div>
+            <div class="content-shape content-shape-left">
+                <div class="content-mask content-mask-left"></div>
+                <div class="m-5 p-5">
+                    <h1>Piva</h1>
+                    <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi
+                        chmelů
+                        a sladů, stále hledáme naše místo a naší <span class="text-primary">specifickou chuť</span>. Pár
+                        osvědčených receptů už ale máme, najdeš je po přihlášení v naší <span
+                            class="text-primary">Elektronické Garáži</span>.</p>
+                    <a href="#egarage" class="btn btn-primary">Co je Elektronická Garáž?</a>
+                </div>
+            </div>
+        </div>
+        <div class="d-sm-block d-md-none row">
+            <div class="col-12 p-5">
+                <img class="img-fluid" src="imgs/beers.jpg">
+            </div>
+            <div class="col-12 px-5">
                 <h1>Piva</h1>
-                <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi chmelů
+                <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi
+                    chmelů
                     a sladů, stále hledáme naše místo a naší <span class="text-primary">specifickou chuť</span>. Pár
                     osvědčených receptů už ale máme, najdeš je po přihlášení v naší <span
                         class="text-primary">Elektronické Garáži</span>.</p>

@@ -19,3 +19,8 @@
     height: 75vh;
     width: auto;
 }
+
+#logo-sm{
+    position: relative;
+    bottom: 15vh;
+}
