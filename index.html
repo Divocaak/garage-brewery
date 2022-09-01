@@ -7,66 +7,167 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="styles/custom.min.css" rel="stylesheet">
-    <link href="styles/index.css" rel="stylesheet">
+    <link href="styles/index/content-block.css" rel="stylesheet">
+    <link href="styles/index/content-plain.css" rel="stylesheet">
+    <link href="styles/index/content-image.css" rel="stylesheet">
+    <link href="styles/index/header.css" rel="stylesheet">
 </head>
 
-<body class="text-light">
-    <div id="mainImage"></div>
-    <div class="row text-center mb-5 pb-5">
-        <div class="col-4 mt-5 pt-5">
-            <h1>Pivovar</h1>
-        </div>
-        <div class="col-4">
-            <img id="logo" src="imgs/logo.png">
-        </div>
-        <div class="col-4 mt-5 pt-5">
-            <h1>Garáž</h1>
-        </div>
-        <div class="col-12">
-            <a href="garage/homepage.php" class="btn btn-primary mb-3">Vstoupit do Garáže</a>
-            <p style="padding-left: 20vw;padding-right: 20vw;">Vstup do naší elektronické garáže pro objednávku piva, recenzi a celkový přehled.</p>
+<body class="text-light bg-dark">
+    <!-- TODO tiny images -->
+    <div id="mainImage">
+        <div id="mainImageFooter">
+            <img id="logo" class="rounded-circle" src="imgs/logo.jpg">
         </div>
     </div>
-    <div class="content-block">
-        <div class="content-bg-image"></div>
+
+    <!-- NOTE about -->
+    <div class="content-block row" id="about">
+        <div class="col-12 text-center pt-5 mt-5">
+            <h1>O nás</h1>
+        </div>
+        <div class="col-6 px-5">
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla,
+                ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis
+                viverra
+                diam non justo. Maecenas libero. Quis autem vel eum in
+                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem.
+                Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
+            <p class="text-primary">Nejsme korporát, nejsme komerční!</p>
+        </div>
+        <div class="col-6 px-5">
+            <img class="img-fluid" src="imgs/about.jpg">
+        </div>
+    </div>
+
+    <!-- NOTE e-garage -->
+    <div class="content-block" id="egarage">
+        <div class="content-bg-image" style="background-image: url('imgs/egarage.jpg');"></div>
         <div class="content-shape content-shape-right">
             <div class="content-mask content-mask-right"></div>
-            <p class="m-5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non justo. Maecenas libero. Quis autem vel eum
-                iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? Sed elit dui, pellentesque a, faucibus vel, interdum nec, diam. Donec vitae arcu. Maecenas
-                aliquet accumsan leo. Aenean fermentum risus id tortor. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Integer in sapien. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
+            <div class="m-5 p-5">
+                <h1>Elektronická Garáž</h1>
+                <p>Elektronická garáž je náš <span class="text-primary">na míru ušitý informační systém</span>, který slouží nejen Vám, jakožto zákazníkům
+                    k
+                <span class="text-primary">objednávce piv</span>, <span class="text-primary">sledování uvařených várek</span> nebo <span class="text-primary">získání podrobnějších informací</span> o pivech, ale také
+                    nám
+                    pivovraníkům, k <span class="text-primary">vyřizování objednávek</span>, sledování <span class="text-primary">naskladněných piv</span> a další. Jednoduše se <span class="text-primary">registruj</span> a
+                    <span class="text-primary">vstup</span> do naší Garáže!</p>
+                <a href="garage/homepage.php" class="btn btn-primary">Vstoupit do Garáže</a>
+            </div>
         </div>
     </div>
-    <div class="content-block">
+
+    <!-- NOTE socials -->
+    <div class="content-block row" id="socials">
+        <div class="col-12 text-center pt-5 mt-5">
+            <h1>Komunita</h1>
+        </div>
+        <div class="col-6 px-5">
+            <img class="img-fluid" src="imgs/social.jpg">
+        </div>
+        <div class="col-6 px-5">
+            <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla,
+                ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis
+                viverra
+                diam non justo. Maecenas libero. Quis autem vel eum in
+                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem.
+                Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
+            <a class="btn btn-primary" href="https://www.instagram.com/pivovar.garaz/" target="_blank"><i
+                    class="bi bi-instagram pe-2"></i>Instagram</a>
+            <a class="btn btn-primary" href="https://www.facebook.com/garaz.pivovar/" target="_blank"><i
+                    class="bi bi-facebook pe-2"></i>Facebook</a>
+        </div>
+    </div>
+
+    <!-- NOTE beers -->
+    <div class="content-block" id="beers">
+        <div class="content-bg-image" style="background-image: url('imgs/beers.jpg');"></div>
+        <div class="content-shape content-shape-left">
+            <div class="content-mask content-mask-left"></div>
+            <div class="m-5 p-5">
+                <h1>Piva</h1>
+                <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi chmelů
+                    a sladů, stále hledáme naše místo a naší <span class="text-primary">specifickou chuť</span>. Pár
+                    osvědčených receptů už ale máme, najdeš je po přihlášení v naší <span
+                        class="text-primary">Elektronické Garáži</span>.</p>
+                <a href="#egarage" class="btn btn-primary">Co je Elektronická Garáž?</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTE footer -->
+    <footer class="bg-dark text-center">
+        <div class="container p-4">
+            <section class="mb-4">
+                <h2 class="text-primary">Pivovar Garáž</h2>
+            </section>
+            <section class="">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <img class="w-75 rounded-circle" src="imgs/logo.jpg">
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-secondary">Navigace</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="#about" class="text-white">O pivovaru</a></li>
+                            <li><a href="#egarage" class="text-white">Elektronická Garáž</a></li>
+                            <li><a href="#socials" class="text-white">Komunita</a></li>
+                            <li><a href="#beers" class="text-white">Piva</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-secondary">Sociální sítě</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li><a href="https://www.instagram.com/pivovar.garaz/" class="text-white"
+                                    target="_blank">Instagram</a></li>
+                            <li><a href="https://www.facebook.com/garaz.pivovar/" class="text-white"
+                                    target="_blank">Facebook</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-secondary">Kontakt</h5>
+                        <ul class="list-unstyled mb-0">
+                            <!-- TODO finish -->
+                            <li><a href="#" class="text-white">Google Play</a></li>
+                            <li><a href="#" class="text-white">App Store</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="text-center pb-3">
+            <!-- NOTE můj web -->
+            <p>© 2022 Copyright: <a class="text-white text-decoration-underline" href="http://www.divokyvojtech.cz/"
+                    target="_blank">Vojtěch Divoký</a></p>
+            <p>Použité fotografie: <a class="text-white text-decoration-underline" href="https://pavelbalek.cz/gallery"
+                    target="_blank">Pavel Balek</a> (<a class="text-white text-decoration-underline"
+                    href="https://www.instagram.com/tntjukebox/" target="_blank">Instagram</a>, <a
+                    class="text-white text-decoration-underline" href="https://www.facebook.com/PhotoBalek"
+                    target="_blank">Facebook</a>)</p>
+        </div>
+    </footer>
+
+    <!-- <div class="content-block">
         <div class="content-bg-image"></div>
         <div class="content-shape content-shape-left  content-shape-left-car">
             <div class="content-mask content-mask-left content-mask-left-car">
                 <img src="imgs/car.png" class="car-img">
             </div>
-            <p class="m-5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non justo. Maecenas libero. Quis autem vel eum
-                iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? Sed elit dui, pellentesque a, faucibus vel, interdum nec, diam. Donec vitae arcu. Maecenas
-                aliquet accumsan leo. Aenean fermentum risus id tortor. Etiam ligula pede, sagittis quis, interdum ultricies, scelerisque eu. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor. Integer in sapien. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
+            <p class="m-5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper
+                nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non
+                justo. Maecenas libero. Quis autem vel eum
+                iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui
+                dolorem eum fugiat quo voluptas nulla pariatur? Sed elit dui, pellentesque a, faucibus vel, interdum
+                nec, diam. Donec vitae arcu. Maecenas
+                aliquet accumsan leo. Aenean fermentum risus id tortor. Etiam ligula pede, sagittis quis, interdum
+                ultricies, scelerisque eu. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor.
+                Integer in sapien. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at
+                lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis
+                dolor.</p>
         </div>
-    </div>
-    <div class="row my-5 py-5">
-        <div class="col-4">
-            <a href=""><img src="imgs/phone.png" class="img-fluid"></a>
-        </div>
-        <div class="col-4 text-center my-auto">
-            <h2>Socky</h2>
-            <p class="mx-5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non justo. Maecenas libero. Quis autem vel eum
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
-        </div>
-        <div class="col-4">
-            <a href=""><img src="imgs/phone.png" class="img-fluid"></a>
-        </div>
-    </div>
-    <div class="row text-center pb-5 pt-4 m-5 border-top border-2">
-        <h3>kontakt</h3>
-        <p class="px-5 pt-3">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non justo. Maecenas libero. Quis autem vel eum in
-            reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis dolor.</p>
-    </div>
+    </div> -->
 </body>
 
 </html>
