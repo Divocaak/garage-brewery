@@ -1,11 +1,14 @@
 <?php
 require_once "../config.php";
 session_start();
-if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
+$sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color,
+        (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4),
+        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4)
+        FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
 $batches = [];
 if ($result = mysqli_query($link, $sql)) {
     while ($row = mysqli_fetch_row($result)) {
@@ -18,7 +21,9 @@ if ($result = mysqli_query($link, $sql)) {
             "pints" => $row[6],
             "statusId" => $row[7],
             "statusLabel" => $row[8],
-            "statusColor" => $row[9]
+            "statusColor" => $row[9],
+            "thirdsOrdered" => $row[10],
+            "pintsOrdered" => $row[11],
         ];
     }
     mysqli_free_result($result);
@@ -49,8 +54,8 @@ mysqli_close($link);
                     <th scope="col">Pivo</th>
                     <th scope="col">Várka</th>
                     <th scope="col">Vytvořeno</th>
-                    <th scope="col">Třetinky [ks]</th>
-                    <th scope="col">Půllitry [ks]</th>
+                    <th scope="col">Třetinky [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá)</th>
+                    <th scope="col">Půllitry [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá)</th>
                     <th scope="col">Status</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -60,13 +65,15 @@ mysqli_close($link);
                 <?php
                 $_SESSION["batches"] = $batches;
                 foreach ($batches as $key => $batch) {
+                    $thirdsRemaining = $batch["thirds"] - $batch["thirdsOrdered"];
+                    $pintsRemaining = $batch["pints"] - $batch["pintsOrdered"];
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . $batch["beerLabel"] . '</td>
                             <td>' . $batch["batchLabel"] . '</td>
                             <td>' . date_format(date_create($batch["created"]), 'd. m. Y') . '</td>
-                            <td>' . $batch["thirds"] . '</td>
-                            <td>' . $batch["pints"] . '</td>
+                            <td>' . $batch["thirdsOrdered"] . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . '</span></td>
+                            <td>' . $batch["pintsOrdered"] . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . '</span></td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $batch["statusColor"] . ';">' . $batch["statusLabel"] . '</td>
                             <td><a class="btn btn-outline-secondary" href="formBatch.php?batchId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
                             <td><a class="btn btn-outline-danger deleteBtn" data-batch-id=' . $key . '><i class="bi bi-trash"></i></a></td>
