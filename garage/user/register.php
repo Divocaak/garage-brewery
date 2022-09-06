@@ -50,10 +50,10 @@ session_start();
         <button type="submit" class="btn btn-primary"><i class="pe-2 bi bi-door-open"></i>Registrovat se</button>
     </form>
     <div class="mt-3">
-        <i>Proč chceme znát Váš <span class="text-primary">e-mail</span>, <span class="text-primary">instagram</span> a <span class="text-primary">jméno</span>?</i>
-        <p class="mt-4">Váš <span class="text-primary">e-mail</span> použijeme výhradně k oznámení událostí v pivovaru, například dokvašení Vámi zarezervované várky, nebo příprava várky nové.</p>
-        <p>Vaše <span class="text-primary">jméno</span> nemáme v plánu nikomu vyzrazovat, použijeme jej pouze k oslovení v zasílaném e-mailu.</p>
-        <p>Proč chceme znát Váš <span class="text-primary">instagram</span>? Z prostého důvodu, chceme vědět, kdo o nás má zájem. Toto pole však není povinné, je jen na Vás, jestli nám jej poskytnete, nebo ne.</p>
+        <i>Proč chceme znát Tvůj <span class="text-primary">e-mail</span>, <span class="text-primary">instagram</span> a <span class="text-primary">jméno</span>?</i>
+        <p class="mt-4">Tvůj <span class="text-primary">e-mail</span> použijeme výhradně k oznámení událostí v pivovaru, například dokvašení Tebou zarezervované várky, nebo příprava várky nové.</p>
+        <p>Tvoje <span class="text-primary">jméno</span> nemáme v plánu nikomu vyzrazovat, použijeme jej pouze k oslovení v zasílaném e-mailu.</p>
+        <p>Proč chceme znát Tvůj <span class="text-primary">instagram</span>? Z prostého důvodu, chceme vědět, kdo o nás má zájem. Toto pole však není povinné, je teda jenom na Tobě, jestli nám jej poskytneš, nebo ne.</p>
         <p>Žádný z těchto údajů <u>nebudeme</u> přeposílat třetím stranám, nebo prodávat.</p>
     </div>
 </body>
