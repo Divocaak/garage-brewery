@@ -71,8 +71,8 @@ mysqli_close($link);
                     <th scope="col">Vytvořeno</th>
                     <th scope="col">Várka</th>
                     <th scope="col">Status várky</th>
-                    <th scope="col">Třetinky [ks/várka ks]</th>
-                    <th scope="col">Půllitry [ks/várka ks]</th>
+                    <th scope="col">Třetinky [ks]</th>
+                    <th scope="col">Půllitry [ks]</th>
                     <th scope="col">Status objednávky</th>
                     <th scope="col"></th>
                 </tr>
