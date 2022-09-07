@@ -3,7 +3,11 @@ require_once "../config.php";
 
 $e = "";
 $sql = "INSERT INTO beer (label) VALUES ('" . $_POST["label"] . "');";
-if (!mysqli_query($link, $sql)) {
+if (mysqli_query($link, $sql)) {
+    $json = json_decode(file_get_contents("../beers.json"), true);
+    $json[mysqli_insert_id($link)] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
+    file_put_contents("../beers.json", json_encode($json));
+}else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
 mysqli_close($link);

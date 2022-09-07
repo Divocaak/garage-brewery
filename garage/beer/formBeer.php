@@ -24,6 +24,17 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
             <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["beers"][$_GET["beerId"]]["label"] : ""; ?>">
             <label for="label" class="form-label">Název</label>
         </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="shortDesc" name="shortDesc" value="<?php echo !isset($_GET["add"]) ? $_SESSION["beers"][$_GET["beerId"]]["shortDesc"] : ""; ?>">
+            <label for="shortDesc" class="form-label">Krátký popis (zobrazuje se v seznamu piv)</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="longDesc" name="longDesc" value="<?php echo !isset($_GET["add"]) ? $_SESSION["beers"][$_GET["beerId"]]["longDesc"] : ""; ?>">
+            <label for="longDesc" class="form-label">Dlouhý popis (zobrazuje se v detailu piva)</label>
+        </div>
+        <div class="form-floating mb-3">
+            <p class="text-info">Podpora HTML znaků (všechno krom názvu piva), nepoužívat dvojité ("") uvozovky, vyměnit za jednoduché ('')</p>
+        </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> Pivo</button>
     </form>
 </body>

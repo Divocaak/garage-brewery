@@ -1,15 +1,20 @@
 <?php
 require_once "../config.php";
 session_start();
-if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
+if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
 }
 
+$json = json_decode(file_get_contents("../beers.json"), true);
 $sql = "SELECT id, label FROM beer;";
 $beers = [];
 if ($result = mysqli_query($link, $sql)) {
     while ($row = mysqli_fetch_row($result)) {
-        $beers[$row[0]] = ["label" => $row[1]];
+        $beers[$row[0]] = [
+            "label" => $row[1],
+            "shortDesc" => isset($json[$row[0]]) ? $json[$row[0]]["shortDesc"] : "",
+            "longDesc" => isset($json[$row[0]]) ? $json[$row[0]]["longDesc"] : ""
+        ];
     }
     mysqli_free_result($result);
 }
@@ -29,7 +34,11 @@ mysqli_close($link);
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Piva</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <a class="btn btn-outline-success" href="formBeer.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>
+    <?php
+    if ($_SESSION["currentUser"]["employee"]) {
+        echo '<a class="btn btn-outline-success" href="formBeer.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>';
+    }
+    ?>
     <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
             <caption>Seznam piv</caption>
@@ -37,8 +46,14 @@ mysqli_close($link);
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Jméno</th>
+                    <th scope="col">Krátký popis</th>
                     <th scope="col"></th>
-                    <th scope="col"></th>
+                    <?php
+                    if ($_SESSION["currentUser"]["employee"]) {
+                        echo '<th scope="col"></th>
+                            <th scope="col"></th>';
+                    }
+                    ?>
                 </tr>
             </thead>
             <tbody>
@@ -48,9 +63,14 @@ mysqli_close($link);
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . $beer["label"] . '</td>
-                            <td><a class="btn btn-outline-secondary" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
-                            <td><a class="btn btn-outline-danger deleteBtn" data-beer-id=' . $key . '><i class="bi bi-trash"></i></a></td>
-                        </tr>';
+                            <td>' . ($beer["shortDesc"] != "" ? $beer["shortDesc"] : "-") . '</td>
+                            <td><a class="btn btn-outline-info beerDetailBtn" data-beer-id=' . $key . ' data-beer-name="' . $beer["label"] . '"><i class="bi bi-search"></i></a></td>';
+                    if ($_SESSION["currentUser"]["employee"]) {
+                        echo '<td><a class="btn btn-outline-secondary" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
+                                <td><a class="btn btn-outline-danger deleteBtn" data-beer-id=' . $key . '><i class="bi bi-trash"></i></a></td>';
+                    }
+
+                    echo '</tr>';
                 }
                 ?>
             </tbody>
@@ -74,13 +94,50 @@ mysqli_close($link);
         </div>
     </div>
 
+    <div class="modal fade" id="beerDetailModal" tabindex="-1" aria-labelledby="beerDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail piva</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <h3 id="beerName"></h3>
+                        <p id="beerShortDesc"></p>
+                        <p id="beerLongDesc"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
             var beerId;
-            $(".deleteBtn").click(function() {
+            $(".deleteBtn, .beerDetailBtn").click(function() {
                 beerId = $(this).data("beerId");
+            });
+
+            $(".beerDetailBtn").click(function() {
+                let beerName = $(this).data("beerName");
+                $.getJSON("../beers.json", function(data) {
+                    $("#beerName").text(beerName);
+                    if (data[beerId] != null) {
+                        $("#beerShortDesc").html(data[beerId]["shortDesc"]);
+                        $("#beerLongDesc").html(data[beerId]["longDesc"]);
+                    }
+                    $('#beerDetailModal').modal('show');
+                }).fail(function() {
+                    alert("Při načítání dat se vyskytla chyba.");
+                });
+            });
+
+            $(".deleteBtn").click(function() {
                 $('#confDeleteModal').modal('show');
             });
 

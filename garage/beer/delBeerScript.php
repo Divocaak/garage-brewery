@@ -3,7 +3,11 @@ require_once "../config.php";
 
 $e = "";
 $sql = "DELETE FROM beer WHERE id=" . $_GET["id"] . ";";
-if (!mysqli_query($link, $sql)) {
+if (mysqli_query($link, $sql)) {
+    $json = json_decode(file_get_contents("../beers.json"), true);
+    unset($json[$_GET["id"]]);
+    file_put_contents("../beers.json", json_encode($json));
+}else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
 mysqli_close($link);

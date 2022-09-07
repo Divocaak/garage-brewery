@@ -88,7 +88,7 @@ mysqli_close($link);
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($order["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . $order["customer"]["name"] . '</td>
-                            <td><a class="btn btn-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
+                            <td><a class="btn btn-outline-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["batch"]["status"]["color"] . ';">' . $order["batch"]["status"]["label"] . '</td>
                             <td>' . $order["thirds"] . "/" . $order["batch"]["thirds"] . '</td>

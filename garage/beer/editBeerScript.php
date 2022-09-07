@@ -3,7 +3,11 @@ require_once "../config.php";
 
 $e = "";
 $sql = "UPDATE beer SET label='" . $_POST["label"] . "' WHERE id=" . $_GET["beerId"] . ";";
-if (!mysqli_query($link, $sql)) {
+if (mysqli_query($link, $sql)) {
+    $json = json_decode(file_get_contents("../beers.json"), true);
+    $json[$_GET["beerId"]] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
+    file_put_contents("../beers.json", json_encode($json));
+}else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
 mysqli_close($link);
