@@ -4,10 +4,8 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 //Load Composer's autoloader
-require 'config.php';
-require '../vendor/autoload.php';
-
-sendMail("test fce", "test alt", "Testovací zpráva", "Testovací zpráva", "divokyvojta@gmail.com");
+require '../config.php';
+require '../../vendor/autoload.php';
 
 function sendMail($body, $bodyAlt, $title, $subject, $address){
     $mail = new PHPMailer(true);
