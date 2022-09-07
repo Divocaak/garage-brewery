@@ -9,10 +9,10 @@ if (mysqli_query($link, $sql)) {
     $json[mysqli_insert_id($link)] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
     file_put_contents("../beers.json", json_encode($json));
 
-    //TODO send to all emails
+    //TODO email to all
     // ... a jmenuje se ...
-    /* sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span class='text-primary'>nový recept, nové pivo!</span>. Neboj, až z něj uvaříme várku, <span class='text-primary'>dáme vědět</span>.",
-    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", all); */
+    /* sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span class='text-primary'>nový recept, nové pivo!</span>. Jmenuje se <span class='text-primary fw-bold'>" . $_POST["label] . "</span>! Neboj, až z něj uvaříme várku, <span class='text-primary'>dáme vědět</span>.",
+    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_POST["label] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", all); */
 }else{
     $e = $sql . "<br>" . mysqli_error($link);
 }

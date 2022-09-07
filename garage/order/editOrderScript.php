@@ -2,15 +2,32 @@
 require_once "../config.php";
 session_start();
 
-if(!isset($_POST["employee"]) || $_POST["employee"] == 0){
+if (!isset($_POST["employee"]) || $_POST["employee"] == 0) {
     $_POST["employee"] = "NULL";
 }
+
 
 $values = (!isset($_GET["cancel"]) ? ("id_batch=" . $_POST["batch"] . ", thirds=" . $_POST["thirds"] . ", pints=" . $_POST["pints"] . ", id_customer=" . $_POST["user"] . ", id_employee=" . $_POST["employee"] . ", id_status=" . $_POST["status"]) : "id_status=4");
 
 $e = "";
 $sql = "UPDATE beer_order SET " . $values . " WHERE id=" . $_GET["orderId"] . ";";
-if (!mysqli_query($link, $sql)) {
+if (mysqli_query($link, $sql)) {
+    if (isset($_GET["cancel"])) {
+        // TODO email
+        // sendMail("S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva <span class='text-primary'>byla zrušena</span>.",
+        // "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva byla zrušena.", "To nás moc mrzí", "Zrušení objednávky", "");
+    } else {
+        // 3 | předáno - čeká na ohodnocení
+        // 5 | ohodnoceno - uzavřeno
+        switch ($_POST["status"]) {
+            case 3:
+                //sendMail("Ahoj! Chceme Ti ještě jednou poděkovat, že ")
+                break;
+            case 5:
+                break;
+        }
+    }
+} else {
     $e = $sql . "<br>" . mysqli_error($link);
 }
 mysqli_close($link);
