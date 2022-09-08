@@ -13,25 +13,51 @@ $values = (!isset($_GET["cancel"]) ? ("id_batch=" . $_POST["batch"] . ", thirds=
 $e = "";
 $sql = "UPDATE beer_order SET " . $values . " WHERE id=" . $_GET["orderId"] . ";";
 if (mysqli_query($link, $sql)) {
-    if (isset($_GET["cancel"])) {
-        // TODO email
-        sendMail("S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " <span style='color: #ffc107'>byla zrušena</span>.",
-        "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " byla zrušena.", "To nás moc mrzí", ("Zrušení objednávky číslo " . $_GET["orderId"]), "");
+    $thirdsChanged = $_POST["thirdsBef"] != $_POST["thirds"];
+    $pintsChanged = $_POST["pintsBef"] != $_POST["pints"];
+    if ($thirdsChanged || $pintsChanged) {
+        $mailBody = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo <span style='color: #ffc107'>" . $_GET["orderId"] . " nasázených fakt raketu, ale každopádně to prostě nevychází. 
+        Museli jsme Ti teda trochu <span style='color: #ffc107'>pozměnit počty objednaných pivek</span>. Kdyby to byl fakt velkej problém, <span style='color: #ffc107'>ozvi se nám</span> a nějak to vymyslíme. Sorry za komplikace. Změna nebo změny:</br></br>"
+            . ($thirdsChanged ? ("Třetinky: <span style='color: #6c757d'>" . $_POST["thirdsBef"] . "</span> => <span style='color: #ffc107'>" . $_POST["thirds"] . "</span></br>") : "")
+            . ($pintsChanged ? ("Půllitry: <span style='color: #6c757d'>" . $_POST["pintsBef"] . "</span> => <span style='color: #ffc107'>" . $_POST["pints"] . "</span></br>") : "");
+
+        $mailBodyAlt = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo " . $_GET["orderId"] . " nasázených fakt raketu, ale každopádně to prostě nevychází. 
+         Museli jsme Ti teda trochu pozměnit počty objednaných pivek. Kdyby to byl fakt velkej problém, ozvi se nám a nějak to vymyslíme. Sorry za komplikace. Změna nebo změny:</br></br>"
+            . ($thirdsChanged ? ("Třetinky: " . $_POST["thirdsBef"] . " => " . $_POST["thirds"] . "</br>") : "")
+            . ($pintsChanged ? ("Půllitry: " . $_POST["pintsBef"] . " => " . $_POST["pints"] . "</br>") : "");
+
+        sendMail($mailBody, $mailBodyAlt, "Někomu z nás se něco nepovedlo...", ("Úprava objednávky číslo " . $_GET["orderId"]), $_POST["email"]);
+    }
+
+    if (isset($_GET["cancel"]) || $_POST["status"] == 4) {
+        sendMail(
+            "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " <span style='color: #ffc107'>byla zrušena</span>.",
+            "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " byla zrušena.",
+            "To nás moc mrzí",
+            ("Zrušení objednávky číslo " . $_GET["orderId"]),
+            $_POST["email"]
+        );
     } else {
         switch ($_POST["status"]) {
             case 3:
-                // TODO email
-                sendMail("Ahoj! Chceme Ti ještě jednou <span style='color: #ffc107'>poděkovat</span>, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
+                sendMail(
+                    "Ahoj! Chceme Ti ještě jednou <span style='color: #ffc107'>poděkovat</span>, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
                 u objednávky <span style='color: #ffc107'>číslo " . $_GET["orderId"] . "</span> jsme Ti změnili stav, takže teď můžeš pivo <span style='color: #ffc107'>ohodnotit</span>. Díky!",
-                "Ahoj! Chceme Ti ještě jednou poděkovat, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
+                    "Ahoj! Chceme Ti ještě jednou poděkovat, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
                 u objednávky číslo " . $_GET["orderId"] . " jsme Ti změnili stav, takže teď můžeš pivo ohodnotit. Díky!",
-                "Tak jak ti chutnalo?", ("Ohodnoť objednávku číslo " . $_GET["orderId"]), "");
+                    "Tak jak ti chutnalo?",
+                    ("Ohodnoť objednávku číslo " . $_GET["orderId"]),
+                    $_POST["email"]
+                );
                 break;
             case 5:
-                // TODO email
-                sendMail("Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě <span style='color: #ffc107'>Tvoje hodnocení</span> bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
-                "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě Tvoje hodnocení bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
-                "Hodnocení už je u nás", ("Hodnocení objednávky číslo " . $_GET["orderId"]), "");
+                sendMail(
+                    "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě <span style='color: #ffc107'>Tvoje hodnocení</span> bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+                    "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě Tvoje hodnocení bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+                    "Hodnocení už je u nás",
+                    ("Hodnocení objednávky číslo " . $_GET["orderId"]),
+                    $_POST["email"]
+                );
                 break;
         }
     }
