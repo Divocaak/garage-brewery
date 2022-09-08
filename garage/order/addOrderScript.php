@@ -1,8 +1,10 @@
 <?php
 require_once "../config.php";
+require_once "../mail/mail.php";
 session_start();
 
 $userId = ($_SESSION["currentUser"]["employee"]) ? $_POST["user"] : $_SESSION["currentUser"]["id"];
+$email = ($_SESSION["currentUser"]["employee"]) ? $_POST["email"] : $_SESSION["currentUser"]["mail"];
 
 if(!isset($_POST["employee"]) || $_POST["employee"] == 0){
     $_POST["employee"] = "NULL";
@@ -11,7 +13,13 @@ if(!isset($_POST["employee"]) || $_POST["employee"] == 0){
 $e = "";
 $sql = "INSERT INTO beer_order (id_customer, id_batch, thirds, pints" . (($_SESSION["currentUser"]["employee"]) ? ", id_employee, id_status" : "") . ") 
         VALUES (" . $userId . ", " . $_POST["batch"] . ", " . $_POST["thirds"] . ", " . $_POST["pints"] . (($_SESSION["currentUser"]["employee"]) ? (", " . $_POST["employee"] . ", " . $_POST["status"]) : "") . ");";
-if (!mysqli_query($link, $sql)) {
+if (mysqli_query($link, $sql)) {
+    $orderId = mysqli_insert_id($link);
+    sendMail("Jo, vidíme to tady. Nová <span style='color: #ffc107'>objednávka číslo " . $orderId . "</span>. Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou <span style='color: #ffc107'>chodit do mailu</span>, 
+        nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit!",
+        "Jo, vidíme to tady. Nová objednávka číslo " . $orderId . ". Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou chodit do mailu, 
+        nebo je můžeš sledovat přímo v Elekrtronické Garáži. Tak zatím, my to jdeme vyřídit!", "Tvoje objednávka už je u nás", ("Objednávka číslo " . $orderId), $email);
+}else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
 mysqli_close($link);

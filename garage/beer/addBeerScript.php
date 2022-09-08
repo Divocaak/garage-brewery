@@ -1,6 +1,6 @@
 <?php
 require_once "../config.php";
-//require_once "../mail/mail.php";
+require_once "../mail/mail.php";
 
 $e = "";
 $sql = "INSERT INTO beer (label) VALUES ('" . $_POST["label"] . "');";
@@ -9,10 +9,8 @@ if (mysqli_query($link, $sql)) {
     $json[mysqli_insert_id($link)] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
     file_put_contents("../beers.json", json_encode($json));
 
-    //TODO email to all
-    // ... a jmenuje se ...
-    /* sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107 font-weight: bold;'>" . $_POST["label] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
-    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_POST["label] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", all); */
+    sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107 font-weight: bold;'>" . $_POST["label"] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
+    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_POST["label"] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", getAllEmails($link));
 }else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
