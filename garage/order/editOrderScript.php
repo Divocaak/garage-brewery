@@ -1,5 +1,6 @@
 <?php
 require_once "../config.php";
+require_once "../mail/mail.php";
 session_start();
 
 if (!isset($_POST["employee"]) || $_POST["employee"] == 0) {
@@ -14,16 +15,23 @@ $sql = "UPDATE beer_order SET " . $values . " WHERE id=" . $_GET["orderId"] . ";
 if (mysqli_query($link, $sql)) {
     if (isset($_GET["cancel"])) {
         // TODO email
-        // sendMail("S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva <span class='text-primary'>byla zrušena</span>.",
-        // "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva byla zrušena.", "To nás moc mrzí", "Zrušení objednávky", "");
+        sendMail("S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " <span style='color: #ffc107'>byla zrušena</span>.",
+        "S hlubokou záští a smutkem v našich srdcích jsme nuceni Ti oznámit, že Tvoje objednáva číslo " . $_GET["orderId"] . " byla zrušena.", "To nás moc mrzí", ("Zrušení objednávky číslo " . $_GET["orderId"]), "");
     } else {
-        // 3 | předáno - čeká na ohodnocení
-        // 5 | ohodnoceno - uzavřeno
         switch ($_POST["status"]) {
             case 3:
-                //sendMail("Ahoj! Chceme Ti ještě jednou poděkovat, že ")
+                // TODO email
+                sendMail("Ahoj! Chceme Ti ještě jednou <span style='color: #ffc107'>poděkovat</span>, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
+                u objednávky <span style='color: #ffc107'>číslo " . $_GET["orderId"] . "</span> jsme Ti změnili stav, takže teď můžeš pivo <span style='color: #ffc107'>ohodnotit</span>. Díky!",
+                "Ahoj! Chceme Ti ještě jednou poděkovat, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
+                u objednávky číslo " . $_GET["orderId"] . " jsme Ti změnili stav, takže teď můžeš pivo ohodnotit. Díky!",
+                "Tak jak ti chutnalo?", ("Ohodnoť objednávku číslo " . $_GET["orderId"]), "");
                 break;
             case 5:
+                // TODO email
+                sendMail("Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě <span style='color: #ffc107'>Tvoje hodnocení</span> bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+                "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě Tvoje hodnocení bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+                "Hodnocení už je u nás", ("Hodnocení objednávky číslo " . $_GET["orderId"]), "");
                 break;
         }
     }

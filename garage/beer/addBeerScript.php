@@ -11,7 +11,7 @@ if (mysqli_query($link, $sql)) {
 
     //TODO email to all
     // ... a jmenuje se ...
-    /* sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span class='text-primary'>nový recept, nové pivo!</span>. Jmenuje se <span class='text-primary fw-bold'>" . $_POST["label] . "</span>! Neboj, až z něj uvaříme várku, <span class='text-primary'>dáme vědět</span>.",
+    /* sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107 font-weight: bold;'>" . $_POST["label] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
     "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_POST["label] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", all); */
 }else{
     $e = $sql . "<br>" . mysqli_error($link);

@@ -34,28 +34,52 @@ if (!isset($_SESSION["currentUser"])) {
             </select>
             <label for="batch" class="form-label">Várka</label>
         </div>
+        <!-- TODO měnit min max podle várky -->
         <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="thirds" name="thirds" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : ""; ?>">
-            <label for="label" class="form-label">Třetinek [ks]</label>
+            <input type="number" class="form-control" required min="0" max="20" id="thirds" name="thirds" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : ""; ?>">
+            <label for="thirds" class="form-label">Třetinek [ks] (rozmezí od 0 do 20, pokud nemáš zájem, vyplň nulu)</label>
         </div>
+        <?php
+        if ($_SESSION["currentUser"]["employee"] && !isset($_GET["add"])) {
+            echo '<div class="form-floating mb-3">
+                <input type="number" class="form-control" readonly id="thirdsBef" name="thirdsBef" value="' . $_SESSION["orders"][$_GET["orderId"]]["thirds"] . '">
+                <label for="thirdsBef" class="form-label">Třetinek před změnou [ks]</label>
+            </div>';
+        }
+        ?>
+        <!-- TODO měnit min max podle várky -->
         <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="pints" name="pints" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : ""; ?>">
-            <label for="pints" class="form-label">Půllitrů [ks]</label>
+            <input type="number" class="form-control" required min="0" max="20" id="pints" name="pints" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : ""; ?>">
+            <label for="pints" class="form-label">Půllitrů [ks] (rozmezí od 0 do 20, pokud nemáš zájem, vyplň nulu)</label>
         </div>
         <?php
         if ($_SESSION["currentUser"]["employee"]) {
+            if (!isset($_GET["add"])) {
+                echo '<div class="form-floating mb-3">
+                    <input type="number" class="form-control" readonly id="pintsBef" name="pintsBef" value="' . $_SESSION["orders"][$_GET["orderId"]]["pints"] . '">
+                    <label for="pintsBef" class="form-label">Půllitrů před změnou [ks]</label>
+                </div>';
+            }
+
             echo '<div class="mb-3 form-floating">
                 <select class="form-select" id="user" name="user">';
+            $selectedMail;
             $sql = "SELECT id, f_name, l_name, mail FROM user;";
             if ($result = mysqli_query($link, $sql)) {
                 while ($row = mysqli_fetch_row($result)) {
-                    echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["customer"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " " . $row[2] . " (" . $row[3] . ")</option>";
+                    $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["customer"]["id"] == $row[0]) : ($selectedMail == null);
+                    $selectedMail = $isSelected ? $row[3] : $selectedMail;
+                    echo "<option value='" . $row[0] . "'" . ($isSelected ? " selected" : "") . " data-customer-email='" . $row[3] . "'>" . $row[1] . " " . $row[2] . "</option>";
                 }
                 mysqli_free_result($result);
             }
             echo '</select>
                 <label for="user" class="form-label">Zákazník</label>
-                </div>';
+                </div>
+            <div class="mb-3 form-floating">
+                <input type="text" class="form-control" id="email" name="email" value="' . $selectedMail . '" readonly>
+                <label for="email" class="form-label">Email zákazníka</label>
+            </div>';
 
             echo '<div class="mb-3 form-floating">
                 <select class="form-select" id="employee" name="employee">';
@@ -95,6 +119,12 @@ if (!isset($_SESSION["currentUser"])) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 <script>
+    $(document).ready(function() {
+        $("#user").change(function() {
+            $("#email").val($(this).find(":selected").data("customerEmail"));
+        });
+    });
+
     (function() {
         "use strict"
         var forms = document.querySelectorAll(".needs-validation")
