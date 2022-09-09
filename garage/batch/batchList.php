@@ -7,7 +7,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
 
 $sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color,
         (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4),
-        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4)
+        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4), ba.emailed
         FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
 $batches = [];
 if ($result = mysqli_query($link, $sql)) {
@@ -24,11 +24,13 @@ if ($result = mysqli_query($link, $sql)) {
             "statusColor" => $row[9],
             "thirdsOrdered" => $row[10],
             "pintsOrdered" => $row[11],
+            "emailed" => $row[12] ?? ""
         ];
     }
     mysqli_free_result($result);
 }
 mysqli_close($link);
+echo json_encode($batches);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -59,6 +61,8 @@ mysqli_close($link);
                     <th scope="col">Status</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -75,6 +79,8 @@ mysqli_close($link);
                             <td>' . $batch["thirdsOrdered"] . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . '</span></td>
                             <td>' . $batch["pintsOrdered"] . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . '</span></td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $batch["statusColor"] . ';">' . $batch["statusLabel"] . '</td>
+                            <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '</td>
+                            <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '</td>
                             <td><a class="btn btn-outline-secondary" href="formBatch.php?batchId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
                             <td><a class="btn btn-outline-danger deleteBtn" data-batch-id=' . $key . '><i class="bi bi-trash"></i></a></td>
                         </tr>';

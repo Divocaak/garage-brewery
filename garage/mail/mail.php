@@ -1,11 +1,10 @@
 <?php
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-require "../config.php";
-require "../../vendor/autoload.php";
+require_once "../config.php";
+require_once "../../vendor/autoload.php";
 
 function getAllEmails($link)
 {
@@ -46,8 +45,8 @@ function sendMail($body, $bodyAlt, $title, $subject, $address)
             $mail->addBCC(SMTP_EMAIL);
         }
 
-        $message = file_get_contents('header.txt') . '<h1 style="color: #ffc107;">' . $title . '</h1><p style="padding: 0% 0% 10% 0%">' . $body . file_get_contents('footer.txt');
-        $messageAlt = file_get_contents('headerAlt.txt') . '<h2>' . $title . '</h2><p>' . $bodyAlt . file_get_contents('footerAlt.txt');
+        $message = file_get_contents('../mail/header.txt') . '<h1 style="color: #ffc107;">' . $title . '</h1><p style="padding: 0% 0% 10% 0%">' . $body . file_get_contents('../mail/footer.txt');
+        $messageAlt = file_get_contents('../mail/headerAlt.txt') . '<h2>' . $title . '</h2><p>' . $bodyAlt . file_get_contents('../mail/footerAlt.txt');
         $mail->isHTML(true);
         $mail->Subject = $subject;
         $mail->Body = $message;

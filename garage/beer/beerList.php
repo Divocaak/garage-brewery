@@ -6,14 +6,15 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $json = json_decode(file_get_contents("../beers.json"), true);
-$sql = "SELECT id, label FROM beer;";
+$sql = "SELECT id, label, emailed FROM beer;";
 $beers = [];
 if ($result = mysqli_query($link, $sql)) {
     while ($row = mysqli_fetch_row($result)) {
         $beers[$row[0]] = [
             "label" => $row[1],
             "shortDesc" => isset($json[$row[0]]) ? $json[$row[0]]["shortDesc"] : "",
-            "longDesc" => isset($json[$row[0]]) ? $json[$row[0]]["longDesc"] : ""
+            "longDesc" => isset($json[$row[0]]) ? $json[$row[0]]["longDesc"] : "",
+            "emailed" => $row[2]
         ];
     }
     mysqli_free_result($result);
@@ -51,6 +52,7 @@ mysqli_close($link);
                     <?php
                     if ($_SESSION["currentUser"]["employee"]) {
                         echo '<th scope="col"></th>
+                            <th scope="col"></th>
                             <th scope="col"></th>';
                     }
                     ?>
@@ -66,6 +68,8 @@ mysqli_close($link);
                             <td>' . ($beer["shortDesc"] != "" ? $beer["shortDesc"] : "-") . '</td>
                             <td><a class="btn btn-outline-info beerDetailBtn" data-beer-id=' . $key . ' data-beer-name="' . $beer["label"] . '"><i class="bi bi-search"></i></a></td>';
                     if ($_SESSION["currentUser"]["employee"]) {
+                            echo '<td><a class="btn btn-outline-light' . ($beer["emailed"] ? " disabled" : "") . '" href="beerMail.php?beerId=' . $key . '"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat</a></td>';
+
                         echo '<td><a class="btn btn-outline-secondary" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
                                 <td><a class="btn btn-outline-danger deleteBtn" data-beer-id=' . $key . '><i class="bi bi-trash"></i></a></td>';
                     }

@@ -8,9 +8,6 @@ if (mysqli_query($link, $sql)) {
     $json = json_decode(file_get_contents("../beers.json"), true);
     $json[mysqli_insert_id($link)] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
     file_put_contents("../beers.json", json_encode($json));
-
-    sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107 font-weight: bold;'>" . $_POST["label"] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
-    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_POST["label"] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", getAllEmails($link));
 }else{
     $e = $sql . "<br>" . mysqli_error($link);
 }
