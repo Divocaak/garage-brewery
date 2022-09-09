@@ -129,6 +129,8 @@ mysqli_close($link);
 
             $(".beerDetailBtn").click(function() {
                 let beerName = $(this).data("beerName");
+                $("#beerShortDesc").html("");
+                $("#beerLongDesc").html("");
                 $.getJSON("../beers.json", function(data) {
                     $("#beerName").text(beerName);
                     if (data[beerId] != null) {
