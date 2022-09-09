@@ -7,7 +7,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
 
 $sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color,
         (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4),
-        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4), ba.emailed
+        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4), ba.emailed, ba.thirds_pp, ba.pints_pp
         FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
 $batches = [];
 if ($result = mysqli_query($link, $sql)) {
@@ -24,13 +24,14 @@ if ($result = mysqli_query($link, $sql)) {
             "statusColor" => $row[9],
             "thirdsOrdered" => $row[10],
             "pintsOrdered" => $row[11],
-            "emailed" => $row[12] ?? ""
+            "emailed" => $row[12] ?? "",
+            "thirdsPerPerson" => $row[13],
+            "pintsPerPerson" => $row[14]
         ];
     }
     mysqli_free_result($result);
 }
 mysqli_close($link);
-echo json_encode($batches);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -56,8 +57,8 @@ echo json_encode($batches);
                     <th scope="col">Pivo</th>
                     <th scope="col">Várka</th>
                     <th scope="col">Vytvořeno</th>
-                    <th scope="col">Třetinky [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá)</th>
-                    <th scope="col">Půllitry [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá)</th>
+                    <th scope="col">Třetinky [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá (max na osobu))</th>
+                    <th scope="col">Půllitry [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá (max na osobu))</th>
                     <th scope="col">Status</th>
                     <th scope="col"></th>
                     <th scope="col"></th>
@@ -76,8 +77,8 @@ echo json_encode($batches);
                             <td>' . $batch["beerLabel"] . '</td>
                             <td>' . $batch["batchLabel"] . '</td>
                             <td>' . date_format(date_create($batch["created"]), 'd. m. Y') . '</td>
-                            <td>' . $batch["thirdsOrdered"] . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . '</span></td>
-                            <td>' . $batch["pintsOrdered"] . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . '</span></td>
+                            <td>' . $batch["thirdsOrdered"] . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . "</span> (" . $batch["thirdsPerPerson"] . ')</td>
+                            <td>' . $batch["pintsOrdered"] . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . "</span> (" . $batch["pintsPerPerson"] . ')</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $batch["statusColor"] . ';">' . $batch["statusLabel"] . '</td>
                             <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '</td>
                             <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '</td>

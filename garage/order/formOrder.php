@@ -23,10 +23,16 @@ if (!isset($_SESSION["currentUser"])) {
         <div class="mb-3 form-floating">
             <select class="form-select" id="batch" name="batch">
                 <?php
-                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds, ba.pints, be.label FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
+                $thirdsPP;
+                $pintsPP;
+                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
                 if ($result = mysqli_query($link, $sql)) {
                     while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " (" . $row[5] . ", " . $row[2] . ", třetinek: " . $row[3] . ", půllitrů:" . $row[4] . ")</option>";
+                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row[0]) : ($thirdsPP == null || $pintsPP == null);
+                        $thirdsPP = $isSelected ? $row[3] : $thirdsPP;
+                        $pintsPP = $isSelected ? $row[4] : $pintsPP;
+                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row[3] . " data-pints-per-person=" . $row[4] . ">"
+                            . $row[1] . " (" . $row[5] . ", " . $row[2] . ")</option>";
                     }
                     mysqli_free_result($result);
                 }
@@ -34,25 +40,25 @@ if (!isset($_SESSION["currentUser"])) {
             </select>
             <label for="batch" class="form-label">Várka</label>
         </div>
-        <!-- TODO měnit min max podle várky -->
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" required min="0" max="20" id="thirds" name="thirds" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : ""; ?>">
-            <label for="thirds" class="form-label">Třetinek [ks] (rozmezí od 0 do 20, pokud nemáš zájem, vyplň nulu)</label>
-        </div>
+
         <?php
+        echo '<div class="form-floating mb-3">
+                <input type="number" class="form-control" required min="0" max="' . $thirdsPP . '" id="thirds" name="thirds" value="' . (!isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : "") . '">
+                <label id="thirdsLabel" for="thirds" class="form-label">Třetinek [ks] (rozmezí od 0 do ' . $thirdsPP . ', pokud nemáš zájem, vyplň nulu)</label>
+                </div>';
+
         if ($_SESSION["currentUser"]["employee"] && !isset($_GET["add"])) {
             echo '<div class="form-floating mb-3">
                 <input type="number" class="form-control" readonly id="thirdsBef" name="thirdsBef" value="' . $_SESSION["orders"][$_GET["orderId"]]["thirds"] . '">
                 <label for="thirdsBef" class="form-label">Třetinek před změnou [ks]</label>
             </div>';
         }
-        ?>
-        <!-- TODO měnit min max podle várky -->
-        <div class="form-floating mb-3">
-            <input type="number" class="form-control" required min="0" max="20" id="pints" name="pints" value="<?php echo !isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : ""; ?>">
-            <label for="pints" class="form-label">Půllitrů [ks] (rozmezí od 0 do 20, pokud nemáš zájem, vyplň nulu)</label>
-        </div>
-        <?php
+
+        echo '<div class="form-floating mb-3">
+                <input type="number" class="form-control" required min="0" max="' . $pintsPP . '" id="pints" name="pints" value="' . (!isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : "") . '">
+                <label id="pintsLabel" for="pints" class="form-label">Půllitrů [ks] (rozmezí od 0 do ' . $pintsPP . ', pokud nemáš zájem, vyplň nulu)</label>
+                </div>';
+
         if ($_SESSION["currentUser"]["employee"]) {
             if (!isset($_GET["add"])) {
                 echo '<div class="form-floating mb-3">
@@ -122,6 +128,15 @@ if (!isset($_SESSION["currentUser"])) {
     $(document).ready(function() {
         $("#user").change(function() {
             $("#email").val($(this).find(":selected").data("customerEmail"));
+        });
+
+        $("#batch").change(function() {
+            let thirdsPP = $(this).find(":selected").data("thirdsPerPerson");
+            let pintsPP = $(this).find(":selected").data("pintsPerPerson");
+            $("#thirds").attr("max", thirdsPP);
+            $("#pints").attr("max", pintsPP);
+            $("#thirdsLabel").text('Třetinek [ks] (rozmezí od 0 do ' + thirdsPP + ', pokud nemáš zájem, vyplň nulu)');
+            $("#pintsLabel").text('Půllitrů [ks] (rozmezí od 0 do ' + pintsPP + ', pokud nemáš zájem, vyplň nulu)');
         });
     });
 

@@ -2,8 +2,8 @@
 require_once "../config.php";
 
 $e = "";
-$sql = "INSERT INTO batch (id_beer, label, created" . (($_POST["thirds"] != "") ? ", thirds" : "") . (($_POST["pints"] != "") ? ", pints" : "") . ", id_status)
-        VALUES (" . $_POST["beer"] . ", '" . $_POST["label"] . "', '" . $_POST["created"] . "'" . (($_POST["thirds"] != "") ? (", " . $_POST["thirds"]) : "") . (($_POST["pints"] != "") ? (", " . $_POST["pints"]) : "") . ", " . $_POST["status"] . ");";
+$sql = "INSERT INTO batch (id_beer, label, created, thirds, pints, id_status)
+        VALUES (" . $_POST["beer"] . ", '" . $_POST["label"] . "', '" . $_POST["created"] . "', " . $_POST["thirds"] . ", " . $_POST["pints"] . ", " . $_POST["status"] . ");";
 if (!mysqli_query($link, $sql)) {
     $e = $sql . "<br>" . mysqli_error($link);
 }
