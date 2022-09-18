@@ -6,8 +6,8 @@ session_start();
 $e = "";
 $sql = "UPDATE beer SET emailed=1 WHERE id=" . $_GET["beerId"] . ";";
 if (mysqli_query($link, $sql)) {
-    sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["beers"]["label"] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
-    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_SESSION["beers"]["label"] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", getAllEmails($link));
+    sendMail("S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["beers"][$_GET["beerId"]]["label"] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
+    "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_SESSION["beers"][$_GET["beerId"]]["label"] . "! Neboj, až z něj uvaříme várku, dáme vědět.", "Máme nový recept!", "Nový recept, nové pivo", getAllEmails($link));
 }else{
     $e = $sql . "<br>" . mysqli_error($link);
     mysqli_close($link);

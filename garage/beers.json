@@ -6,5 +6,9 @@
     "3": {
         "shortDesc": "<span class='text-danger'>test pls</span>",
         "longDesc": "wtf"
+    },
+    "5": {
+        "shortDesc": "dfghjkjhgfcvb",
+        "longDesc": "<span class='color: red'>test cerv text</span>"
     }
 }
