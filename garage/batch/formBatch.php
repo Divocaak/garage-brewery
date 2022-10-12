@@ -51,12 +51,20 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
             <label for="thirdsPerPerson" class="form-label">Max třetinek na osobu [ks]</label>
         </div>
         <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="thirdPrice" name="thirdPrice" required min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["thirdPrice"] : "30"; ?>">
+            <label for="thirdPrice" class="form-label">Cena za třetinku [Kč]</label>
+        </div>
+        <div class="form-floating mb-3">
             <input type="number" class="form-control" id="pints" name="pints" required min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["pints"] : ""; ?>">
             <label for="pints" class="form-label">Půllitry [ks]</label>
         </div>
         <div class="form-floating mb-3">
             <input type="number" class="form-control" id="pintsPerPerson" name="pintsPerPerson" required min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["pintsPerPerson"] : ""; ?>">
             <label for="pintsPerPerson" class="form-label">Max půllitrů na osobu [ks]</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="pintPrice" name="pintPrice" required min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["pintPrice"] : "50"; ?>">
+            <label for="pintPrice" class="form-label">Cena za půllitr [Kč]</label>
         </div>
         <div class="mb-3 form-floating">
             <select class="form-select" id="status" name="status">

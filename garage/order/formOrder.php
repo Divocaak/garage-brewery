@@ -25,14 +25,18 @@ if (!isset($_SESSION["currentUser"])) {
                 <?php
                 $thirdsPP;
                 $pintsPP;
-                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
+                $thirdPrice;
+                $pintPrice;
+                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
                 if ($result = mysqli_query($link, $sql)) {
                     while ($row = mysqli_fetch_row($result)) {
                         $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row[0]) : ($thirdsPP == null || $pintsPP == null);
                         $thirdsPP = $isSelected ? $row[3] : $thirdsPP;
                         $pintsPP = $isSelected ? $row[4] : $pintsPP;
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row[3] . " data-pints-per-person=" . $row[4] . ">"
-                            . $row[1] . " (" . $row[5] . ", " . $row[2] . ")</option>";
+                        $thirdPrice = $isSelected ? $row[6] : $thirdPrice;
+                        $pintPrice = $isSelected ? $row[7] : $pintPrice;
+                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row[3] . " data-pints-per-person=" . $row[4] . "
+                            data-third-price=" . $row[6] . " data-pint-price=" . $row[7] . ">" . $row[1] . " (" . $row[5] . ", " . $row[2] . ")</option>";
                     }
                     mysqli_free_result($result);
                 }
@@ -44,7 +48,7 @@ if (!isset($_SESSION["currentUser"])) {
         <?php
         echo '<div class="form-floating mb-3">
                 <input type="number" class="form-control" required min="0" max="' . $thirdsPP . '" id="thirds" name="thirds" value="' . (!isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["thirds"] : "") . '">
-                <label id="thirdsLabel" for="thirds" class="form-label">Třetinek [ks] (rozmezí od 0 do ' . $thirdsPP . ', pokud nemáš zájem, vyplň nulu)</label>
+                <label id="thirdsLabel" for="thirds" class="form-label">Třetinek [ks] (rozmezí od 0 do ' . $thirdsPP . ', pokud nemáš zájem, vyplň nulu), ' . $thirdPrice . ' Kč/ks</label>
                 </div>';
 
         if ($_SESSION["currentUser"]["employee"] && !isset($_GET["add"])) {
@@ -56,7 +60,7 @@ if (!isset($_SESSION["currentUser"])) {
 
         echo '<div class="form-floating mb-3">
                 <input type="number" class="form-control" required min="0" max="' . $pintsPP . '" id="pints" name="pints" value="' . (!isset($_GET["add"]) ? $_SESSION["orders"][$_GET["orderId"]]["pints"] : "") . '">
-                <label id="pintsLabel" for="pints" class="form-label">Půllitrů [ks] (rozmezí od 0 do ' . $pintsPP . ', pokud nemáš zájem, vyplň nulu)</label>
+                <label id="pintsLabel" for="pints" class="form-label">Půllitrů [ks] (rozmezí od 0 do ' . $pintsPP . ', pokud nemáš zájem, vyplň nulu), ' . $pintPrice . ' Kč/ks</label>
                 </div>';
 
         if ($_SESSION["currentUser"]["employee"]) {
@@ -115,6 +119,7 @@ if (!isset($_SESSION["currentUser"])) {
                 </div>';
         }
         ?>
+        <p id="priceText"></p>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</button>
         <?php if (!$_SESSION["currentUser"]["employee"]) {
             echo "<p>Upozorňujeme, že objednávku po odeslání nelze upravit, jedině zrušit</p>";
@@ -130,13 +135,25 @@ if (!isset($_SESSION["currentUser"])) {
             $("#email").val($(this).find(":selected").data("customerEmail"));
         });
 
+        var thirdPrice = $(this).find(":selected").data("thirdPrice");
+        var pintPrice = $(this).find(":selected").data("pintPrice");
         $("#batch").change(function() {
             let thirdsPP = $(this).find(":selected").data("thirdsPerPerson");
             let pintsPP = $(this).find(":selected").data("pintsPerPerson");
+            thirdPrice = $(this).find(":selected").data("thirdPrice");
+            pintPrice = $(this).find(":selected").data("pintPrice");
             $("#thirds").attr("max", thirdsPP);
             $("#pints").attr("max", pintsPP);
-            $("#thirdsLabel").text('Třetinek [ks] (rozmezí od 0 do ' + thirdsPP + ', pokud nemáš zájem, vyplň nulu)');
-            $("#pintsLabel").text('Půllitrů [ks] (rozmezí od 0 do ' + pintsPP + ', pokud nemáš zájem, vyplň nulu)');
+            $("#thirdsLabel").text('Třetinek [ks] (rozmezí od 0 do ' + thirdsPP + ', pokud nemáš zájem, vyplň nulu), ' + thirdPrice + ' Kč/ks');
+            $("#pintsLabel").text('Půllitrů [ks] (rozmezí od 0 do ' + pintsPP + ', pokud nemáš zájem, vyplň nulu), ' + pintPrice + ' Kč/ks');
+        });
+
+        $("#batch, #thirds, #pints").change(function(){
+            let thirds = $("#thirds").val();
+            let pints = $("#pints").val();
+            let thirdsPrice = $("#thirds").val() * thirdPrice;
+            let pintsPrice = $("#pints").val() * pintPrice;
+            $("#priceText").text("Celkem: " + (thirdsPrice + pintsPrice) + " Kč (třetinky: " + thirds + " (celkem za " + thirdsPrice + " Kč), půllitry: " + pints + " (celkem za " + pintsPrice + " Kč))");
         });
     });
 
