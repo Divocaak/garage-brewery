@@ -34,6 +34,7 @@ function sendMail($body, $bodyAlt, $title, $subject, $address)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
 
+        $mail->addReplyTo(SMTP_EMAIL, "Pivovar Garáž - Elektronická Garáž");
         $mail->setFrom(SMTP_EMAIL, 'Pivovar Garáž - Elektronická Garáž');
         if (is_array($address)) {
             $mail->addAddress(SMTP_EMAIL);
