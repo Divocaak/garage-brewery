@@ -5,36 +5,39 @@ if (!isset($_SESSION["currentUser"])) {
     header("Location: user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id, b.label, bs.label, bs.color, os.id, os.label, os.color, b.third_price, b.pint_price
-        FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
-        WHERE id_customer=" . $_SESSION["currentUser"]["id"] . ";";
 $myOrders = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $myOrders[$row[0]] = [
-            "thirds" => $row[1],
-            "pints" => $row[2],
-            "created" => $row[3],
+$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id AS batchId, b.label AS batchLabel, b.third_price, b.pint_price, bs.label AS batchStatusLabel, bs.color AS batchStatusColor, os.id AS ordedStatusId, os.label AS ordedStatusLabel, os.color AS ordedStatusColor
+FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
+WHERE id_customer=?;");
+$stmt->bind_param("i", $_SESSION["currentUser"]["id"]);
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $myOrders[$row["id"]] = [
+            "thirds" => $row["thirds"],
+            "pints" => $row["pints"],
+            "created" => $row["created"],
             "batch" => [
-                "id" => $row[4],
-                "label" => $row[5],
-                "thirdPrice" => $row[11],
-                "pintPrice" => $row[12],
+                "id" => $row["batchId"],
+                "label" => $row["batchLabel"],
+                "thirdPrice" => $row["third_price"],
+                "pintPrice" => $row["pint_price"],
                 "status" => [
-                    "label" => $row[6],
-                    "color" => $row[7]
+                    "label" => $row["batchStatusLabel"],
+                    "color" => $row["batchStatusColor"]
                 ]
             ],
             "status" => [
-                "id" => $row[8],
-                "label" => $row[9],
-                "color" => $row[10]
+                "id" => $row["ordedStatusId"],
+                "label" => $row["ordedStatusLabel"],
+                "color" => $row["ordedStatusColor"]
             ]
         ];
     }
     mysqli_free_result($result);
 }
 mysqli_close($link);
+
 ?>
 <!DOCTYPE html>
 <html lang="cz">
