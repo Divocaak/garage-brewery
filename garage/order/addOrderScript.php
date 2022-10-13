@@ -16,9 +16,13 @@ $sql = "INSERT INTO beer_order (id_customer, id_batch, thirds, pints" . (($_SESS
 if (mysqli_query($link, $sql)) {
     $orderId = mysqli_insert_id($link);
     sendMail("Jo, vidíme to tady. Nová <span style='color: #ffc107'>objednávka číslo " . $orderId . "</span>. Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou <span style='color: #ffc107'>chodit do mailu</span>, 
-        nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit!",
+        nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko,
+        bude Tě to stát totiž přesně <span style='color: #ffc107'>" . $_POST["priceField"] . "&nbsp;Kč</span>. Co na tom stojí zrovna tolik samozřejmě najdeš u svojí objednávky v Garáži. 
+        S tím přichází i upozornění, <span style='color: #dc3545'>karty bohužel nebereme</span>, díky za pochopení.",
         "Jo, vidíme to tady. Nová objednávka číslo " . $orderId . ". Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou chodit do mailu, 
-        nebo je můžeš sledovat přímo v Elekrtronické Garáži. Tak zatím, my to jdeme vyřídit!", "Tvoje objednávka už je u nás", ("Objednávka číslo " . $orderId), $email);
+        nebo je můžeš sledovat přímo v Elekrtronické Garáži. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko,
+        bude Tě to stát totiž přesně " . $_POST["priceField"] . "&nbsp;Kč. Co na tom stojí zrovna tolik samozřejmě najdeš u svojí objednávky v Garáži. 
+        S tím přichází i upozornění, karty bohužel nebereme, díky za pochopení.", "Tvoje objednávka už je u nás", ("Objednávka číslo " . $orderId), $email);
 }else{
     $e = $sql . "<br>" . mysqli_error($link);
 }

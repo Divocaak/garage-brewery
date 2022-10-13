@@ -16,15 +16,17 @@ if (mysqli_query($link, $sql)) {
     $thirdsChanged = $_POST["thirdsBef"] != $_POST["thirds"];
     $pintsChanged = $_POST["pintsBef"] != $_POST["pints"];
     if ($thirdsChanged || $pintsChanged) {
-        $mailBody = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo <span style='color: #ffc107'>" . $_GET["orderId"] . " nasázených fakt raketu, ale každopádně to prostě nevychází. 
+        $mailBody = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo <span style='color: #ffc107'>" . $_GET["orderId"] . "</span> nasázených fakt raketu, ale každopádně to prostě nevychází. 
         Museli jsme Ti teda trochu <span style='color: #ffc107'>pozměnit počty objednaných pivek</span>. Kdyby to byl fakt velkej problém, <span style='color: #ffc107'>ozvi se nám</span> a nějak to vymyslíme. Sorry za komplikace. Změna nebo změny:</br></br>"
             . ($thirdsChanged ? ("Třetinky: <span style='color: #6c757d'>" . $_POST["thirdsBef"] . "</span> => <span style='color: #ffc107'>" . $_POST["thirds"] . "</span></br>") : "")
-            . ($pintsChanged ? ("Půllitry: <span style='color: #6c757d'>" . $_POST["pintsBef"] . "</span> => <span style='color: #ffc107'>" . $_POST["pints"] . "</span></br>") : "");
-
-        $mailBodyAlt = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo " . $_GET["orderId"] . " nasázených fakt raketu, ale každopádně to prostě nevychází. 
-         Museli jsme Ti teda trochu pozměnit počty objednaných pivek. Kdyby to byl fakt velkej problém, ozvi se nám a nějak to vymyslíme. Sorry za komplikace. Změna nebo změny:</br></br>"
+            . ($pintsChanged ? ("Půllitry: <span style='color: #6c757d'>" . $_POST["pintsBef"] . "</span> => <span style='color: #ffc107'>" . $_POST["pints"] . "</span></br>") : "")
+            . "<br><br> Aktuální cena je teda <span style='color: #ffc107'>" . $_POST["priceField"] . "&nbsp;Kč</span>.";
+            
+            $mailBodyAlt = "Čau, stala se věc. Asi jsme se nějak spletli s pivama, nebo jich máš v objednávce číslo " . $_GET["orderId"] . " nasázených fakt raketu, ale každopádně to prostě nevychází. 
+            Museli jsme Ti teda trochu pozměnit počty objednaných pivek. Kdyby to byl fakt velkej problém, ozvi se nám a nějak to vymyslíme. Sorry za komplikace. Změna nebo změny:</br></br>"
             . ($thirdsChanged ? ("Třetinky: " . $_POST["thirdsBef"] . " => " . $_POST["thirds"] . "</br>") : "")
-            . ($pintsChanged ? ("Půllitry: " . $_POST["pintsBef"] . " => " . $_POST["pints"] . "</br>") : "");
+            . ($pintsChanged ? ("Půllitry: " . $_POST["pintsBef"] . " => " . $_POST["pints"] . "</br>") : "")
+            . "<br><br> Aktuální cena je teda " . $_POST["priceField"] . "&nbsp;Kč.";
 
         sendMail($mailBody, $mailBodyAlt, "Někomu z nás se něco nepovedlo...", ("Úprava objednávky číslo " . $_GET["orderId"]), $_POST["email"]);
     }

@@ -5,7 +5,7 @@ if (!isset($_SESSION["currentUser"])) {
     header("Location: user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id, b.label, bs.label, bs.color, os.id, os.label, os.color
+$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id, b.label, bs.label, bs.color, os.id, os.label, os.color, b.third_price, b.pint_price
         FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
         WHERE id_customer=" . $_SESSION["currentUser"]["id"] . ";";
 $myOrders = [];
@@ -18,6 +18,8 @@ if ($result = mysqli_query($link, $sql)) {
             "batch" => [
                 "id" => $row[4],
                 "label" => $row[5],
+                "thirdPrice" => $row[11],
+                "pintPrice" => $row[12],
                 "status" => [
                     "label" => $row[6],
                     "color" => $row[7]
@@ -73,6 +75,7 @@ mysqli_close($link);
                     <th scope="col">Status várky</th>
                     <th scope="col">Třetinky [ks]</th>
                     <th scope="col">Půllitry [ks]</th>
+                    <th scope="col">Cena</th>
                     <th scope="col">Status objednávky</th>
                     <th scope="col"></th>
                 </tr>
@@ -80,21 +83,23 @@ mysqli_close($link);
             <tbody>
                 <?php
                 foreach ($myOrders as $key => $myOrder) {
-
                     $btn = "";
                     if($myOrder["status"]["id"] == 3){
                         $btn = '<form action="feedback/formFeedback.php" method="post"><button class="btn btn-primary" name="orderId" value="' . $key . '"><i class="bi bi-graph-up-arrow pe-2"></i>Ohodnotit</button></form>';
                     }else if($myOrder["status"]["id"] == 1){
                         $btn = '<a class="btn btn-outline-danger deleteBtn" data-order-id=' . $key . '><i class="bi bi-trash"></i></a>';
                     }
-                    
+
+                    $pintsPrice = $myOrder["pints"] * $myOrder["batch"]["pintPrice"];
+                    $thirdsPrice = $myOrder["thirds"] * $myOrder["batch"]["thirdPrice"];
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($myOrder["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . $myOrder["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["batch"]["status"]["color"] . ';">' . $myOrder["batch"]["status"]["label"] . '</td>
-                            <td>' . $myOrder["thirds"] . '</td>
-                            <td>' . $myOrder["pints"] . '</td>
+                            <td>' . $myOrder["thirds"] . "<br>" . $thirdsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["thirdPrice"] . "&nbsp;Kč/ks" . '</td>
+                            <td>' . $myOrder["pints"] . "<br>" . $pintsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["pintPrice"] . "&nbsp;Kč/ks" . '</td>
+                            <td><span class="text-primary fw-bold">' . $pintsPrice + $thirdsPrice . '&nbsp;Kč</span></td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</td>
                             <td>' . $btn . '</td>
                         </tr>';

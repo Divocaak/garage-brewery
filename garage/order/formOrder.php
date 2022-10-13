@@ -119,7 +119,12 @@ if (!isset($_SESSION["currentUser"])) {
                 </div>';
         }
         ?>
-        <p id="priceText"></p>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" readonly id="priceField" name="priceField" value="<?php echo isset($_GET["add"]) ? "" : ($_SESSION["orders"][$_GET["orderId"]]["pints"] * $pintPrice + $_SESSION["orders"][$_GET["orderId"]]["thirds"] * $thirdPrice)?>">
+            <label for="priceField" class="form-label">Cena celkem [Kč]</label>
+        </div>
+        <p id="priceText"><?php echo isset($_GET["add"]) ? "" : ($_SESSION["orders"][$_GET["orderId"]]["thirds"] > 0 ? "třetinky: " . $_SESSION["orders"][$_GET["orderId"]]["thirds"] . " ks (celkem za " . $thirdPrice . " Kč), " : "") .
+            ($_SESSION["orders"][$_GET["orderId"]]["pints"] > 0 ? "půllitry: " . $_SESSION["orders"][$_GET["orderId"]]["pints"] . " ks (celkem za " . $pintPrice . " Kč)" : "")?></p>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</button>
         <?php if (!$_SESSION["currentUser"]["employee"]) {
             echo "<p>Upozorňujeme, že objednávku po odeslání nelze upravit, jedině zrušit</p>";
@@ -148,12 +153,14 @@ if (!isset($_SESSION["currentUser"])) {
             $("#pintsLabel").text('Půllitrů [ks] (rozmezí od 0 do ' + pintsPP + ', pokud nemáš zájem, vyplň nulu), ' + pintPrice + ' Kč/ks');
         });
 
-        $("#batch, #thirds, #pints").change(function(){
+        $("#batch, #thirds, #pints").on("input", function(){
             let thirds = $("#thirds").val();
             let pints = $("#pints").val();
             let thirdsPrice = $("#thirds").val() * thirdPrice;
             let pintsPrice = $("#pints").val() * pintPrice;
-            $("#priceText").text("Celkem: " + (thirdsPrice + pintsPrice) + " Kč (třetinky: " + thirds + " (celkem za " + thirdsPrice + " Kč), půllitry: " + pints + " (celkem za " + pintsPrice + " Kč))");
+            $("#priceField").val(thirdsPrice + pintsPrice);
+            let detail = (thirds > 0 ? "třetinky: " + thirds + " ks (celkem za " + thirdsPrice + " Kč), " : "") + (pints > 0 ? "půllitry: " + pints + " ks (celkem za " + pintsPrice + " Kč)" : "");
+            $("#priceText").text(detail);
         });
     });
 
