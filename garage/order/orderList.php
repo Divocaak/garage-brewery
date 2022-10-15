@@ -5,7 +5,8 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name, b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color
+$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name,
+        b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color, b.third_price, b.pint_price
         FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
         INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;";
 $orders = [];
@@ -30,6 +31,8 @@ if ($result = mysqli_query($link, $sql)) {
                 "label" => $row[13],
                 "thirds" => $row[14],
                 "pints" => $row[15],
+                "thirdPrice" => $row[21],
+                "pintPrice" => $row[22],
                 "status" => [
                     "label" => $row[16],
                     "color" => $row[17]
@@ -55,10 +58,9 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
-    <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-md-5 p-md-5 p-3 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Objednávky</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <a class="btn btn-outline-success" href="formOrder.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>
@@ -75,6 +77,7 @@ mysqli_close($link);
                     <th scope="col">Status várky</th>
                     <th scope="col">Třetinky [ks/várka ks]</th>
                     <th scope="col">Půllitry [ks/várka ks]</th>
+                    <th scope="col">Cena</th>
                     <th scope="col">Řeší</th>
                     <th scope="col">Status</th>
                     <th scope="col"></th>
@@ -85,15 +88,18 @@ mysqli_close($link);
                 <?php
                 $_SESSION["orders"] = $orders;
                 foreach ($orders as $key => $order) {
+                    $pintsPrice = $order["pints"] * $order["batch"]["pintPrice"];
+                    $thirdsPrice = $order["thirds"] * $order["batch"]["thirdPrice"];
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($order["created"]), 'd. m. Y H:i:s') . '</td>
                             <td>' . $order["customer"]["name"] . '</td>
-                            <td><a class="btn btn-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
+                            <td><a class="btn btn-outline-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["batch"]["status"]["color"] . ';">' . $order["batch"]["status"]["label"] . '</td>
-                            <td>' . $order["thirds"] . "/" . $order["batch"]["thirds"] . '</td>
-                            <td>' . $order["pints"] . "/" . $order["batch"]["pints"] . '</td>
+                            <td>' . $order["thirds"] . "/" . $order["batch"]["thirds"] . "<br>" . $thirdsPrice . "&nbsp;Kč<br>" . $order["batch"]["thirdPrice"] . "&nbsp;Kč/ks" . '</td>
+                            <td>' . $order["pints"] . "/" . $order["batch"]["pints"] . "<br>" . $pintsPrice . "&nbsp;Kč<br>" . $order["batch"]["pintPrice"] . "&nbsp;Kč/ks" . '</td>
+                            <td><span class="text-primary fw-bold">' . $pintsPrice + $thirdsPrice . '&nbsp;Kč</span></td>
                             <td>' . $order["employee"]["name"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["status"]["color"] . ';">' . $order["status"]["label"] . '</td>
                             <td><a class="btn btn-outline-secondary" href="formOrder.php?orderId=' . $key . '"><i class="bi bi-pencil"></i></a></td>

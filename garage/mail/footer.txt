@@ -1,0 +1,10 @@
+</p>
+<a href="http://pivovargaraz.cz/garage/homepage.php" target="_blank" style="color: #212529; background-color: #ffc107; padding: 1em 2em 1em 2em; border-radius: .5em; text-decoration: none;">Vstoupit do Elektronické Garáže</a>
+<footer style="border-top: 1px solid #f8f9fa; margin-top: 10%; padding-top: 1%; padding-bottom: 20%">
+<h1>Pivovar Garáž</h1>
+<p>Tato zpráva byla vygenerována skrz <a href="http://pivovargaraz.cz/garage/homepage.php" target="_blank" style="color: #ffc107;">Elektronickou Garáž</a>, neztrácej čas odpovídáním.</p>
+<p>Pokud ale potřebuješ s něčím pomoct nebo poradit, můžeš nám napsat sem: divokyvojta@gmail.com
+<p>Nechceš, aby Ti něco uniklo? Sleduj nás na <a href="https://www.instagram.com/pivovar.garaz/" style="color: #ffc107" target="_blank">Instagramu</a> a <a href="https://www.facebook.com/garaz.pivovar" style="color: #ffc107" target="_blank">Facebooku</a></p>
+</footer>
+</body>
+</html>

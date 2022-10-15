@@ -11,10 +11,9 @@ session_start();
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
-    <link href="../../styles/index.css" rel="stylesheet">
 </head>
 
-<body class="m-md-5 p-md-5 p-3 text-light">
+<body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Zaregistrovat se</h1>
     <a class="btn btn-outline-primary" href="login.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action="registerScript.php" method="post">
@@ -51,10 +50,10 @@ session_start();
         <button type="submit" class="btn btn-primary"><i class="pe-2 bi bi-door-open"></i>Registrovat se</button>
     </form>
     <div class="mt-3">
-        <i>Proč chceme znát Váš <span class="text-primary">e-mail</span>, <span class="text-primary">instagram</span> a <span class="text-primary">jméno</span>?</i>
-        <p class="mt-4">Váš <span class="text-primary">e-mail</span> použijeme výhradně k oznámení událostí v pivovaru, například dokvašení Vámi zarezervované várky, nebo příprava várky nové.</p>
-        <p>Vaše <span class="text-primary">jméno</span> nemáme v plánu nikomu vyzrazovat, použijeme jej pouze k oslovení v zasílaném e-mailu.</p>
-        <p>Proč chceme znát Váš <span class="text-primary">instagram</span>? Z prostého důvodu, chceme vědět, kdo o nás má zájem. Toto pole však není povinné, je jen na Vás, jestli nám jej poskytnete, nebo ne.</p>
+        <i>Proč chceme znát Tvůj <span class="text-primary">e-mail</span>, <span class="text-primary">instagram</span> a <span class="text-primary">jméno</span>?</i>
+        <p class="mt-4">Tvůj <span class="text-primary">e-mail</span> použijeme výhradně k oznámení událostí v pivovaru, například dokvašení Tebou zarezervované várky, nebo příprava várky nové.</p>
+        <p>Tvoje <span class="text-primary">jméno</span> nemáme v plánu nikomu vyzrazovat, použijeme jej pouze k oslovení v zasílaném e-mailu.</p>
+        <p>Proč chceme znát Tvůj <span class="text-primary">instagram</span>? Z prostého důvodu, chceme vědět, kdo o nás má zájem. Toto pole však není povinné, je teda jenom na Tobě, jestli nám jej poskytneš, nebo ne.</p>
         <p>Žádný z těchto údajů <u>nebudeme</u> přeposílat třetím stranám, nebo prodávat.</p>
     </div>
 </body>

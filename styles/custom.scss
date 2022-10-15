@@ -1,0 +1,21 @@
+$_outlines: #ffc107;
+$_inner: #ffb16e; //#fd7e14;
+$primary: #ffc107;
+
+/* $primary: $_inner;
+$component-active-bg: $_inner;
+$input-bg: $_inner; */
+
+$input-border-width: 3px;
+$input-border-color: $_outlines;
+$form-select-border-color: $_outlines;
+$form-range-thumb-bg: $_outlines;
+// $form-range-track-bg: #ffd3ad;
+@import "../vendor/twbs/bootstrap/scss/_functions";
+@import "../vendor/twbs/bootstrap/scss/_variables";
+$input-disabled-bg: $gray-500;
+$form-select-disabled-bg: $gray-500;
+$modal-content-color: $light;
+$modal-content-bg: $dark;
+$form-label-color: $dark;
+@import "../vendor/twbs/bootstrap/scss/bootstrap";
