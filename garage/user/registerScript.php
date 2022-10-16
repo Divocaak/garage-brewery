@@ -4,16 +4,22 @@ require_once "../mail/mail.php";
 
 $e = "";
 if ($_POST["password"] == $_POST["passwordCheck"]) {
-    $sql = "INSERT INTO user (mail, password, f_name, l_name" . ($_POST["instagram"] != "" ? ", instagram" : "") . ")
-            VALUES ('" . $_POST["email"] . "', '" . password_hash($_POST["password"], PASSWORD_DEFAULT) . "', '" . $_POST["fName"] . "', '" . $_POST["lName"] . "'" . ($_POST["instagram"] != "" ? ", '" . $_POST["instagram"] . "'"  : "") . ");";
-    if (mysqli_query($link, $sql)) {
-        sendMail("Ahoj, chceme Ti jménem celého Pivovaru Garáž <span style='color: #ffc107'>poděkovat</span>, že jsi se rozhodl udělat tak velký krok a otevřenými vraty vstoupit do <span style='color: #ffc107'>
+    $stmt = $link->prepare("INSERT INTO user (mail, password, f_name, l_name, instagram) VALUES (?, ?, ?, ?, ?);");
+    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+    $stmt->bind_param("sssss", $_POST["email"], $password, $_POST["fName"], $_POST["lName"], $_POST["instagram"]);
+    $stmt->execute();
+    if (!$stmt->error) {
+        sendMail(
+            "Ahoj, chceme Ti jménem celého Pivovaru Garáž <span style='color: #ffc107'>poděkovat</span>, že jsi se rozhodl udělat tak velký krok a otevřenými vraty vstoupit do <span style='color: #ffc107'>
         Elektronické Garáže</span>. Můžeš si přečíst něco o <span style='color: #ffc107'>našich pivech</span> nebo rovnou nějaký kousky <span style='color: #ffc107'>objednat</span>. Tak doufáme, že se Ti u nás bude líbit!",
-        "Ahoj, chceme Ti jménem celého Pivovaru Garáž poděkovat, že jsi se rozhodl udělat tak velký krok a otevřenými vraty vstoupit do 
+            "Ahoj, chceme Ti jménem celého Pivovaru Garáž poděkovat, že jsi se rozhodl udělat tak velký krok a otevřenými vraty vstoupit do 
         Elektronické Garáže. Můžeš si přečíst něco o našich pivech nebo rovnou nějaký kousky objednat. Tak doufáme, že se Ti u nás bude líbit!",
-        "Vítej v Elektronické Garáži!", "Vítej v Elektronické Garáži", $_POST["email"]);
+            "Vítej v Elektronické Garáži!",
+            "Vítej v Elektronické Garáži",
+            $_POST["email"]
+        );
     } else {
-        $e = $sql . "<br>" . mysqli_error($link);
+        $e = $stmt->error;
     }
     mysqli_close($link);
 } else {

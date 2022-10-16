@@ -2,7 +2,6 @@
 require_once "../config.php";
 session_start();
 
-$e = "";
 $sql = "SELECT id, mail, password, employee FROM user WHERE mail='" . $_POST["email"] . "';";
 if ($result = mysqli_query($link, $sql)) {
     while ($row = mysqli_fetch_row($result)) {

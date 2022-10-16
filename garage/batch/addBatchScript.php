@@ -1,13 +1,8 @@
 <?php
 require_once "../config.php";
-
-$e = "";
-$sql = "INSERT INTO batch (id_beer, label, created, thirds, pints, id_status, thirds_pp, pints_pp, third_price, pint_price)
-        VALUES (" . $_POST["beer"] . ", '" . $_POST["label"] . "', '" . $_POST["created"] . "', " . $_POST["thirds"] . ", " . $_POST["pints"] . ", " . $_POST["status"] . ", " . $_POST["thirdsPerPerson"] . ", " . $_POST["pintsPerPerson"] . ", " . $_POST["thirdPrice"] . ", " . $_POST["pintPrice"] . ");";
-if (!mysqli_query($link, $sql)) {
-    $e = $sql . "<br>" . mysqli_error($link);
-}
-mysqli_close($link);
+$stmt = $link->prepare("INSERT INTO batch (id_beer, label, created, thirds, pints, id_status, thirds_pp, pints_pp, third_price, pint_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+$stmt->bind_param("issiiiiiii", $_POST["beer"], $_POST["label"], $_POST["created"], $_POST["thirds"], $_POST["pints"], $_POST["status"], $_POST["thirdsPerPerson"], $_POST["pintsPerPerson"], $_POST["thirdPrice"], $_POST["pintPrice"]);
+$stmt->execute();
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +18,7 @@ mysqli_close($link);
 
 <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
-    <p><?php echo $e == "" ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Várka byla přidána do systému' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $e) ?></p>
+    <p><?php echo !$stmt->error ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Várka byla přidána do systému' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $stmt->error) ?></p>
     <a class="btn btn-primary" href="batchList.php"><i class="pe-2 bi bi-arrow-left-circle"></i>Přejít na seznam várek</a>
 </body>
 

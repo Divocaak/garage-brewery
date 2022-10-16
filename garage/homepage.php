@@ -34,10 +34,7 @@ if ($result = $stmt->get_result()) {
             ]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
-
 ?>
 <!DOCTYPE html>
 <html lang="cz">
