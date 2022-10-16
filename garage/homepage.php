@@ -6,9 +6,9 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $myOrders = [];
-$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id AS batchId, b.label AS batchLabel, b.third_price, b.pint_price, bs.label AS batchStatusLabel, bs.color AS batchStatusColor, os.id AS ordedStatusId, os.label AS ordedStatusLabel, os.color AS ordedStatusColor
-FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
-WHERE id_customer=?;");
+$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id AS batchId, b.label AS batchLabel, b.third_price, b.pint_price, bs.label AS batchStatusLabel, bs.color AS batchStatusColor,
+    os.id AS ordedStatusId, os.label AS ordedStatusLabel, os.color AS ordedStatusColor FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id 
+    INNER JOIN status_order os ON bo.id_status=os.id WHERE id_customer=?;");
 $stmt->bind_param("i", $_SESSION["currentUser"]["id"]);
 $stmt->execute();
 if ($result = $stmt->get_result()) {
@@ -84,9 +84,9 @@ if ($result = $stmt->get_result()) {
                 <?php
                 foreach ($myOrders as $key => $myOrder) {
                     $btn = "";
-                    if($myOrder["status"]["id"] == 3){
+                    if ($myOrder["status"]["id"] == 3) {
                         $btn = '<form action="feedback/formFeedback.php" method="post"><button class="btn btn-primary" name="orderId" value="' . $key . '"><i class="bi bi-graph-up-arrow pe-2"></i>Ohodnotit</button></form>';
-                    }else if($myOrder["status"]["id"] == 1){
+                    } else if ($myOrder["status"]["id"] == 1) {
                         $btn = '<a class="btn btn-outline-danger deleteBtn" data-order-id=' . $key . '><i class="bi bi-trash"></i></a>';
                     }
 

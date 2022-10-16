@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -9,14 +10,13 @@ require_once "../../vendor/autoload.php";
 function getAllEmails($link)
 {
     $emails = [];
-    $sql = "SELECT mail FROM user;";
-    if ($result = mysqli_query($link, $sql)) {
-        while ($row = mysqli_fetch_row($result)) {
-            $emails[] = $row[0];
+    $stmt = $link->prepare("SELECT mail FROM user;");
+    $stmt->execute();
+    if ($result = $stmt->get_result()) {
+        while ($row = $result->fetch_assoc()) {
+            $emails[] = $row["mail"];
         }
-        mysqli_free_result($result);
     }
-    mysqli_close($link);
     return $emails;
 }
 
