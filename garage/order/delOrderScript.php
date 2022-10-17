@@ -1,12 +1,8 @@
 <?php
 require_once "../config.php";
-
-$e = "";
-$sql = "DELETE FROM beer_order WHERE id=" . $_GET["id"] . ";";
-if (!mysqli_query($link, $sql)) {
-    $e = $sql . "<br>" . mysqli_error($link);
-}
-mysqli_close($link);
+$stmt = $link->prepare("DELETE FROM beer_order WHERE id=?;");
+$stmt->bind_param("i", $_GET["id"]);
+$stmt->execute();
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +18,7 @@ mysqli_close($link);
 
 <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
-    <p><?php echo $e == "" ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Objednávka byla odstraněna' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $e) ?></p>
+    <p><?php echo !$stmt->error ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Objednávka byla odstraněna' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $stmt->error) ?></p>
     <a class="btn btn-primary" href="orderList.php"><i class="pe-2 bi bi-arrow-left-circle"></i>Přejít na seznam objednávek</a>
 </body>
 

@@ -5,35 +5,33 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT ba.id, be.id, be.label, ba.label, ba.created, ba.thirds, ba.pints, s.id, s.label, s.color,
-        (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4),
-        (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4), ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price
-        FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;";
 $batches = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $batches[$row[0]] = [
-            "beerId" => $row[1],
-            "beerLabel" => $row[2],
-            "batchLabel" => $row[3],
-            "created" => $row[4],
-            "thirds" => $row[5],
-            "pints" => $row[6],
-            "statusId" => $row[7],
-            "statusLabel" => $row[8],
-            "statusColor" => $row[9],
-            "thirdsOrdered" => $row[10],
-            "pintsOrdered" => $row[11],
-            "emailed" => $row[12] ?? "",
-            "thirdsPerPerson" => $row[13],
-            "pintsPerPerson" => $row[14],
-            "thirdPrice" => $row[15],
-            "pintPrice" => $row[16],
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, s.id AS statusId, s.label AS statusLabel, s.color,
+    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered, (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
+    ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $batches[$row["id"]] = [
+            "beerId" => $row["beerId"],
+            "beerLabel" => $row["beerLabel"],
+            "batchLabel" => $row["batchLabel"],
+            "created" => $row["created"],
+            "thirds" => $row["thirds"],
+            "pints" => $row["pints"],
+            "statusId" => $row["statusId"],
+            "statusLabel" => $row["statusLabel"],
+            "statusColor" => $row["color"],
+            "thirdsOrdered" => $row["thirdsOrdered"],
+            "pintsOrdered" => $row["pintsOrdered"],
+            "emailed" => $row["emailed"] ?? "",
+            "thirdsPerPerson" => $row["thirds_pp"],
+            "pintsPerPerson" => $row["pints_pp"],
+            "thirdPrice" => $row["third_price"],
+            "pintPrice" => $row["pint_price"],
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">

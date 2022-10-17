@@ -6,20 +6,19 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $json = json_decode(file_get_contents("../beers.json"), true);
-$sql = "SELECT id, label, emailed FROM beer;";
 $beers = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $beers[$row[0]] = [
-            "label" => $row[1],
-            "shortDesc" => isset($json[$row[0]]) ? $json[$row[0]]["shortDesc"] : "",
-            "longDesc" => isset($json[$row[0]]) ? $json[$row[0]]["longDesc"] : "",
-            "emailed" => $row[2]
+$stmt = $link->prepare("SELECT id, label, emailed FROM beer;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $beers[$row["id"]] = [
+            "label" => $row["label"],
+            "shortDesc" => isset($json[$row["id"]]) ? $json[$row["id"]]["shortDesc"] : "",
+            "longDesc" => isset($json[$row["id"]]) ? $json[$row["id"]]["longDesc"] : "",
+            "emailed" => $row["emailed"]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">

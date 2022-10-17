@@ -2,16 +2,16 @@
 require_once "../config.php";
 session_start();
 
-$e = "";
-$sql = "SELECT id, mail, password, employee FROM user WHERE mail='" . $_POST["email"] . "';";
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        if (password_verify($_POST["password"], $row[2])) {
-            echo "valid";
+$stmt = $link->prepare("SELECT id, mail, password, employee FROM user WHERE mail=?;");
+$stmt->bind_param("s", $_POST["email"]);
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        if (password_verify($_POST["password"], $row["password"])) {
             $_SESSION["currentUser"] = [
-                "id" => $row[0],
-                "mail" => $row[1],
-                "employee" => $row[3]
+                "id" => $row["id"],
+                "mail" => $row["mail"],
+                "employee" => $row["employee"]
             ];
             if (!headers_sent()) {
                 foreach (headers_list() as $header)
@@ -20,9 +20,7 @@ if ($result = mysqli_query($link, $sql)) {
             echo '<script type="text/javascript">window.location="../homepage.php"</script>';
         }
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 
 <!DOCTYPE html>

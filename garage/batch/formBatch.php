@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 session_start();
-if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 ?>
@@ -23,12 +23,12 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
         <div class="mb-3 form-floating">
             <select class="form-select" id="beer" name="beer">
                 <?php
-                $sql = "SELECT id, label FROM beer;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beerId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
+                $stmt = $link->prepare("SELECT id, label FROM beer;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beerId"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
-                    mysqli_free_result($result);
                 }
                 ?>
             </select>
@@ -69,14 +69,13 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
         <div class="mb-3 form-floating">
             <select class="form-select" id="status" name="status">
                 <?php
-                $sql = "SELECT id, label FROM status_batch;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
+                $stmt = $link->prepare("SELECT id, label FROM status_batch;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
-                    mysqli_free_result($result);
                 }
-                mysqli_close($link);
                 ?>
             </select>
             <label for="status" class="form-label">Status</label>

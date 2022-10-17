@@ -1,46 +1,37 @@
 <?php
 require_once "../config.php";
-
-$keys = [
-    "n_taste",
-    "n_bitterness",
-    "n_scent",
-    "n_fullness",
-    "n_frothiness",
-    "n_clarity",
-    "n_overall"
-];
+require_once "../mail/mail.php";
+session_start();
 
 $e = "";
-$sql = "INSERT INTO feedback (id_order, g_temperature, date_consumed, g_taste, g_bitterness, g_scent, g_fullness, g_frothiness, g_clarity, g_overall" . getPostKeys($keys) . ")
-VALUES (" . $_POST["orderId"] . ", " . $_POST["temp"] . ", '" . $_POST["date"] . "', " . $_POST["taste"] . ", " . $_POST["bitterness"] . ", "
-. $_POST["scent"] . ", " . $_POST["fullness"] . ", " . $_POST["frothiness"] . ", " . $_POST["clarity"] . ", " . $_POST["overall"] . getPostValues($keys) . ");
-UPDATE beer_order SET id_status=5 WHERE id=" . $_POST["orderId"] . ";";
-if (!mysqli_multi_query($link, $sql)) {
-    $e = $sql . "<br>" . mysqli_error($link);
-}
-mysqli_close($link);
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+try {
+    $link->autocommit(false);
+    $stmt = $link->prepare("INSERT INTO feedback (id_order, g_temperature, date_consumed, g_taste, g_bitterness, g_scent, g_fullness, g_frothiness, g_clarity, g_overall, n_taste, n_bitterness, n_scent, n_fullness, n_frothiness, n_clarity, n_overall)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    $stmt->bind_param("iisiiiiiiisssssss", $_POST["orderId"], $_POST["temp"], $_POST["date"], $_POST["taste"], $_POST["bitterness"], $_POST["scent"], $_POST["fullness"], $_POST["frothiness"], $_POST["clarity"],  $_POST["overall"], $_POST["n_taste"], $_POST["n_bitterness"], $_POST["n_scent"], $_POST["n_fullness"], $_POST["n_frothiness"], $_POST["n_clarity"], $_POST["n_overall"]);
+    $stmt->execute();
 
-function getPostKeys($keysToCheck)
-{
-    $toRet = "";
-    foreach ($keysToCheck as $key) {
-        if (isset($_POST[$key]) && $_POST[$key] != "") {
-            $toRet .= (", " . $key);
-        }
-    }
-    return $toRet;
-}
+    $stmt = $link->prepare("UPDATE beer_order SET id_status=5 WHERE id=?;");
+    $stmt->bind_param("i", $_POST["orderId"]);
+    $stmt->execute();
 
-function getPostValues($keysToCheck)
-{
-    $toRet = "";
-    foreach ($keysToCheck as $key) {
-        if (isset($_POST[$key]) && $_POST[$key] != "") {
-            $toRet .= (", '" . $_POST[$key] . "'");
-        }
-    }
-    return $toRet;
+    $link->commit();
+} catch (\mysqli_sql_exception $exception) {
+    $link->rollback();
+    $e = $exception;
+    //throw $exception;
+} finally {
+    sendMail(
+        "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě <span style='color: #ffc107'>Tvoje hodnocení</span> bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+        "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě Tvoje hodnocení bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+        "Hodnocení už je u nás",
+        ("Hodnocení objednávky číslo " . $_POST["orderId"]),
+        $_SESSION["currentUser"]["mail"]
+    );
+
+    isset($stmt) && $stmt->close();
+    $link->autocommit(true);
 }
 ?>
 
