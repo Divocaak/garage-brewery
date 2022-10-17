@@ -37,7 +37,7 @@ if (!isset($_SESSION["currentUser"])) {
                         $thirdPrice = $isSelected ? $row["third_price"] : $thirdPrice;
                         $pintPrice = $isSelected ? $row["pint_price"] : $pintPrice;
                         echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row["thirds_pp"] . " data-pints-per-person=" . $row["pints_pp"] . "
-                            data-third-price=" . $row["third_price"] . " data-pint-price=" . $row["print_price"] . ">" . $row["label"] . " (" . $row["beerLabel"] . ", " . $row["created"] . ")</option>";
+                            data-third-price=" . $row["third_price"] . " data-pint-price=" . $row["pint_price"] . ">" . $row["label"] . " (" . $row["beerLabel"] . ", " . $row["created"] . ")</option>";
                     }
                 }
                 ?>

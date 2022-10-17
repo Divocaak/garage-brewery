@@ -1,5 +1,7 @@
 <?php
 require_once "../config.php";
+require_once "../mail/mail.php";
+session_start();
 
 $e = "";
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -20,6 +22,14 @@ try {
     $e = $exception;
     //throw $exception;
 } finally {
+    sendMail(
+        "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě <span style='color: #ffc107'>Tvoje hodnocení</span> bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+        "Děkujeme za hodnocení, hned na to koukneme. Kdo ví, třeba právě Tvoje hodnocení bude ten důvod, proč změníme recepturu, nebo na ní už nikdy sahat nebudeme. To ukáže čas. Tak zatím, díky.",
+        "Hodnocení už je u nás",
+        ("Hodnocení objednávky číslo " . $_POST["orderId"]),
+        $_SESSION["currentUser"]["mail"]
+    );
+
     isset($stmt) && $stmt->close();
     $link->autocommit(true);
 }

@@ -6,12 +6,10 @@ session_start();
 $userId = ($_SESSION["currentUser"]["employee"]) ? $_POST["user"] : $_SESSION["currentUser"]["id"];
 $email = ($_SESSION["currentUser"]["employee"]) ? $_POST["email"] : $_SESSION["currentUser"]["mail"];
 
-if (!isset($_POST["employee"]) || $_POST["employee"] == 0) {
-    $_POST["employee"] = "NULL";
-}
-
-$stmt = $link->prepare("INSERT INTO beer_order (id_customer, id_batch, thirds, pints, id_employee, id_status) VALUES (?, ?, ?, ?, ?, ?);");
-$stmt->bind_param("iiiiii", $userId, $_POST["batch"], $_POST["thirds"], $_POST["pints"], $_POST["employee"], $_POST["status"]);
+$stmt = $link->prepare("INSERT INTO beer_order (id_customer, id_batch, thirds, pints, id_status, id_employee) VALUES (?, ?, ?, ?, ?, ?);");
+$status = isset($_POST["status"]) ? $_POST["status"] : 1;
+$employee = (!isset($_POST["employee"]) || $_POST["employee"] == 0) ? NULL : $_POST["employee"];
+$stmt->bind_param("iiiiii", $userId, $_POST["batch"], $_POST["thirds"], $_POST["pints"], $status, $employee);
 $stmt->execute();
 if (!$stmt->error) {
     $orderId = $stmt->insert_id;;
