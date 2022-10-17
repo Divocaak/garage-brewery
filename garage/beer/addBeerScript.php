@@ -6,7 +6,7 @@ $stmt->bind_param("s", $_POST["label"]);
 $stmt->execute();
 if (!$stmt->error) {
     $json = json_decode(file_get_contents("../beers.json"), true);
-    $json[mysqli_insert_id($link)] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
+    $json[$stmt->insert_id] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
     file_put_contents("../beers.json", json_encode($json));
 }
 ?>

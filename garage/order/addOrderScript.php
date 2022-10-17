@@ -12,7 +12,7 @@ $employee = (!isset($_POST["employee"]) || $_POST["employee"] == 0) ? NULL : $_P
 $stmt->bind_param("iiiiii", $userId, $_POST["batch"], $_POST["thirds"], $_POST["pints"], $status, $employee);
 $stmt->execute();
 if (!$stmt->error) {
-    $orderId = $stmt->insert_id;;
+    $orderId = $stmt->insert_id;
     sendMail(
         "Jo, vidíme to tady. Nová <span style='color: #ffc107'>objednávka číslo " . $orderId . "</span>. Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou <span style='color: #ffc107'>chodit do mailu</span>, 
             nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko,
