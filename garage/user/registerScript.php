@@ -21,7 +21,6 @@ if ($_POST["password"] == $_POST["passwordCheck"]) {
     } else {
         $e = $stmt->error;
     }
-    mysqli_close($link);
 } else {
     $e = "Hesla se neshodují.";
 }
