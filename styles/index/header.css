@@ -1,26 +1,15 @@
 #mainImage {
     background-image: url("../../imgs/main.jpg");
-    background-size:cover;
+    background-size: cover;
     position: relative;
     height: 100vh;
 }
 
-#mainImageFooter {
-    height: 25vh;
-    background-color: #212529;
-    top: 75vh;
-    position: relative;
-}
-
 #logo {
     position: relative;
-    bottom: 40vh;
-    left: 50vh;
-    height: 75vh;
+    height: 50vh;
     width: auto;
-}
-
-#logo-sm{
-    position: relative;
-    bottom: 15%;
+    box-shadow: 0px 0px 150px 100px rgba(33, 37, 41, 1);
+    -webkit-box-shadow: 0px 0px 150px 100px rgba(33, 37, 41, 1);
+    -moz-box-shadow: 0px 0px 150px 100px rgba(33, 37, 41, 1);
 }
