@@ -15,7 +15,7 @@ require_once "../config.php";
 <body class="m-5 p-5 text-light bg-dark">
     <h1>Nastavení</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <p><i class="bi bi-cone-striped pe-2"></i>TODO</p>
+    <a class="btn btn-primary m-1" href="testMail.php"><i class="bi bi-send pe-2"></i>test mail</a>
 </body>
 
 </html>

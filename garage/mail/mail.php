@@ -46,7 +46,7 @@ function sendMail($body, $bodyAlt, $title, $subject, $address)
             $mail->addBCC(SMTP_EMAIL);
         }
 
-        $message = file_get_contents('../mail/header.txt') . '<h1 style="color: #ffc107;">' . $title . '</h1><p style="padding: 0% 0% 10% 0%">' . $body . file_get_contents('../mail/footer.txt');
+        $message = file_get_contents('../mail/header.txt') . '<h1 style="color: #ffc107;" align="center">' . $title . '</h1><p style="padding: 0% 0% 10% 0%" align="center">' . $body . file_get_contents('../mail/footer.txt');
         $messageAlt = file_get_contents('../mail/headerAlt.txt') . '<h2>' . $title . '</h2><p>' . $bodyAlt . file_get_contents('../mail/footerAlt.txt');
         $mail->isHTML(true);
         $mail->Subject = $subject;
