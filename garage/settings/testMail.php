@@ -6,7 +6,7 @@ sendMail(
     "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se Test mail! Neboj, až z něj uvaříme várku, dáme vědět.",
     "Máme nový recept!",
     "Nový recept, nové pivo",
-    "lahvy02@seznam.cz"
+    "divokyvojta@gmail.com"
 );
 ?>
 

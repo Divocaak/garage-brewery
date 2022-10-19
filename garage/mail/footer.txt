@@ -6,5 +6,6 @@
 <p align="center">Pokud ale potřebuješ s něčím pomoct nebo poradit, můžeš nám napsat na <a href="mailto:elektronickagaraz@email.cz">elektronickagaraz@email.cz</a></p></br>
 <p align="center">Nechceš, aby Ti něco uniklo? Sleduj nás na <a href="https://www.instagram.com/pivovar.garaz/" style="color: #ffc107" target="_blank">Instagramu</a> a <a href="https://www.facebook.com/garaz.pivovar" style="color: #ffc107" target="_blank">Facebooku</a></p></br>
 </div>
+</div>
 </body>
 </html>
