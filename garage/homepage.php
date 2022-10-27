@@ -58,6 +58,7 @@ if ($result = $stmt->get_result()) {
                 <a class="btn btn-primary m-1" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
                 <a class="btn btn-primary m-1" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
                 <a class="btn btn-primary m-1" href="feedback/feedbackList.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
+                <a class="btn btn-primary m-1" href="qr/formQr.php"><i class="bi bi-qr-code pe-2"></i>Generátor etiket</a>
                 <a class="btn btn-primary m-1" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
     } else {
         echo '<a class="btn btn-primary m-1" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
