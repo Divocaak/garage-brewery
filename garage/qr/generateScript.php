@@ -1,83 +1,47 @@
 <?php
-/**
- * Class QRImageWithLogo
- *
- * @filesource   QRImageWithLogo.php
- * @created      18.11.2020
- * @package      chillerlan\QRCodeExamples
- * @author       smiley <smiley@chillerlan.net>
- * @copyright    2020 smiley
- * @license      MIT
- *
- * @noinspection PhpComposerExtensionStubsInspection
- */
 
-namespace chillerlan\QRCodeExamples;
+$data = 'http://labs.nticompassinc.com';
+$size = 300;
 
-use chillerlan\QRCode\Output\{QRCodeOutputException, QRImage};
+header('Content-type: image/png');
+// http://code.google.com/apis/chart/infographics/docs/qr_codes.html
+$qr = imagecreatefrompng('https://chart.googleapis.com/chart?cht=qr&chld=H|1&chs=' . $size . "x" . $size . '&chl=' . urlencode($data));
+$logo = imagecreatefromstring(file_get_contents("src/logo.jpg"));
 
-use function imagecopyresampled, imagecreatefrompng, imagesx, imagesy, is_file, is_readable;
+$qr_width = imagesx($qr);
+$qr_height = imagesy($qr);
 
-/**
- * @property \chillerlan\QRCodeExamples\LogoOptions $options
- */
-class QRImageWithLogo extends QRImage{
+$logo_width = imagesx($logo);
+$logo_height = imagesy($logo);
 
-	/**
-	 * @param string|null $file
-	 * @param string|null $logo
-	 *
-	 * @return string
-	 * @throws \chillerlan\QRCode\Output\QRCodeOutputException
-	 */
-	public function dump(string $file = null, string $logo = null):string{
-		// set returnResource to true to skip further processing for now
-		$this->options->returnResource = true;
+// Scale logo to fit in the QR Code
+$logo_qr_width = $qr_width / 3;
+$scale = $logo_width / $logo_qr_width;
+$logo_qr_height = $logo_height / $scale;
 
-		// of course you could accept other formats too (such as resource or Imagick)
-		// i'm not checking for the file type either for simplicity reasons (assuming PNG)
-		if(!is_file($logo) || !is_readable($logo)){
-			throw new QRCodeOutputException('invalid logo');
-		}
+imagecopyresampled($qr, $logo, $qr_width / 3, $qr_height / 3, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
 
-		$this->matrix->setLogoSpace(
-			$this->options->logoSpaceWidth,
-			$this->options->logoSpaceHeight
-			// not utilizing the position here
-		);
 
-		// there's no need to save the result of dump() into $this->image here
-		parent::dump($file);
+$sticker = imagecreatefrompng('src/sticker.png');
+list($width, $height) = getimagesize('src/sticker.png');
 
-		$im = imagecreatefrompng($logo);
+$out = imagecreatetruecolor($width, $height);
+//imagealphablending($out, false);
+//imagesavealpha($out, true);
 
-		// get logo image size
-		$w = imagesx($im);
-		$h = imagesy($im);
+$txtColor = imagecolorallocate($out, 255, 0, 0);
+$font_path = 'src/font.ttf';
+$label = $_POST["id"] . ": " . $_POST["label"];
+imagettftext($out, 25, 0, 75, 300, $txtColor, $font_path, $label);
 
-		// set new logo size, leave a border of 1 module (no proportional resize/centering)
-		$lw = ($this->options->logoSpaceWidth - 2) * $this->options->scale;
-		$lh = ($this->options->logoSpaceHeight - 2) * $this->options->scale;
+$qrPosX = $width - $qr_width - 300;
+$qrPosY = $height - $qr_height - 600;
 
-		// get the qrcode size
-		$ql = $this->matrix->size() * $this->options->scale;
 
-		// scale the logo and copy it over. done!
-		imagecopyresampled($this->image, $im, ($ql - $lw) / 2, ($ql - $lh) / 2, 0, 0, $lw, $lh, $w, $h);
+imagecopyresampled($out, $sticker, 0, 0, 0, 0, $width, $height, $width, $height);
+imagecopyresampled($out, $qr, $qrPosX, $qrPosY, 0, 0, $size, $size, $size, $size);
 
-		$imageData = $this->dumpImage();
 
-		if($file !== null){
-			$this->saveToFile($imageData, $file);
-		}
 
-		if($this->options->imageBase64){
-			$imageData = 'data:image/'.$this->options->outputType.';base64,'.base64_encode($imageData);
-		}
 
-		return $imageData;
-	}
-
-}
-echo '<img src="'.$imageData->render($data).'" alt="QR Code" />';
-?>
+imagepng($out);
