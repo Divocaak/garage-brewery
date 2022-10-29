@@ -1,70 +1,6 @@
 <?php
 
-$data = 'http://labs.nticompassinc.com';
-$size = 300;
-
-header('Content-type: image/png');
-// http://code.google.com/apis/chart/infographics/docs/qr_codes.html
-$qr = imagecreatefrompng('https://chart.googleapis.com/chart?cht=qr&chld=H|1&chs=' . $size . "x" . $size . '&chl=' . urlencode($data));
-$logo = imagecreatefromstring(file_get_contents("src/logo.jpg"));
-
-$qr_width = imagesx($qr);
-$qr_height = imagesy($qr);
-
-$logo_width = imagesx($logo);
-$logo_height = imagesy($logo);
-
-// Scale logo to fit in the QR Code
-$logo_qr_width = $qr_width / 3;
-$scale = $logo_width / $logo_qr_width;
-$logo_qr_height = $logo_height / $scale;
-
-imagecopyresampled($qr, $logo, $qr_width / 3, $qr_height / 3, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
-
-
-$sticker = imagecreatefrompng('src/sticker.png');
-list($width, $height) = getimagesize('src/sticker.png');
-
-$out = imagecreatetruecolor($width, $height);
-//imagealphablending($out, false);
-//imagesavealpha($out, true);
-
-$qrPosX = $width - $qr_width - 300;
-$qrPosY = $height - $qr_height - 600;
-
-imagecopyresampled($out, $sticker, 0, 0, 0, 0, $width, $height, $width, $height);
-imagecopyresampled($out, $qr, $qrPosX, $qrPosY, 0, 0, $size, $size, $size, $size);
-
-/* $tmpClr = imagecolorallocate($out, 0, 0, 255);
-$tmpTxt = "a";
-
-$txtColor = imagecolorallocate($out, 255, 0, 0);
-$defaultFontSize = 50;
-$font_path = 'src/AmaticSC-Bold.ttf'; */
-
-$label = $_POST["id"] . ": " . $_POST["label"] . "ASD ASD 	ASDA";
-/* $boundingBox = imagettfbbox($defaultFontSize, 0, $font_path, $label);
-$boundingBoxWidth = $boundingBox[2] - $boundingBox[0];
-$textScale = 450 / $boundingBoxWidth;
-
-$boundingBoxTmp = imagettfbbox($defaultFontSize, 0, $font_path, $tmpTxt);
-$boundingBoxWidthTmp = $boundingBoxTmp[2] - $boundingBoxTmp[0];
-$textScaleTmp = 450 / $boundingBoxWidthTmp;
-
-
-$tmp = imagecreatetruecolor(50, 30);
-imagecopyresampled($out, $tmp, $qrPosX - 100, $txtPosY - 65, 0, 0, 450, 85, $width, $height);
-
-imagettftext($out, $defaultFontSize * $textScale, 0, $txtPosX, $txtPosY, $txtColor, $font_path, $label);
-imagettftext($out, $defaultFontSize * $textScaleTmp, 0, $txtPosX, $txtPosY, $tmpClr, $font_path, $tmpTxt); */
-
-$txtPosX = $qrPosX - 100;
-$txtPosY = $qrPosY - 15;
-
-drawText($out, $label, $txtPosX, $txtPosY, 450, 65, drawDebugBox: true);
-drawText($out, "a", $txtPosX, $txtPosY, 450, 85);
-
-function drawText(GDImage $out, $text, $x, $y, $desiredWidth, $desiredHeight, $angle = 0, $defaultFontSize = 50, $r = 255, $g = 255, $b = 255, $fontPath = "src/AmaticSC-Bold.ttf", $drawDebugBox = false)
+function drawText(GDImage $out, $text, $x, $y, $desiredWidth, $desiredHeight, $angle = 0, $defaultFontSize = 50, $r = 0, $g = 0, $b = 0, $fontPath = "src/AmaticSC-Bold.ttf", $drawDebugBox = false)
 {
 	$txtColor = imagecolorallocate($out, $r, $g, $b);
 
@@ -73,19 +9,70 @@ function drawText(GDImage $out, $text, $x, $y, $desiredWidth, $desiredHeight, $a
 	$boundingBoxHeight = $boundingBox[1] - $boundingBox[7];
 	$textScaleX = $desiredWidth / $boundingBoxWidth;
 	$textScaleY = $desiredHeight / $boundingBoxHeight;
-	$textScale = ($textScaleX + $textScaleY) / 2;
-
-	// calc optimal default scale to fit height => defaultFontSize
-	// if defaultfontsize > defaultfontsize * textscalex
+	$textScale = $textScaleX < 1 ? $textScaleX : $textScaleY * .75;
 
 	if ($drawDebugBox) {
 
-		list($width, $height) = [imagesx($out), imagesy($out)];
-		$tmp = imagecreatetruecolor(50, 30);
-		imagecopyresampled($out, $tmp, $x, $y - $desiredHeight, 0, 0, $desiredWidth, $desiredHeight, $width, $height);
+		$tmp = imagecreatetruecolor($desiredWidth, $desiredHeight);
+		imagecopyresampled($out, $tmp, $x, $y - $desiredHeight, 0, 0, $desiredWidth, $desiredHeight, $desiredWidth, $desiredHeight);
 	}
 
 	imagettftext($out, $defaultFontSize * $textScale, $angle, $x, $y, $txtColor, $fontPath, $text);
 }
 
-imagepng($out);
+$data = 'http://labs.nticompassinc.com';
+$size = 300;
+
+$qr = imagecreatefrompng('https://chart.googleapis.com/chart?cht=qr&chld=H|1&chs=' . $size . "x" . $size . '&chl=' . urlencode($data));
+$qrSize = imagesx($qr);
+
+$logo = imagecreatefromstring(file_get_contents("src/logo.png"));
+$logoSize = imagesx($logo);
+
+$logoQrSize = $qrSize / 3;
+$logoOutlineSize = $logoQrSize + 20;
+$logoOutlineCenter = $qrSize / 2;
+imagefilledellipse($qr, $logoOutlineCenter, $logoOutlineCenter, $logoOutlineSize, $logoOutlineSize, 0xFFFFFF);
+imagecopyresampled($qr, $logo, $logoQrSize, $logoQrSize, 0, 0, $logoQrSize, $logoQrSize, $logoSize, $logoSize);
+
+$sticker = imagecreatefrompng('src/sticker.png');
+list($width, $height) = getimagesize('src/sticker.png');
+
+$out = imagecreatetruecolor($width, $height);
+imagealphablending($out, false);
+imagesavealpha($out, true);
+
+$qrPosX = $width - $qrSize - 160;
+$qrPosY = $height - $qrSize - 310;
+
+imagecopyresampled($out, $sticker, 0, 0, 0, 0, $width, $height, $width, $height);
+imagecopyresampled($out, $qr, $qrPosX, $qrPosY, 0, 0, $size, $size, $size, $size);
+
+$label = $_POST["id"] . ": " . $_POST["label"];
+drawText($out, $label, $qrPosX - 100, $qrPosY - 15, 450, 65);
+drawText($out, $_POST["created"], $qrPosX + 120, $qrPosY + 380, 250, 65, angle: -5);
+// TODO volt
+drawText($out, "99,9 %", 600, 737, 50, 20);
+
+imagepng($out, "sticker.png");
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Výsledná etiketa</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <link href="../../styles/custom.min.css" rel="stylesheet">
+</head>
+
+<body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
+    <h1 class="pb-3 ms-2">Výsledná etiketa</h1>
+    <a class="btn btn-primary" href="formQr.php"><i class="pe-2 bi bi-arrow-left-circle"></i>Zpět</a>
+    <a class="btn btn-primary" href="sticker.png" download="sticker.png"><i class="pe-2 bi bi-download"></i>Uložit</a>
+	<img src="sticker.png" class="img-fluid"/>
+</body>
+
+</html>
