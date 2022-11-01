@@ -101,7 +101,7 @@ if ($result = $stmt->get_result()) {
                             <td>' . $myOrder["thirds"] . "<br>" . $thirdsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["thirdPrice"] . "&nbsp;Kč/ks" . '</td>
                             <td>' . $myOrder["pints"] . "<br>" . $pintsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["pintPrice"] . "&nbsp;Kč/ks" . '</td>
                             <td><span class="text-primary fw-bold">' . $pintsPrice + $thirdsPrice . '&nbsp;Kč</span></td>
-                            <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</td>
+                            <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</span></td>
                             <td>' . $btn . '</td>
                         </tr>';
                 }

@@ -1,0 +1,7 @@
+.cover-image{
+    height: 75vh;
+    position: relative;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
