@@ -1,19 +1,33 @@
 <?php
 require_once "../garage/config.php";
 
-$stmt = $link->prepare("SELECT id, label FROM beer WHERE id=?");
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label, ba.created, ba.thirds, ba.pints, ba.third_price, ba.pint_price, s.label AS statusLabel, s.color 
+    FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id WHERE ba.id=?");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
 $json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
-$beer;
+$batch;
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
-        $beer = [
+        $batch = [
             "id" => $row["id"],
             "label" => $row["label"],
-            "thumbnailName" => $json[$row["id"]]["thumbnailName"],
-            "shortDesc" => $json[$row["id"]]["shortDesc"],
-            "longDesc" => $json[$row["id"]]["longDesc"],
+            "created" => $row["created"],
+            "thirds" => $row["thirds"],
+            "pints" => $row["pints"],
+            "thirdPrice" => $row["third_price"],
+            "pintPrice" => $row["pint_price"],
+            "beer" => [
+                "id" => $row["beerId"],
+                "label" => $row["beerLabel"],
+                "thumbnailName" => $json[$row["beerId"]]["thumbnailName"],
+                "shortDesc" => $json[$row["beerId"]]["shortDesc"],
+                "longDesc" => $json[$row["beerId"]]["longDesc"],
+            ],
+            "status" => [
+                "label" => $row["statusLabel"],
+                "color" => $row["color"]
+            ]
         ];
     }
 }
@@ -23,7 +37,7 @@ if ($result = $stmt->get_result()) {
 
 <head>
     <meta charset="UTF-8">
-    <title><?php echo $beer["label"]; ?></title>
+    <title><?php echo $batch["label"]; ?></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../styles/custom.min.css" rel="stylesheet">
@@ -32,22 +46,26 @@ if ($result = $stmt->get_result()) {
 </head>
 
 <body class="text-light bg-dark text-center">
-    <div class="cover-image" style="background-image: url('../imgs/beers/<?php echo $beer["thumbnailName"]; ?>');"></div>
+    <div class="cover-image" style="background-image: url('../imgs/beers/<?php echo $batch["thumbnailName"]; ?>');"></div>
     <div class="m-md-5 p-md-5 p-3 ">
-        <h1><?php echo $beer["id"] . ": " . "<span class='text-primary'>" . $beer["label"] . "</span>"; ?></h1>
-        <a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>
+        <h1><?php echo $batch["id"] . ": " . "<span class='text-primary'>" . $batch["label"] . "</span>"; ?></h1>
+        <a class="btn btn-outline-primary" href="batchesPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>
+
+        <!-- NOTE beer page -->
+        <!-- TODO btn to beers page -->
+        <h1><?php echo $batch["beer"]["id"] . ": " . "<span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
         <h3 class="text-primary pt-4">Popis</h3>
-        <p><?php echo $beer["shortDesc"]; ?></p>
+        <p><?php echo $batch["beer"]["shortDesc"]; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
-        <p><?php echo $beer["longDesc"]; ?></p>
-        <h3 class="text-primary pt-4">Várky</h3>
+        <p><?php echo $batch["beer"]["longDesc"]; ?></p>
+        <h3 class="text-primary pt-4">Další várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
         <div class="row">
 
             <?php
             $batches = [];
             $stmt = $link->prepare("SELECT b.id, b.label, b.created, s.label AS statusLabel, s.color FROM batch b INNER JOIN status_batch s ON b.id_status=s.id WHERE b.id_beer=?;");
-            $stmt->bind_param("i", $_GET["id"]);
+            $stmt->bind_param("i", $batch["beer"]["id"]);
             $stmt->execute();
             $json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
             if ($result = $stmt->get_result()) {

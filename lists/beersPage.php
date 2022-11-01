@@ -37,15 +37,15 @@ if ($result = $stmt->get_result()) {
         if (count($beers) > 0) {
             foreach ($beers as $key => $beer) {
                 echo '<div class="col-12 col-md-6 p-2 text-center">
-                    <div class="card-body" onclick="window.location = \'beerDetail.php?id=' . $key . '\';">
-                        <div class="card-wrapper">
-                            <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . $beer["thumbnailName"] . '\');">
-                                <div class="card-fade"></div>
-                            </div>            
+                        <div class="card-body" onclick="window.location = \'beerDetail.php?id=' . $key . '\';">
+                            <div class="card-wrapper">
+                                <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . $beer["thumbnailName"] . '\');">
+                                    <div class="card-fade"></div>
+                                </div>            
+                            </div>
+                            <h2 class="text-primary">' . $beer["label"] . '</h2>
                         </div>
-                        <h2 class="text-primary">' . $beer["label"] . '</h2>
-                    </div>
-                </div>';
+                    </div>';
             }
         } else {
             echo '<p class="pt-3"> No, jak vidíš, moc toho tady není. Ale ono to přijde, neboj. Jenom se nesmí nikam spěchat.</p>';

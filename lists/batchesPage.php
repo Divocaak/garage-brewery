@@ -16,8 +16,12 @@ if ($result = $stmt->get_result()) {
         }
         $batchesSorted[$row["beerId"]]["batches"][$row["id"]] = [
             "label" => $row["batchLabel"],
-            "created" => $row["created"]
-            //"thumbnailName" => $json[$row["id"]]["thumbnailName"]
+            "created" => $row["created"],
+            "status" => [
+                "label" => $row["statusLabel"],
+                "color" => $row["color"]
+            ]
+            // TODO batch thumbnails
         ];
     }
 }
@@ -35,29 +39,34 @@ if ($result = $stmt->get_result()) {
 </head>
 
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
-    <h1><span class="text-primary">Naše</span> piva</h1>
-    <p class="text-muted">V detailu každého piva můžeš zjistit, jaké várky jsme z něj uvařily, nebo si o něm jenom přečíst.</p>
+    <h1><span class="text-primary">Várky</h1>
+    <p class="text-muted">Várky jsou seřazené podle piv, ze kterých jsou uvařené.</p>
     <a class="btn btn-outline-primary" href="../index.html"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <div class="row">
-        <?php
-        if (count($batchesSorted) > 0) {
-            foreach ($batchesSorted as $key => $batch) {
+    <?php
+    if (count($batchesSorted) > 0) {
+        foreach ($batchesSorted as $key => $beer) {
+            echo '<h2 class="pt-5">' . $beer["label"] . '</h2><div class="row">';
+            foreach ($beer["batches"] as $key => $batch) {
+                // TODO thumbnail
                 echo '<div class="col-12 col-md-6 p-2 text-center">
-                    <div class="card-body" onclick="window.location = \'beerDetail.php?id=' . $key . '\';">
-                        <div class="card-wrapper">
-                            <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . $beer["thumbnailName"] . '\');">
+                        <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
+                            <div class="card-wrapper">
+                                <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . "0.jpg" . '\');">
                                 <div class="card-fade"></div>
                             </div>            
                         </div>
-                        <h2 class="text-primary">' . $beer["label"] . '</h2>
-                    </div>
-                </div>';
+                        <h2 class="text-primary"><span class="me-2 badge rounded-pill" style="background-color:#' . $batch["status"]["color"] . ';">' . $batch["status"]["label"] . '</span>' . $batch["label"] . '</h2>
+                        <p class="text-muted">uvařeno ' . $batch["created"] . '</p>
+                        </div>
+                    </div>';
             }
-        } else {
-            echo '<p class="pt-3"> No, jak vidíš, moc toho tady není. Ale ono to přijde, neboj. Jenom se nesmí nikam spěchat.</p>';
+            echo '</div>';
         }
-        ?>
-    </div>
+    } else {
+        echo '<p class="pt-3"> No, jak vidíš, moc toho tady není. Ale ono to přijde, neboj. Jenom se nesmí nikam spěchat.</p>';
+    }
+
+    ?>
 </body>
 
 </html>
