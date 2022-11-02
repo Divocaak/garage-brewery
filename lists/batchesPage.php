@@ -31,7 +31,7 @@ if ($result = $stmt->get_result()) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Piva</title>
+    <title>Várky</title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../styles/custom.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@ if ($result = $stmt->get_result()) {
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
                             <div class="card-wrapper">
-                                <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . "0.jpg" . '\');">
+                                <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . "0.jpg" . '\');">
                                 <div class="card-fade"></div>
                             </div>            
                         </div>

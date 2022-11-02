@@ -32,7 +32,7 @@ if ($result = $stmt->get_result()) {
 </head>
 
 <body class="text-light bg-dark text-center">
-    <div class="cover-image" style="background-image: url('../imgs/beers/<?php echo $beer["thumbnailName"]; ?>');"></div>
+    <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $beer["thumbnailName"]; ?>');"></div>
     <div class="m-md-5 p-md-5 p-3 ">
         <h1><?php echo $beer["id"] . ": " . "<span class='text-primary'>" . $beer["label"] . "</span>"; ?></h1>
         <a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>
@@ -69,7 +69,7 @@ if ($result = $stmt->get_result()) {
                     echo '<div class="col-12 col-md-6 p-2 text-center">
                             <div class="card-body" onclick="window.open(\'batchDetail.php?id=' . $key . '\', \'_blank\');">
                                 <div class="card-wrapper">
-                                    <div class="card-background-image" style="background-image: url(\'../imgs/beers/' . "0.jpg" . '\');">
+                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . "0.jpg" . '\');">
                                         <div class="card-fade"></div>
                                     </div>            
                                 </div>

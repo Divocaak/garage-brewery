@@ -5,3 +5,10 @@
     background-repeat: no-repeat;
     background-position: center center;
 }
+
+.my-data-table{
+    line-height: 3em;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+    box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+}
