@@ -31,17 +31,11 @@ if ($result = $stmt->get_result()) {
             // TODO batch thumbnail
             "thumbnailName" => "1.jpg",
             // TODO batch data
-            // stupňovitost (extrakt původní) (%)
             "gradation" => "18",
-            // alkohol (objemový) (%)
             "alcohol" => "99.9",
-            // typ
             "type" => "Ležák",
-            // barva (EBC)
-            "color" => "22",
-            // pH,
+            "color" => 30,
             "ph" => "xx",
-            // hořkost (IBU)
             "bitterness" => "xx",
             "desc" => "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam commodo dui eget wisi. Suspendisse sagittis ultrices augue. Etiam posuere lacus quis dolor. Donec iaculis gravida nulla. Praesent vitae arcu tempor neque lacinia pretium. Nulla quis diam. Quisque tincidunt scelerisque libero. Pellentesque arcu. Nullam rhoncus aliquam metus. Etiam bibendum elit eget erat. Fusce aliquam vestibulum ipsum.",
             // TODO batch sticker
@@ -64,7 +58,14 @@ $colors = [
     57 => "#100b0a",
     69 => "#080707",
     79 => "#030403"
-]
+];
+
+$colorHex = null;
+foreach ($colors as $key => $color) {
+    if ($colorHex === null || abs($batch["color"] - $colorHex) > abs($key - $batch["color"])) {
+        $colorHex = $key;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -83,21 +84,14 @@ $colors = [
     <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $batch["thumbnailName"]; ?>');"></div>
     <div class="m-md-5 p-md-5 p-3">
         <h1><?php echo $batch["id"] . ": " . "<span class='text-primary'>" . $batch["label"] . "</span>"; ?></h1>
-        <a class="btn btn-outline-primary" href="batchesPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>
-        <!-- // stupňovitost (extrakt původní) (%)
-        "gradation" => "18",
-        // alkohol (objemový) (%)
-        "alcohol" => "99.9",
-        // typ
-        "type" => "Ležák",
-        // barva (EBC)
-        "color" => "22",
-        // pH,
-        "ph" => "xx",
-        // hořkost (IBU)
-        "bitterness" => "xx", -->
-        <div class="d-flex justify-content-center">
-            <div class="row my-data-table w-50">
+        <?php
+        if (!isset($_GET["bckBtn"])) {
+            echo '<a class="btn btn-outline-primary" href="batchesPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>';
+        }
+        ?>
+        <h3 class="text-primary pt-4">Data z laborky</h3>
+        <div class="d-flex justify-content-center mt-3">
+            <div class="row my-data-table w-50 pt-3">
                 <div class="col-6 text-start">
                     <p>Stupňovitost (extrakt původní)</p>
                 </div>
@@ -110,6 +104,30 @@ $colors = [
                 <div class="col-6 text-end">
                     <p><?php echo $batch["alcohol"]; ?> %</p>
                 </div>
+                <div class="col-6 text-start">
+                    <p>Typ piva</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p><?php echo $batch["type"]; ?></p>
+                </div>
+                <div class="col-6 text-start">
+                    <p>Barva</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p><i class="bi bi-circle-fill" style="color:<?php echo $colors[$colorHex]; ?>"></i> <?php echo $batch["color"]; ?> EBC</p>
+                </div>
+                <div class="col-6 text-start">
+                    <p>pH</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p><?php echo $batch["ph"]; ?></p>
+                </div>
+                <div class="col-6 text-start">
+                    <p>Hořkost</p>
+                </div>
+                <div class="col-6 text-end">
+                    <p><?php echo $batch["bitterness"]; ?> IBU</p>
+                </div>
             </div>
         </div>
         <h3 class="text-primary pt-4">Popis</h3>
@@ -119,13 +137,15 @@ $colors = [
             <figcaption class="figure-caption">Etiketa vytvořena <span class="text-primary">speciálně</span> pro tuto várku</figcaption>
         </figure>
     </div>
-    <!-- NOTE beer page -->
-    <!-- TODO btn to beers page -->
     <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $batch["beer"]["thumbnailName"]; ?>');"></div>
     <div class="m-md-5 p-md-5 p-3 ">
         <p class="text-muted">Uvařeno z piva</p>
         <h1><?php echo $batch["beer"]["id"] . ": " . "<span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
-        <a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Přejít na seznam piv</a>
+        <?php
+        if (!isset($_GET["bckBtn"])) {
+            echo '<a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Přejít na seznam piv</a>';
+        }
+        ?>
         <h3 class="text-primary pt-4">Popis</h3>
         <p><?php echo $batch["beer"]["shortDesc"]; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>

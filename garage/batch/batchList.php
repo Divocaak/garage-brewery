@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 session_start();
-if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
+if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
 }
 
@@ -12,23 +12,30 @@ $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
-        $batches[$row["id"]] = [
-            "beerId" => $row["beerId"],
-            "beerLabel" => $row["beerLabel"],
-            "batchLabel" => $row["batchLabel"],
+        if (!isset($batchesSorted[$row["beerId"]])) {
+            $batchesSorted[$row["beerId"]] = [
+                "label" => $row["beerLabel"],
+                "batches" => []
+            ];
+        }
+        $batchesSorted[$row["beerId"]]["batches"][$row["id"]] = [
+            "label" => $row["batchLabel"],
             "created" => $row["created"],
             "thirds" => $row["thirds"],
             "pints" => $row["pints"],
-            "statusId" => $row["statusId"],
-            "statusLabel" => $row["statusLabel"],
-            "statusColor" => $row["color"],
-            "thirdsOrdered" => $row["thirdsOrdered"],
-            "pintsOrdered" => $row["pintsOrdered"],
-            "emailed" => $row["emailed"] ?? "",
             "thirdsPerPerson" => $row["thirds_pp"],
             "pintsPerPerson" => $row["pints_pp"],
             "thirdPrice" => $row["third_price"],
             "pintPrice" => $row["pint_price"],
+            "thirdsOrdered" => $row["thirdsOrdered"],
+            "pintsOrdered" => $row["pintsOrdered"],
+            "emailed" => $row["emailed"] ?? "",
+            "status" => [
+                "id" => $row["statusId"],
+                "label" => $row["statusLabel"],
+                "color" => $row["color"]
+            ]
+            // TODO batch thumbnails
         ];
     }
 }
@@ -42,54 +49,52 @@ if ($result = $stmt->get_result()) {
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
+    <link href="../../styles/lists/card.css" rel="stylesheet">
 </head>
 
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Várky</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <a class="btn btn-outline-success" href="formBatch.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>
-    <div class="table-responsive">
-        <table class="mt-3 table table-striped table-hover table-dark">
-            <caption>Seznam várek</caption>
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Pivo</th>
-                    <th scope="col">Várka</th>
-                    <th scope="col">Vytvořeno</th>
-                    <th scope="col">Třetinky [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá (max na osobu))</th>
-                    <th scope="col">Půllitry [ks]<br />(objednáno/uvařeno =>&nbsp;zbývá (max na osobu))</th>
-                    <th scope="col">Status</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $_SESSION["batches"] = $batches;
-                foreach ($batches as $key => $batch) {
-                    $thirdsRemaining = $batch["thirds"] - $batch["thirdsOrdered"];
-                    $pintsRemaining = $batch["pints"] - $batch["pintsOrdered"];
-                    echo '<tr>
-                            <th scope="row">' . $key . '</th>
-                            <td>' . $batch["beerLabel"] . '</td>
-                            <td>' . $batch["batchLabel"] . '</td>
-                            <td>' . date_format(date_create($batch["created"]), 'd. m. Y') . '</td>
-                            <td>' . ($batch["thirdsOrdered"] ? $batch["thirdsOrdered"] : "0") . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . "</span> (" . $batch["thirdsPerPerson"] . ')<br>' . $batch["thirdPrice"] . ' Kč/ks</td>
-                            <td>' . ($batch["pintsOrdered"] ? $batch["pintsOrdered"] : "0") . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . "</span> (" . $batch["pintsPerPerson"] . ')<br>' . $batch["pintPrice"] . ' Kč/ks</td>
-                            <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $batch["statusColor"] . ';">' . $batch["statusLabel"] . '</td>
-                            <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '</td>
-                            <td>' . ($batch["statusId"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '</td>
-                            <td><a class="btn btn-outline-secondary" href="formBatch.php?batchId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
-                            <td><a class="btn btn-outline-danger deleteBtn" data-batch-id=' . $key . '><i class="bi bi-trash"></i></a></td>
-                        </tr>';
+    <?php
+    if ($_SESSION["currentUser"]["employee"]) {
+        echo '<a class="btn btn-outline-success" href="formBatch.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>';
+        echo '<p class="pt-3">Třetinky [ks] (objednáno/uvařeno => zbývá (max na osobu, cena))<br>
+                Půllitry [ks] (objednáno/uvařeno => zbývá (max na osobu, cena))</p>';
+    }
+
+    if (count($batchesSorted) > 0) {
+        foreach ($batchesSorted as $key => $beer) {
+            echo '<h2 class="pt-5">' . $beer["label"] . '</h2><div class="row">';
+            foreach ($beer["batches"] as $key => $batch) {
+                $thirdsRemaining = $batch["thirds"] - $batch["thirdsOrdered"];
+                $pintsRemaining = $batch["pints"] - $batch["pintsOrdered"];
+                // TODO thumbnail
+                echo '<div class="col-12 col-md-6 p-2 text-center">
+                    <div class="card-body">
+                        <div class="card-wrapper" onclick="window.open(\'../../lists/batchDetail.php?id=' . $key . '&bckBtn=0\', \'_blank\');">
+                            <div class="card-background-image" style="background-image: url(\'../../imgs/bank/' . "0.jpg" . '\');">
+                            <div class="card-fade"></div>
+                        </div>            
+                    </div>
+                    <h2 class="text-primary"><span class="me-2 badge rounded-pill" style="background-color:#' . $batch["status"]["color"] . ';">' . $batch["status"]["label"] . '</span>' . $batch["label"] . '</h2>';
+                if ($_SESSION["currentUser"]["employee"]) {
+                    echo ($batch["thirdsOrdered"] ? $batch["thirdsOrdered"] : "0") . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . "</span> (" . $batch["thirdsPerPerson"] . ', ' . $batch["thirdPrice"] . ' Kč/ks)<br>
+                    ' . ($batch["pintsOrdered"] ? $batch["pintsOrdered"] : "0") . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . "</span> (" . $batch["pintsPerPerson"] . ', ' . $batch["pintPrice"] . ' Kč/ks)<br>';
+                    echo ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '
+                    ' . ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '
+                    <a class="btn btn-outline-secondary" href="formBatch.php?batchId=' . $key . '"><i class="bi bi-pencil"></i></a>
+                    <a class="btn btn-outline-danger deleteBtn" data-batch-id=' . $key . '><i class="bi bi-trash"></i></a>';
                 }
-                ?>
-            </tbody>
-        </table>
-    </div>
+                echo '<p class="text-muted">uvařeno ' . $batch["created"] . '</p>
+                    </div>
+                </div>';
+            }
+            echo '</div>';
+        }
+    } else {
+        echo '<p class="pt-3"> No, jak vidíš, moc toho tady není. Ale ono to přijde, neboj. Jenom se nesmí nikam spěchat.</p>';
+    }
+    ?>
 
     <div class="modal fade" id="confDeleteModal" tabindex="-1" aria-labelledby="confDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
