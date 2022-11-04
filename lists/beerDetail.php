@@ -1,19 +1,18 @@
 <?php
 require_once "../garage/config.php";
 
-$stmt = $link->prepare("SELECT id, label FROM beer WHERE id=?");
+$beer;
+$stmt = $link->prepare("SELECT id, label, thumbnail_name, short_desc, long_desc FROM beer WHERE id=?");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
-$json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
-$beer;
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         $beer = [
             "id" => $row["id"],
             "label" => $row["label"],
-            "thumbnailName" => $json[$row["id"]]["thumbnailName"],
-            "shortDesc" => $json[$row["id"]]["shortDesc"],
-            "longDesc" => $json[$row["id"]]["longDesc"],
+            "thumbnailName" => $row["thumbnail_name"],
+            "shortDesc" => $row["short_desc"],
+            "longDesc" => $row["long_desc"]
         ];
     }
 }
@@ -32,7 +31,7 @@ if ($result = $stmt->get_result()) {
 </head>
 
 <body class="text-light bg-dark text-center">
-    <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $beer["thumbnailName"]; ?>');"></div>
+    <?php echo $beer["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $beer["thumbnailName"] . '\');"></div>' : '';?>
     <div class="m-md-5 p-md-5 p-3 ">
         <h1><?php echo $beer["id"] . ": " . "<span class='text-primary'>" . $beer["label"] . "</span>"; ?></h1>
         <?php
@@ -41,9 +40,9 @@ if ($result = $stmt->get_result()) {
         }
         ?>
         <h3 class="text-primary pt-4">Popis</h3>
-        <p><?php echo $beer["shortDesc"]; ?></p>
+        <p><?php echo $beer["shortDesc"] != "" ? $beer["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
-        <p><?php echo $beer["longDesc"]; ?></p>
+        <p><?php echo $beer["longDesc"] != "" ? $beer["longDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
         <div class="row">

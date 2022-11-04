@@ -3,11 +3,6 @@ require_once "../config.php";
 $stmt = $link->prepare("DELETE FROM beer WHERE id=?;");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
-if (!$stmt->error) {
-    $json = json_decode(file_get_contents("../beers.json"), true);
-    unset($json[$_GET["id"]]);
-    file_put_contents("../beers.json", json_encode($json));
-}
 ?>
 
 <!DOCTYPE html>

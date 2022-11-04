@@ -1,14 +1,9 @@
 <?php
 require_once "../config.php";
 require_once "../mail/mail.php";
-$stmt = $link->prepare("INSERT INTO beer (label) VALUES (?);");
-$stmt->bind_param("s", $_POST["label"]);
+$stmt = $link->prepare("INSERT INTO beer (label, thumbnail_name, short_desc, long_desc) VALUES (?, ?, ?, ?);");
+$stmt->bind_param("ssss", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"]);
 $stmt->execute();
-if (!$stmt->error) {
-    $json = json_decode(file_get_contents("../beers.json"), true);
-    $json[$stmt->insert_id] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
-    file_put_contents("../beers.json", json_encode($json));
-}
 ?>
 
 <!DOCTYPE html>

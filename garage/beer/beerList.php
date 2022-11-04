@@ -6,23 +6,20 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $beers = [];
-$stmt = $link->prepare("SELECT id, label, emailed FROM beer;");
+$stmt = $link->prepare("SELECT id, label, emailed, thumbnail_name, short_desc, long_desc FROM beer;");
 $stmt->execute();
-$json = json_decode(file_get_contents("../pagesData/beers.json"), true);
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         $beers[$row["id"]] = [
             "label" => $row["label"],
-            "thumbnailName" => $json[$row["id"]]["thumbnailName"],
             "emailed" => $row["emailed"],
-            "shortDesc" => $json[$row["id"]]["shortDesc"],
-            "longDesc" => $json[$row["id"]]["longDesc"]
+            "thumbnailName" => $row["thumbnail_name"],
+            "shortDesc" => $row["short_desc"],
+            "longDesc" => $row["long_desc"]
         ];
     }
 }
 $_SESSION["beers"] = $beers;
-// TODO move thumbnail name to databese, so i dont have to read the json here
-// TODO move both desc texts to database
 ?>
 <!DOCTYPE html>
 <html lang="cz">

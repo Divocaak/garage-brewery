@@ -2,19 +2,16 @@
 require_once "../garage/config.php";
 
 $beers = [];
-$stmt = $link->prepare("SELECT id, label FROM beer;");
+$stmt = $link->prepare("SELECT id, label, thumbnail_name FROM beer;");
 $stmt->execute();
-$json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         $beers[$row["id"]] = [
             "label" => $row["label"],
-            "thumbnailName" => $json[$row["id"]]["thumbnailName"]
+            "thumbnailName" => $row["thumbnail_name"]
         ];
     }
 }
-// TODO move thumbnail name to databese, so i dont have to read the json here
-// TODO move both desc texts to database
 ?>
 <!DOCTYPE html>
 <html lang="cz">

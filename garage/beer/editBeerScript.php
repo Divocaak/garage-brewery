@@ -1,13 +1,8 @@
 <?php
 require_once "../config.php";
-$stmt = $link->prepare("UPDATE beer SET label=? WHERE id=?;");
-$stmt->bind_param("si", $_POST["label"], $_GET["beerId"]);
+$stmt = $link->prepare("UPDATE beer SET label=?, thumbnail_name=?, short_desc=?, long_desc=? WHERE id=?;");
+$stmt->bind_param("ssssi", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"], $_GET["beerId"]);
 $stmt->execute();
-if (!$stmt->error) {
-    $json = json_decode(file_get_contents("../beers.json"), true);
-    $json[$_GET["beerId"]] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
-    file_put_contents("../beers.json", json_encode($json));
-}
 ?>
 
 <!DOCTYPE html>
