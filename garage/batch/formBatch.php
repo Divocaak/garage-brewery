@@ -35,7 +35,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
             <label for="beer" class="form-label">Pivo</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] : ""; ?>">
+            <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["label"] : ""; ?>">
             <label for="label" class="form-label">Název</label>
         </div>
         <div class="form-floating mb-3">

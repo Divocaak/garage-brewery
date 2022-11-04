@@ -14,10 +14,13 @@ if ($result = $stmt->get_result()) {
         $beers[$row["id"]] = [
             "label" => $row["label"],
             "thumbnailName" => $json[$row["id"]]["thumbnailName"],
-            "emailed" => $row["emailed"]
+            "emailed" => $row["emailed"],
+            "shortDesc" => $json[$row["id"]]["shortDesc"],
+            "longDesc" => $json[$row["id"]]["longDesc"]
         ];
     }
 }
+$_SESSION["beers"] = $beers;
 // TODO move thumbnail name to databese, so i dont have to read the json here
 // TODO move both desc texts to database
 ?>

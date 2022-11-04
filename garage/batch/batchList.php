@@ -5,7 +5,7 @@ if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
 }
 
-$batches = [];
+$batchesSorted = [];
 $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, s.id AS statusId, s.label AS statusLabel, s.color,
     (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered, (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
     ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
@@ -18,7 +18,7 @@ if ($result = $stmt->get_result()) {
                 "batches" => []
             ];
         }
-        $batchesSorted[$row["beerId"]]["batches"][$row["id"]] = [
+        $batchesSorted[$row["beerId"]]["batches"][$row["id"]] = $_SESSION["batches"][$row["id"]] = [
             "label" => $row["batchLabel"],
             "created" => $row["created"],
             "thirds" => $row["thirds"],
