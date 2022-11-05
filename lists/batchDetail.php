@@ -1,12 +1,12 @@
 <?php
 require_once "../garage/config.php";
 
-$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label, ba.created, ba.thirds, ba.pints, ba.third_price, ba.pint_price, s.label AS statusLabel, s.color AS statusColor 
+$batch;
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, be.thumbnail_name AS beerThumbnailName, be.short_desc, be.long_desc, ba.label, ba.created, ba.thirds, ba.pints, ba.third_price, ba.pint_price, ba.thumbnail_name,
+    ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, s.label AS statusLabel, s.color AS statusColor 
     FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id WHERE ba.id=?");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
-$json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
-$batch;
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         $batch = [
@@ -20,26 +20,22 @@ if ($result = $stmt->get_result()) {
             "beer" => [
                 "id" => $row["beerId"],
                 "label" => $row["beerLabel"],
-                "thumbnailName" => $json[$row["beerId"]]["thumbnailName"],
-                "shortDesc" => $json[$row["beerId"]]["shortDesc"],
-                "longDesc" => $json[$row["beerId"]]["longDesc"],
+                "thumbnailName" => $row["beerThumbnailName"],
+                "shortDesc" => $row["short_desc"],
+                "longDesc" => $row["long_desc"],
             ],
             "status" => [
                 "label" => $row["statusLabel"],
                 "color" => $row["statusColor"]
             ],
-            // TODO batch thumbnail
-            "thumbnailName" => "1.jpg",
-            // TODO batch data
-            "gradation" => "18",
-            "alcohol" => "99.9",
-            "type" => "Ležák",
-            "color" => 30,
-            "ph" => "xx",
-            "bitterness" => "xx",
-            "desc" => "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam commodo dui eget wisi. Suspendisse sagittis ultrices augue. Etiam posuere lacus quis dolor. Donec iaculis gravida nulla. Praesent vitae arcu tempor neque lacinia pretium. Nulla quis diam. Quisque tincidunt scelerisque libero. Pellentesque arcu. Nullam rhoncus aliquam metus. Etiam bibendum elit eget erat. Fusce aliquam vestibulum ipsum.",
-            // TODO batch sticker
-            "stickerName" => "0.png"
+            "thumbnailName" => $row["thumbnail_name"],
+            "stickerName" => $row["sticker_name"],
+            "desc" => $row["description"],
+            "gradation" => $row["gradation"],
+            "alcohol" => $row["alcohol"],
+            "color" => $row["color"],
+            "ph" => $row["ph"],
+            "bitterness" => $row["bitterness"],
         ];
     }
 }
@@ -61,10 +57,20 @@ $colors = [
 ];
 
 $colorHex = null;
-foreach ($colors as $key => $color) {
-    if ($colorHex === null || abs($batch["color"] - $colorHex) > abs($key - $batch["color"])) {
-        $colorHex = $key;
+if ($batch["color"] != "") {
+    foreach ($colors as $key => $color) {
+        if ($colorHex === null || abs($batch["color"] - $colorHex) > abs($key - $batch["color"])) {
+            $colorHex = $key;
+        }
     }
+}
+
+function writeTableData($data, $suffix = "")
+{
+    if ($data != "") {
+        return $data . " " . $suffix;
+    }
+    return "Zatím nevíme";
 }
 ?>
 <!DOCTYPE html>
@@ -81,7 +87,7 @@ foreach ($colors as $key => $color) {
 </head>
 
 <body class="text-light bg-dark text-center">
-    <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $batch["thumbnailName"]; ?>');"></div>
+    <?php echo $batch["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');"></div>' : ''; ?>
     <div class="m-md-5 p-md-5 p-3">
         <h1><?php echo $batch["id"] . ": " . "<span class='text-primary'>" . $batch["label"] . "</span>"; ?></h1>
         <?php
@@ -96,48 +102,50 @@ foreach ($colors as $key => $color) {
                     <p>Stupňovitost (extrakt původní)</p>
                 </div>
                 <div class="col-6 text-end">
-                    <p><?php echo $batch["gradation"]; ?> %</p>
+                    <p><?php echo writeTableData($batch["gradation"], "%"); ?></p>
                 </div>
                 <div class="col-6 text-start">
                     <p>Podíl alkoholu</p>
                 </div>
                 <div class="col-6 text-end">
-                    <p><?php echo $batch["alcohol"]; ?> %</p>
-                </div>
-                <div class="col-6 text-start">
-                    <p>Typ piva</p>
-                </div>
-                <div class="col-6 text-end">
-                    <p><?php echo $batch["type"]; ?></p>
+                    <p><?php echo writeTableData($batch["alcohol"], "%"); ?></p>
                 </div>
                 <div class="col-6 text-start">
                     <p>Barva</p>
                 </div>
                 <div class="col-6 text-end">
-                    <p><i class="bi bi-circle-fill" style="color:<?php echo $colors[$colorHex]; ?>"></i> <?php echo $batch["color"]; ?> EBC</p>
+                    <p><?php echo $colorHex != null ? '<i class="bi bi-circle-fill" style="color:' . $colors[$colorHex] . '"></i>' : '';
+                        echo writeTableData($batch["color"], "EBC"); ?></p>
                 </div>
                 <div class="col-6 text-start">
                     <p>pH</p>
                 </div>
                 <div class="col-6 text-end">
-                    <p><?php echo $batch["ph"]; ?></p>
+                    <p><?php echo writeTableData($batch["ph"]); ?></p>
                 </div>
                 <div class="col-6 text-start">
                     <p>Hořkost</p>
                 </div>
                 <div class="col-6 text-end">
-                    <p><?php echo $batch["bitterness"]; ?> IBU</p>
+                    <p><?php echo writeTableData($batch["bitterness"], "IBU"); ?></p>
                 </div>
             </div>
         </div>
         <h3 class="text-primary pt-4">Popis</h3>
-        <p><?php echo $batch["desc"]; ?></p>
-        <figure class="figure">
-            <img src="../imgs/stickers/<?php echo $batch["stickerName"]; ?>" class="figure-img img-fluid rounded" alt="...">
-            <figcaption class="figure-caption">Etiketa vytvořena <span class="text-primary">speciálně</span> pro tuto várku</figcaption>
-        </figure>
+        <p><?php echo $batch["desc"] != "" ? $batch["desc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
+        <h3 class="text-primary pt-4">Etiketa</h3>
+        <?php
+        if ($batch["stickerName"] != "") {
+            echo '<figure class="figure">
+                    <img src="../imgs/stickers/' . $batch["stickerName"] . '" class="figure-img img-fluid rounded" alt="...">
+                    <figcaption class="figure-caption">Etiketa vytvořena <span class="text-primary">speciálně</span> pro tuto várku</figcaption>
+                </figure>';
+        }else{
+            echo '<p>Etiketa je zatím ve výrobě</p>';
+        }
+        ?>
     </div>
-    <div class="cover-image" style="background-image: url('../imgs/bank/<?php echo $batch["beer"]["thumbnailName"]; ?>');"></div>
+    <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : '';?>
     <div class="m-md-5 p-md-5 p-3 ">
         <p class="text-muted">Uvařeno z piva</p>
         <h1><?php echo $batch["beer"]["id"] . ": " . "<span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
@@ -147,29 +155,27 @@ foreach ($colors as $key => $color) {
         }
         ?>
         <h3 class="text-primary pt-4">Popis</h3>
-        <p><?php echo $batch["beer"]["shortDesc"]; ?></p>
+        <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
-        <p><?php echo $batch["beer"]["longDesc"]; ?></p>
+        <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Další várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
         <div class="row">
-
             <?php
             $batches = [];
-            $stmt = $link->prepare("SELECT b.id, b.label, b.created, s.label AS statusLabel, s.color FROM batch b INNER JOIN status_batch s ON b.id_status=s.id WHERE b.id_beer=?;");
+            $stmt = $link->prepare("SELECT b.id, b.label, b.thumbnail_name, b.created, s.label AS statusLabel, s.color FROM batch b INNER JOIN status_batch s ON b.id_status=s.id WHERE b.id_beer=?;");
             $stmt->bind_param("i", $batch["beer"]["id"]);
             $stmt->execute();
-            $json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
             if ($result = $stmt->get_result()) {
                 while ($row = $result->fetch_assoc()) {
                     $batches[$row["id"]] = [
                         "label" => $row["label"],
                         "created" => $row["created"],
+                        "thumbnailName" => $row["thumbnail_name"],
                         "status" => [
                             "label" => $row["statusLabel"],
                             "color" => $row["color"]
                         ]
-                        // TODO batch thumbnails
                     ];
                 }
             }
@@ -179,7 +185,7 @@ foreach ($colors as $key => $color) {
                     echo '<div class="col-12 col-md-6 p-2 text-center">
                             <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
                                 <div class="card-wrapper">
-                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . "0.jpg" . '\');">
+                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');">
                                         <div class="card-fade"></div>
                                     </div>            
                                 </div>

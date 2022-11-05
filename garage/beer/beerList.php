@@ -89,28 +89,8 @@ $_SESSION["beers"] = $beers;
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            var beerId;
-            $(".deleteBtn, .beerDetailBtn").click(function() {
-                beerId = $(this).data("beerId");
-            });
-
-            $(".beerDetailBtn").click(function() {
-                let beerName = $(this).data("beerName");
-                $("#beerShortDesc").html("");
-                $("#beerLongDesc").html("");
-                $.getJSON("../beers.json", function(data) {
-                    $("#beerName").text(beerName);
-                    if (data[beerId] != null) {
-                        $("#beerShortDesc").html(data[beerId]["shortDesc"]);
-                        $("#beerLongDesc").html(data[beerId]["longDesc"]);
-                    }
-                    $('#beerDetailModal').modal('show');
-                }).fail(function() {
-                    alert("Při načítání dat se vyskytla chyba.");
-                });
-            });
-
             $(".deleteBtn").click(function() {
+                beerId = $(this).data("beerId");
                 $('#confDeleteModal').modal('show');
             });
 

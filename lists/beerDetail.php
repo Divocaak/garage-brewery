@@ -48,20 +48,19 @@ if ($result = $stmt->get_result()) {
         <div class="row">
             <?php
             $batches = [];
-            $stmt = $link->prepare("SELECT b.id, b.label, b.created, s.label AS statusLabel, s.color FROM batch b INNER JOIN status_batch s ON b.id_status=s.id WHERE b.id_beer=?;");
+            $stmt = $link->prepare("SELECT b.id, b.label, b.thumbnail_name, b.created, s.label AS statusLabel, s.color FROM batch b INNER JOIN status_batch s ON b.id_status=s.id WHERE b.id_beer=?;");
             $stmt->bind_param("i", $_GET["id"]);
             $stmt->execute();
-            $json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
             if ($result = $stmt->get_result()) {
                 while ($row = $result->fetch_assoc()) {
                     $batches[$row["id"]] = [
                         "label" => $row["label"],
                         "created" => $row["created"],
+                        "thumbnailName" => $row["thumbnail_name"],
                         "status" => [
                             "label" => $row["statusLabel"],
                             "color" => $row["color"]
                         ]
-                        // TODO batch thumbnails
                     ];
                 }
             }
@@ -71,7 +70,7 @@ if ($result = $stmt->get_result()) {
                     echo '<div class="col-12 col-md-6 p-2 text-center">
                             <div class="card-body" onclick="window.open(\'batchDetail.php?id=' . $key . '\', \'_blank\');">
                                 <div class="card-wrapper">
-                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . "0.jpg" . '\');">
+                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');">
                                         <div class="card-fade"></div>
                                     </div>            
                                 </div>

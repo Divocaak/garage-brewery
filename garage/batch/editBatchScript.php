@@ -1,7 +1,29 @@
 <?php
 require_once "../config.php";
-$stmt = $link->prepare("UPDATE batch SET id_beer=?, label=?, created=?, thirds=?, pints=?, thirds_pp=?, pints_pp=?, id_status=?, third_price=?, pint_price=? WHERE id=?;");
-$stmt->bind_param("issiiiiiiii", $_POST["beer"], $_POST["label"], $_POST["created"], $_POST["thirds"], $_POST["pints"], $_POST["thirdsPerPerson"], $_POST["pintsPerPerson"], $_POST["status"], $_POST["thirdPrice"], $_POST["pintPrice"], $_GET["batchId"]);
+$stmt = $link->prepare("UPDATE batch SET id_beer=?, label=?, created=?, thirds=?, pints=?, thirds_pp=?, pints_pp=?, id_status=?, third_price=?, pint_price=?,
+    thumbnail_name=?, sticker_name=?, gradation=?, alcohol=?, color=?, ph=?, bitterness=?, description=? WHERE id=?;");
+$stmt->bind_param(
+    "issiiiiiiissididisi",
+    $_POST["beer"],
+    $_POST["label"],
+    $_POST["created"],
+    $_POST["thirds"],
+    $_POST["pints"],
+    $_POST["thirdsPerPerson"],
+    $_POST["pintsPerPerson"],
+    $_POST["status"],
+    $_POST["thirdPrice"],
+    $_POST["pintPrice"],
+    $_POST["thumbnailName"],
+    $_POST["stickerName"],
+    $_POST["gradation"],
+    $_POST["alcohol"],
+    $_POST["color"],
+    $_POST["ph"],
+    $_POST["bitterness"],
+    $_POST["desc"],
+    $_GET["batchId"]
+);
 $stmt->execute();
 ?>
 

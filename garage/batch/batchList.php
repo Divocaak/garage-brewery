@@ -6,7 +6,9 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $batchesSorted = [];
-$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, s.id AS statusId, s.label AS statusLabel, s.color,
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, ba.thumbnail_name,
+    ba.thumbnail_name, ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, 
+    s.id AS statusId, s.label AS statusLabel, s.color AS statusColor,
     (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered, (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
     ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
 $stmt->execute();
@@ -30,12 +32,19 @@ if ($result = $stmt->get_result()) {
             "thirdsOrdered" => $row["thirdsOrdered"],
             "pintsOrdered" => $row["pintsOrdered"],
             "emailed" => $row["emailed"] ?? "",
+            "thumbnailName" => $row["thumbnail_name"],
+            "stickerName" => $row["sticker_name"],
+            "desc" => $row["description"],
+            "gradation" => $row["gradation"],
+            "alcohol" => $row["alcohol"],
+            "color" => $row["color"],
+            "ph" => $row["ph"],
+            "bitterness" => $row["bitterness"],
             "status" => [
                 "id" => $row["statusId"],
                 "label" => $row["statusLabel"],
-                "color" => $row["color"]
+                "color" => $row["statusColor"]
             ]
-            // TODO batch thumbnails
         ];
     }
 }
@@ -68,11 +77,10 @@ if ($result = $stmt->get_result()) {
             foreach ($beer["batches"] as $key => $batch) {
                 $thirdsRemaining = $batch["thirds"] - $batch["thirdsOrdered"];
                 $pintsRemaining = $batch["pints"] - $batch["pintsOrdered"];
-                // TODO thumbnail
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                     <div class="card-body">
                         <div class="card-wrapper" onclick="window.open(\'../../lists/batchDetail.php?id=' . $key . '&bckBtn=0\', \'_blank\');">
-                            <div class="card-background-image" style="background-image: url(\'../../imgs/bank/' . "0.jpg" . '\');">
+                            <div class="card-background-image" style="background-image: url(\'../../imgs/bank/' . $batch["thumbnailName"] . '\');">
                             <div class="card-fade"></div>
                         </div>            
                     </div>

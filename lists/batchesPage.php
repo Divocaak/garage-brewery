@@ -2,10 +2,9 @@
 require_once "../garage/config.php";
 
 $batchesSorted = [];
-$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, s.label AS statusLabel, s.color 
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thumbnail_name, s.label AS statusLabel, s.color 
     FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
 $stmt->execute();
-$json = json_decode(file_get_contents("../garage/pagesData/beers.json"), true);
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         if (!isset($batchesSorted[$row["beerId"]])) {
@@ -17,11 +16,11 @@ if ($result = $stmt->get_result()) {
         $batchesSorted[$row["beerId"]]["batches"][$row["id"]] = [
             "label" => $row["batchLabel"],
             "created" => $row["created"],
+            "thumbnailName" => $row["thumbnail_name"],
             "status" => [
                 "label" => $row["statusLabel"],
                 "color" => $row["color"]
             ]
-            // TODO batch thumbnails
         ];
     }
 }
@@ -47,11 +46,10 @@ if ($result = $stmt->get_result()) {
         foreach ($batchesSorted as $key => $beer) {
             echo '<h2 class="pt-5">' . $beer["label"] . '</h2><div class="row">';
             foreach ($beer["batches"] as $key => $batch) {
-                // TODO thumbnail
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
                             <div class="card-wrapper">
-                                <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . "0.jpg" . '\');">
+                                <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');">
                                 <div class="card-fade"></div>
                             </div>            
                         </div>

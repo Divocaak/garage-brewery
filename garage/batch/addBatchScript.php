@@ -1,7 +1,28 @@
 <?php
 require_once "../config.php";
-$stmt = $link->prepare("INSERT INTO batch (id_beer, label, created, thirds, pints, id_status, thirds_pp, pints_pp, third_price, pint_price) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-$stmt->bind_param("issiiiiiii", $_POST["beer"], $_POST["label"], $_POST["created"], $_POST["thirds"], $_POST["pints"], $_POST["status"], $_POST["thirdsPerPerson"], $_POST["pintsPerPerson"], $_POST["thirdPrice"], $_POST["pintPrice"]);
+$stmt = $link->prepare("INSERT INTO batch (id_beer, label, created, thirds, pints, id_status, thirds_pp, pints_pp, third_price, pint_price, thumbnail_name, sticker_name, gradation, alcohol, color, ph, bitterness, description) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+$stmt->bind_param(
+    "issiiiiiiissididis",
+    $_POST["beer"],
+    $_POST["label"],
+    $_POST["created"],
+    $_POST["thirds"],
+    $_POST["pints"],
+    $_POST["status"],
+    $_POST["thirdsPerPerson"],
+    $_POST["pintsPerPerson"],
+    $_POST["thirdPrice"],
+    $_POST["pintPrice"],
+    $_POST["thumbnailName"],
+    $_POST["stickerName"],
+    $_POST["gradation"],
+    $_POST["alcohol"],
+    $_POST["color"],
+    $_POST["ph"],
+    $_POST["bitterness"],
+    $_POST["desc"]
+);
 $stmt->execute();
 ?>
 
