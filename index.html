@@ -12,11 +12,16 @@
 </head>
 
 <body class="text-light bg-dark">
-    <div id="mainImage">
-        <div id="mainImageFooter">
-            <img id="logo" class="rounded-circle d-none d-md-block" src="imgs/logo.jpg">
-            <img id="logo-sm" class="rounded-circle d-md-none img-fluid" src="imgs/logo.jpg">
-        </div>
+    <div id="mainImage" class="d-flex justify-content-center align-items-center">
+        <img id="logo" class="rounded-circle" src="imgs/logo.jpg">
+    </div>
+
+    <div class="m-5 text-center">
+        <a class="btn btn-primary m-1" href="#beers"><i class="bi bi-cup pe-2"></i>Piva</a>
+        <a class="btn btn-primary m-1" href="#about"><i class="bi bi-info-circle pe-2"></i>O pivovaru</a>
+        <a class="btn btn-primary m-1" href="#egarage"><i class="bi bi-door-open pe-2"></i>Elektronická Garáž</a>
+        <a class="btn btn-primary m-1" href="#socials"><i class="bi bi-people pe-2"></i>Komunita</a>
+        <a class="btn btn-primary m-1" href="#team"><i class="bi bi-question-circle pe-2"></i>Kdo jsme</a>
     </div>
 
     <div class="content-block" id="beers">
@@ -29,9 +34,13 @@
                     <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi
                         chmelů
                         a sladů, stále hledáme naše místo a naší <span class="text-primary">specifickou chuť</span>. Pár
-                        osvědčených receptů už ale máme, najdeš je po přihlášení v naší <span
-                            class="text-primary">Elektronické Garáži</span>.</p>
-                    <a href="#egarage" class="btn btn-primary">Co je Elektronická Garáž?</a>
+                        <span class="text-primary">osvědčených receptů</span> už ale máme, tak na ně klidně koukni.
+                    </p>
+                    <a href="lists/beersPage.php" class="btn btn-primary"><i class="bi bi-cup pe-2"></i>Chci víc</a>
+                    <p class="pt-4">Nebo se rovnou můžeš podívat na <span class="text-primary">várky</span>, které jsme
+                        <span class="text-primary">z</span> těchto <span class="text-primary">piv uvařili</span>.</p>
+                    <a href="lists/batchesPage.php" class="btn btn-primary"><i class="bi bi-eye pe-2"></i>Ukaž mi
+                        várky</a>
                 </div>
             </div>
         </div>
@@ -44,26 +53,48 @@
                 <p>U nás v pivovaru rádi <span class="text-primary">experimentujeme</span> s různými kombinacemi
                     chmelů
                     a sladů, stále hledáme naše místo a naší <span class="text-primary">specifickou chuť</span>. Pár
-                    osvědčených receptů už ale máme, najdeš je po přihlášení v naší <span
-                        class="text-primary">Elektronické Garáži</span>.</p>
-                <a href="#egarage" class="btn btn-primary">Co je Elektronická Garáž?</a>
+                    <span class="text-primary">osvědčených receptů</span> už ale máme, tak na ně klidně koukni.
+                </p>
+                <a href="lists/beersPage.php" class="btn btn-primary"><i class="bi bi-cup pe-2"></i>Chci víc</a>
+                <p class="pt-4">Nebo se rovnou můžeš podívat na <span class="text-primary">várky</span>, které jsme
+                    <span class="text-primary">z</span> těchto <span class="text-primary">piv uvařili</span>.</p>
+                <a href="lists/batchesPage.php" class="btn btn-primary"><i class="bi bi-eye pe-2"></i>Ukaž mi várky</a>
             </div>
         </div>
     </div>
 
     <div class="content-block row d-flex align-items-center" id="about">
-        <div class="col-12 col-md-6 px-5">
-            <h1>O nás</h1>
-            <blockquote class="blockquote">
-                <p>Kde se pivo vaří, tam se dobře vaří.</p>
-                <footer class="blockquote-footer">František Přemil v <cite title="Source Title">Pivovaru Garáž</cite></footer>
-            </blockquote>
-            <p>Jsme skupinka kamarádů ze základní školy, kteří se ke konci střední školy sešli a rozhodli se, že chtějí vařit svůj nachmelený chléb. Vzhledem k velké rozmanitosti našich oborů jsme relativně soběstační.</p>
-            <p>Pivovar Garáž vznikl koncem roku 2021 na základě společné vášni k pivu. Vaření první várky se neúspěšně uskutečnilo 28.12.2021. První úsěšná várka byla uvařena 16.1.2022, od té doby se neustále zlepšujeme a sbíráme nové zkušensoti.</p>
-            <p>Zkoušíme různé technologie vaření, od infuzního po dekokční způsob. Vaříme ze základních primárně českých surovin, jako je slad českého typu, žatecký chmel a kvalitní římovská voda. První várky kvasily spodním způsobem kvašení. Snažíme se nedržet jen klasických piv, ale vaříme i piva speciálního rázu.</p>
-            <p>Nejsem komerční, nejsme korporát.</p>
+        <div class="col-12 col-md-6 p-5 d-sm-block d-md-none">
+            <img class="img-fluid" src="imgs/about.jpg">
         </div>
         <div class="col-12 col-md-6 px-5">
+            <h1>O pivovaru</h1>
+            <blockquote class="blockquote">
+                <p class="text-primary">Kde se pivo vaří, tam se dobře vaří.</p>
+                <footer class="blockquote-footer">František Přemil v <cite title="Source Title">Pivovaru Garáž</cite>, a
+                    někdy určitě ještě někdo
+                </footer>
+            </blockquote>
+            <p>Jsme <span class="text-primary">skupinka kamarádů</span> ze základní školy, kteří se ke konci střední
+                školy sešli a rozhodli se, že chtějí
+                <span class="text-primary">vařit svůj nachmelený chléb</span>. Vzhledem k velké rozmanitosti našich
+                oborů jsme <span class="text-primary">relativně soběstační</span>.
+            </p>
+            <p>Pivovar Garáž vznikl <span class="text-primary">koncem roku 2021</span> na základě společné vášni k pivu.
+                Vaření první várky se <span class="text-primary">neúspěšně
+                    uskutečnilo 28.12.2021</span>. První úsěšná várka byla <span class="text-primary"></span>uvařena
+                16.1.2022</span>, od té doby se neustále zlepšujeme a
+                sbíráme <span class="text-primary">nové zkušensoti</span>.</p>
+            <p>Zkoušíme <span class="text-primary">různé techniky</span> vaření, od <span class="text-primary">infuzního
+                    po dekokční</span> způsob. Vaříme ze základních <span class="text-primary">primárně českých</span>
+                surovin, jako je slad českého typu, <span class="text-primary">žatecký chmel</span> a <span
+                    class="text-primary">kvalitní římovská voda</span>. První várky kvasily <span
+                    class="text-primary">spodním
+                    způsobem kvašení</span>. Snažíme se nedržet jen klasických piv, ale vaříme i <span
+                    class="text-primary">piva speciálního rázu</span>.</p>
+            <p class="text-primary">Nejsem komerční, nejsme korporát.</p>
+        </div>
+        <div class="col-12 col-md-6 p-5 d-none d-md-block">
             <img class="img-fluid" src="imgs/about.jpg">
         </div>
     </div>
@@ -86,7 +117,8 @@
                             class="text-primary">registruj</span> a
                         <span class="text-primary">vstup</span> do naší Garáže!
                     </p>
-                    <a href="garage/homepage.php" class="btn btn-primary"><i class="bi bi-door-open pe-2"></i>Vstoupit do Garáže</a>
+                    <a href="garage/homepage.php" class="btn btn-primary"><i class="bi bi-door-open pe-2"></i>Vstoupit
+                        do Garáže</a>
                 </div>
             </div>
         </div>
@@ -107,20 +139,33 @@
                         class="text-primary">registruj</span> a
                     <span class="text-primary">vstup</span> do naší Garáže!
                 </p>
-                <a href="garage/homepage.php" class="btn btn-primary"><i class="bi bi-door-open pe-2"></i>Vstoupit do Garáže</a>
+                <a href="garage/homepage.php" class="btn btn-primary"><i class="bi bi-door-open pe-2"></i>Vstoupit do
+                    Garáže</a>
             </div>
         </div>
     </div>
 
     <div class="content-block row d-flex align-items-center" id="socials">
-        <div class="col-12 col-md-6 px-5">
+        <div class="col-12 col-md-6 p-5">
             <img class="img-fluid" src="imgs/social.jpg">
         </div>
         <div class="col-12 col-md-6 px-5">
             <h1>Komunita</h1>
-            <p>Cílem našeho pivovaru rozhodně není zisk, jde nám převážně o komunitu. Naše vaření není nijak utajované, kdokoliv z našich přátel i náhodných kolemjdoucích se může v naší garáži zastavit, posedět, ochutnat naše pivo, popovídat a nakouknout pod mistrovu ruku.</p>
-            <p>Náš formát vaření, připomíná mnohem víc grilování, kde si lidé užívají celkovou atmosféru a malá skupinka lidí se stará o gril (kde grilem je hrnec s budoucím pivem), než uzavřené vaření ve specializovaných prostorech, kam bez zaměstnanecké karty nemá běžný smrtelník přístup.</p>
-            <p>Budujeme komunitu, nevaříme pro zisk, vaříme pro přátele.</p>
+            <p>Cílem našeho pivovaru rozhodně <span class="text-primary">není zisk</span>, jde nám převážně o <span
+                    class="text-primary">komunitu</span>. Naše vaření není nijak utajované,
+                <span class="text-primary">kdokoliv</span> z našich přátel i náhodných kolemjdoucích se může v naší
+                garáži <span class="text-primary">zastavit</span>, <span class="text-primary">posedět</span>, <span
+                    class="text-primary">ochutnat
+                    naše pivo</span>, <span class="text-primary">popovídat</span> a <span
+                    class="text-primary">nakouknout pod mistrovu ruku</span>.
+            </p>
+            <p>Náš formát vaření připomíná mnohem víc grilování, kde si lidé <span class="text-primary">užívají celkovou
+                    atmosféru</span> a malá skupinka
+                lidí se stará o gril (kde grilem je myšlen <span class="text-primary">hrnec s budoucím pivem</span>),
+                než <span class="text-primary">uzavřené vaření</span> ve specializovaných
+                prostorech, kam <span class="text-primary">bez zaměstnanecké karty nemá běžný smrtelník přístup</span>.
+            </p>
+            <p class="text-primary">Budujeme komunitu, nevaříme pro zisk, vaříme pro přátele.</p>
             <a class="btn btn-primary" href="https://www.instagram.com/pivovar.garaz/" target="_blank"><i
                     class="bi bi-instagram pe-2"></i>Instagram</a>
             <a class="btn btn-primary" href="https://www.facebook.com/garaz.pivovar/" target="_blank"><i
@@ -130,24 +175,153 @@
 
     <div class="content-block" id="team">
         <div class="d-none d-md-block">
-            <div class="content-bg-image" style="background-image: url('imgs/beers.jpg');"></div>
+            <div class="content-bg-image" style="background-image: url('imgs/team.jpg');"></div>
             <div class="content-shape content-shape-left">
                 <div class="content-mask content-mask-left"></div>
                 <div class="m-5 p-5">
                     <h1>Kdo jsme</h1>
-                            <p>Chceš nás lépe poznat? Samozřejmě se někdy můžeš zastavit na vaření, ale pro začátek si o členech Pivovaru Garáž můžeš přečíst</p>
-                    <a id="showTeamBtn" class="btn btn-primary"><i class="bi bi-people pe-2"></i>Řekni mi víc</a>
+                    <p>Chceš nás lépe <span class="text-primary">poznat</span>? Samozřejmě jsi zván, můžeš se <span
+                            class="text-primary">zastavit na vaření</span>, ale pro začátek si o členech
+                        <span class="text-primary">Pivovaru Garáž</span> můžeš přečíst
+                    </p>
+                    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teamModal"><i
+                            class="bi bi-people pe-2"></i>Řekni mi víc</a>
                 </div>
             </div>
         </div>
         <div class="d-sm-block d-md-none row">
             <div class="col-12 p-5">
-                <img class="img-fluid" src="imgs/beers.jpg">
+                <img class="img-fluid" src="imgs/team.jpg">
             </div>
             <div class="col-12 px-5">
-                <h1>Kdo jsme</h1>   
-                <p>Chceš nás lépe poznat? Samozřejmě se někdy můžeš zastavit na vaření, ale pro začátek si o členech Pivovaru Garáž můžeš přečíst</p>
-                <a id="showTeamBtn" class="btn btn-primary"><i class="bi bi-people pe-2"></i>Řekni mi víc</a>
+                <h1>Kdo jsme</h1>
+                <p>Chceš nás lépe <span class="text-primary">poznat</span>? Samozřejmě jsi zván, můžeš se <span
+                        class="text-primary">zastavit na vaření</span>, ale pro začátek si o členech
+                    <span class="text-primary">Pivovaru Garáž</span> můžeš přečíst
+                </p>
+                <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#teamModal"><i
+                        class="bi bi-people pe-2"></i>Řekni mi víc</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="teamModal" tabindex="-1" aria-labelledby="teamModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><span class="text-primary">Čestní členové</span>
+                        pivovaru</h5>
+                    <button type="button" class="btn btn-danger text-light" data-bs-dismiss="modal"
+                        aria-label="Close"><i class="bi bi-x-lg"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12 d-block d-sm-none">
+                            <img class="img-fluid rounded-circle" src="imgs/team/fra.jpg">
+                        </div>
+                        <div class="col-12 col-md-8 text-center pt-md-5 mt-md-5 pt-3 mt-3">
+                            <h2 class="text-primary">František Přemil</h2>
+                            <p>Fanda je náš <span class="text-primary">hlavní sládek</span>. Po dostudovaní základní
+                                školy
+                                nevěděl, co jít studovat, tak se na poslední chvíli rozhodl, že se <span
+                                    class="text-primary">přihlásí na
+                                    sládka</span>. Ukázalo se, že udělal dobře. Pivovarnictví ho <span
+                                    class="text-primary">baví jako koníček</span>, tak i jako
+                                práce.</p>
+                            <a class="btn btn-primary" href="https://www.instagram.com/fandapremil/" target="_blank"><i
+                                    class="bi bi-instagram pe-2"></i>Instagram</a>
+                            <a class="btn btn-primary" href="https://www.facebook.com/fanda.premil" target="_blank"><i
+                                    class="bi bi-facebook pe-2"></i>Facebook</a>
+                        </div>
+                        <div class="col-4 d-none d-md-block">
+                            <img class="img-fluid rounded-circle" src="imgs/team/fra.jpg">
+                        </div>
+                    </div>
+
+                    <div class="row pt-5 mt-5">
+                        <div class="col-12 col-md-4">
+                            <img class="img-fluid rounded-circle" src="imgs/team/jak.jpg">
+                        </div>
+                        <div class="col-12 col-md-8 text-center pt-md-5 mt-md-5 pt-3 mt-3">
+                            <h2 class="text-primary">Jakub Černý</h2>
+                            <p>Vystudoval budějckou stavárnu, během posledního ročníku <span class="text-primary">přišel
+                                    s myšlenkou vařit pivo</span>,
+                                Kontaktoval kamarády ze základní školy se stejným <i>pivním</i> zájmem a <span
+                                    class="text-primary">založil</span> s nimi
+                                <span class="text-primary">Pivovar Garáž</span>. S oblibou ochutnává méně známá piva.
+                                Jakožto zakladatel mají jeho slova
+                                <span class="text-primary">největší váhu</span> v manažerských otázkách.
+                            </p>
+                            <a class="btn btn-primary" href="https://www.facebook.com/jakub.cerny.3572"
+                                target="_blank"><i class="bi bi-facebook pe-2"></i>Facebook</a>
+                        </div>
+                    </div>
+
+                    <div class="row pt-5 mt-5">
+                        <div class="col-12 d-block d-sm-none">
+                            <img class="img-fluid rounded-circle" src="imgs/team/voj.jpg">
+                        </div>
+                        <div class="col-12 col-md-8 text-center pt-md-5 mt-md-5 pt-3 mt-3">
+                            <h2 class="text-primary">Vojtěch Divoký</h2>
+                            <p>Vojtěch se pivovaru poslední dobou moc neukazuje, za to ho ale posouvá dopředu po <span
+                                    class="text-primary">legální</span>, <span class="text-primary">PR</span> a <span
+                                    class="text-primary">business stránce</span>. Mimo to je taky <span
+                                    class="text-primary">telefonním seznamem</span>, <span
+                                    class="text-primary">inovátorem</span> a <span class="text-primary">dvorním
+                                    <i>ajťákem</i></span> (web a <a id="aboutEGarageLink" href="#egarage">Elektronická
+                                    Garáž</a> jsou jeho děti).</p>
+                            <a class="btn btn-primary" href="https://www.instagram.com/divokyvojta/" target="_blank"><i
+                                    class="bi bi-instagram pe-2"></i>Instagram</a>
+                            <a class="btn btn-primary" href="https://www.facebook.com/divokyv/" target="_blank"><i
+                                    class="bi bi-facebook pe-2"></i>Facebook</a>
+                            <a class="btn btn-primary" href="http://divokyvojtech.cz/" target="_blank"><i
+                                    class="bi bi-globe pe-2"></i>Web</a>
+                        </div>
+                        <div class="col-4 d-none d-md-block">
+                            <img class="img-fluid rounded-circle" src="imgs/team/voj.jpg">
+                        </div>
+                    </div>
+
+                    <div class="row pt-5 mt-5">
+                        <div class="col-12 col-md-4">
+                            <img class="img-fluid rounded-circle" src="imgs/team/mic.jpeg">
+                        </div>
+                        <div class="col-12 col-md-8 text-center pt-md-5 mt-md-5 pt-3 mt-3">
+                            <h2 class="text-primary">Michal Hlaváč</h2>
+                            <p>Michal rád <span class="text-primary"><i>degustuje</i> pivo</span>, proto mu myšlenka
+                                <span class="text-primary">vařit si pivo vlastní</span> nezněla vůbec špatně. V pivovaru
+                                zastává funkci <span class="text-primary">dodavatele sekundárního materiálu</span> a
+                                spolu s Vojtou se <span class="text-primary">stará o socky</span>.
+                            </p>
+                            <a class="btn btn-primary" href="https://www.instagram.com/michal.lahvy02/"
+                                target="_blank"><i class="bi bi-instagram pe-2"></i>Instagram</a>
+                            <a class="btn btn-primary" href="https://www.facebook.com/profile.php?id=100008587869148"
+                                target="_blank"><i class="bi bi-facebook pe-2"></i>Facebook</a>
+                        </div>
+                    </div>
+
+                    <div class="row pt-5 mt-5">
+                        <div class="col-12 d-block d-sm-none">
+                            <img class="img-fluid rounded-circle" src="imgs/team/tom.jpeg">
+                        </div>
+                        <div class="col-12 col-md-8 text-center pt-md-5 mt-md-5 pt-3 mt-3">
+                            <h2 class="text-primary">Tomáš Černý</h2>
+                            <p>Tomáš se stará o <span class="text-primary">distribuci piva</span>, s čímž jde zároven
+                                ruku v ruce <span class="text-primary">rozšiřování povědomí</span> o
+                                pivovaru. V neposlední řadě se stará i o <span class="text-primary">údržbu
+                                    pivovaru</span>.
+                                Vystudoval zamedělku a teď pokračuje studijem na instaletéra. Když je v
+                                pivovaru něco potřeba, zastane <span class="text-primary">spoustu práce</span>.</p>
+                            <a class="btn btn-primary" href="https://www.instagram.com/kvido_kevin" target="_blank"><i
+                                    class="bi bi-instagram pe-2"></i>Instagram</a>
+                            <a class="btn btn-primary" href="https://www.facebook.com/tomas.cerny.129142"
+                                target="_blank"><i class="bi bi-facebook pe-2"></i>Facebook</a>
+                        </div>
+                        <div class="col-4 d-none d-md-block">
+                            <img class="img-fluid rounded-circle" src="imgs/team/tom.jpeg">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -165,10 +339,10 @@
                     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                         <h5 class="text-secondary">Navigace</h5>
                         <ul class="list-unstyled mb-0">
+                            <li><a href="#beers" class="text-white">Piva</a></li>
                             <li><a href="#about" class="text-white">O pivovaru</a></li>
                             <li><a href="#egarage" class="text-white">Elektronická Garáž</a></li>
                             <li><a href="#socials" class="text-white">Komunita</a></li>
-                            <li><a href="#beers" class="text-white">Piva</a></li>
                             <li><a href="#team" class="text-white">Kdo jsme</a></li>
                         </ul>
                     </div>
@@ -184,8 +358,10 @@
                     <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
                         <h5 class="text-secondary">Kontakt</h5>
                         <ul class="list-unstyled mb-0">
-                            <li><a href="mailto:elektronickagaraz@email.cz" class="text-white">elektronickagaraz@email.cz</a></li>
-                            <li><a href="tel:722680481" class="text-white">722&nbsp;680&nbsp;481 (Vojtěch Divoký)</a></li>
+                            <li><a href="mailto:elektronickagaraz@email.cz"
+                                    class="text-white">elektronickagaraz@email.cz</a></li>
+                            <li><a href="tel:722680481" class="text-white">722&nbsp;680&nbsp;481 (Vojtěch Divoký)</a>
+                            </li>
                             <li><a href="tel:736199344" class="text-white">736&nbsp;199&nbsp;344 (Jakub Černý)</a></li>
                         </ul>
                     </div>
@@ -193,7 +369,7 @@
             </section>
         </div>
         <div class="text-center pb-3">
-            <p>© 2022 Copyright: <a class="text-white text-decoration-underline" href="http://www.divokyvojtech.cz/"
+            <p>© 2022 Copyright: <a class="text-white text-decoration-underline" href="http://divokyvojtech.cz/"
                     target="_blank">Vojtěch Divoký</a></p>
             <p>Použité fotografie: <a class="text-white text-decoration-underline" href="https://pavelbalek.cz/gallery"
                     target="_blank">Pavel Balek</a> (<a class="text-white text-decoration-underline"
@@ -203,26 +379,17 @@
         </div>
     </footer>
 
-    <!-- <div class="content-block">
-        <div class="content-bg-image"></div>
-        <div class="content-shape content-shape-left  content-shape-left-car">
-            <div class="content-mask content-mask-left content-mask-left-car">
-                <img src="imgs/car.png" class="car-img">
-            </div>
-            <p class="m-5">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Vestibulum erat nulla, ullamcorper
-                nec, rutrum non, nonummy ac, erat. Etiam dictum tincidunt diam. Nullam eget nisl. Duis viverra diam non
-                justo. Maecenas libero. Quis autem vel eum
-                iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui
-                dolorem eum fugiat quo voluptas nulla pariatur? Sed elit dui, pellentesque a, faucibus vel, interdum
-                nec, diam. Donec vitae arcu. Maecenas
-                aliquet accumsan leo. Aenean fermentum risus id tortor. Etiam ligula pede, sagittis quis, interdum
-                ultricies, scelerisque eu. Duis sapien nunc, commodo et, interdum suscipit, sollicitudin et, dolor.
-                Integer in sapien. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Ut tempus purus at
-                lorem. Etiam dictum tincidunt diam. Mauris elementum mauris vitae tortor. Etiam posuere lacus quis
-                dolor.</p>
-        </div>
-    </div> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#aboutEGarageLink").click(function () {
+                $('#teamModal').modal('hide');
+            });
+        });
+    </script>
 </body>
 
 </html>

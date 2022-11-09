@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 session_start();
-if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 ?>
@@ -23,19 +23,19 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
         <div class="mb-3 form-floating">
             <select class="form-select" id="beer" name="beer">
                 <?php
-                $sql = "SELECT id, label FROM beer;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beerId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
+                $stmt = $link->prepare("SELECT id, label FROM beer;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beer"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
-                    mysqli_free_result($result);
                 }
                 ?>
             </select>
             <label for="beer" class="form-label">Pivo</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] : ""; ?>">
+            <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["label"] : ""; ?>">
             <label for="label" class="form-label">Název</label>
         </div>
         <div class="form-floating mb-3">
@@ -69,17 +69,84 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
         <div class="mb-3 form-floating">
             <select class="form-select" id="status" name="status">
                 <?php
-                $sql = "SELECT id, label FROM status_batch;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row[0] ? " selected" : "") : "") .">" . $row[1] . "</option>";
+                $stmt = $link->prepare("SELECT id, label FROM status_batch;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
-                    mysqli_free_result($result);
                 }
-                mysqli_close($link);
                 ?>
             </select>
             <label for="status" class="form-label">Status</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <textarea class="form-control h-100" rows="10" id="desc" maxlength="1500" name="desc"><?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["desc"] : ""; ?></textarea>
+            <label for="desc" class="form-label">Popis</label>
+        </div>
+        <div class="form-floating mb-3">
+            <p class="text-info">Podpora HTML znaků (pouze u popisu), nepoužívat dvojité ("") uvozovky, vyměnit za jednoduché ('')</p>
+        </div>
+        <div class="mb-3 form-floating">
+            <select class="form-select" id="thumbnailName" name="thumbnailName" required>
+                <option selected value=""></option>
+                <?php
+                $selectedImage;
+                $files = scandir("../../imgs/bank");
+                foreach ($files as $file) {
+                    if (strlen($file) > 2) {
+                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["thumbnailName"] == $file) : (isset($selectedImage));
+                        $selectedImage = $isSelected ? $file : $selectedImage;
+                        echo "<option value='" . $file . "'" . ($isSelected ? " selected" : "") . ">" . $file . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <label for="thumbnailName" class="form-label">Jméno obrázku</label>
+        </div>
+        <div class="mb-3 <?php echo $selectedImage == null ? "d-none" : "d-flex"; ?>">
+            <img id="thumbnailPreview" src="../../imgs/bank/<?php echo $selectedImage; ?>" class="w-50">
+        </div>
+        <div class="mb-3 form-floating">
+            <select class="form-select" id="stickerName" name="stickerName">
+                <option selected value=""></option>
+                <?php
+                $selectedSticker;
+                $files = scandir("../../imgs/stickers");
+                foreach ($files as $file) {
+                    if (strlen($file) > 2) {
+                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["stickerName"] == $file) : (isset($selectedSticker));
+                        $selectedSticker = $isSelected ? $file : $selectedSticker;
+                        echo "<option value='" . $file . "'" . ($isSelected ? " selected" : "") . ">" . $file . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <label for="stickerName" class="form-label">Jméno etikety</label>
+        </div>
+        <div class="mb-3 <?php echo $selectedSticker == null ? "d-none" : "d-flex"; ?>">
+            <img id="stickerPreview" src="../../imgs/stickers/<?php echo $selectedSticker; ?>" class="w-50">
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="gradation" name="gradation" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["gradation"] : ""; ?>">
+            <label for="gradation" class="form-label">Stupňovitost [°]</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" step="0.1" class="form-control" id="alcohol" name="alcohol" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["alcohol"] : ""; ?>">
+            <label for="alcohol" class="form-label">Podíl alkoholu [v %]</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="color" name="color" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["color"] : ""; ?>">
+            <label for="color" class="form-label">Barva [EBC]</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" step="0.1" class="form-control" id="ph" name="ph" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["ph"] : ""; ?>">
+            <label for="ph" class="form-label">pH</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="number" class="form-control" id="bitterness" name="bitterness" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["bitterness"] : ""; ?>">
+            <label for="bitterness" class="form-label">Hořkost [IBU]</label>
         </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> várku</button>
     </form>
@@ -88,6 +155,36 @@ if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
 <script>
+    $(document).ready(function() {
+        $("#thumbnailName").change(function() {
+            var imgName = $(this).find(":selected").val();
+            if (imgName != "null") {
+                if ($("#thumbnailPreview").parent().hasClass("d-none")) {
+                    $("#thumbnailPreview").parent().removeClass("d-none");
+                }
+
+                $("#thumbnailPreview").attr("src", "../../imgs/bank/" + imgName);
+            }
+            if (imgName == "" && !$("#thumbnailPreview").parent().hasClass("d-none")) {
+                $("#thumbnailPreview").parent().addClass("d-none");
+            }
+        });
+
+        $("#stickerName").change(function() {
+            var stickerName = $(this).find(":selected").val();
+            if (stickerName != "null") {
+                if ($("#stickerPreview").parent().hasClass("d-none")) {
+                    $("#stickerPreview").parent().removeClass("d-none");
+                }
+
+                $("#stickerPreview").attr("src", "../../imgs/stickers/" + stickerName);
+            }
+            if (stickerName == "" && !$("#stickerPreview").parent().hasClass("d-none")) {
+                $("#stickerPreview").parent().addClass("d-none");
+            }
+        });
+    });
+
     (function() {
         "use strict"
         var forms = document.querySelectorAll(".needs-validation")

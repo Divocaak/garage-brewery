@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 session_start();
-if (!isset($_SESSION["currentUser"])) {
+if (!isset($_SESSION["currentUser"]["id"])) {
     header("Location: ../user/login.php");
 }
 ?>
@@ -27,18 +27,18 @@ if (!isset($_SESSION["currentUser"])) {
                 $pintsPP;
                 $thirdPrice;
                 $pintPrice;
-                $sql = "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;";
-                if ($result = mysqli_query($link, $sql)) {
-                    while ($row = mysqli_fetch_row($result)) {
-                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row[0]) : ($thirdsPP == null || $pintsPP == null);
-                        $thirdsPP = $isSelected ? $row[3] : $thirdsPP;
-                        $pintsPP = $isSelected ? $row[4] : $pintsPP;
-                        $thirdPrice = $isSelected ? $row[6] : $thirdPrice;
-                        $pintPrice = $isSelected ? $row[7] : $pintPrice;
-                        echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row[3] . " data-pints-per-person=" . $row[4] . "
-                            data-third-price=" . $row[6] . " data-pint-price=" . $row[7] . ">" . $row[1] . " (" . $row[5] . ", " . $row[2] . ")</option>";
+                $stmt = $link->prepare("SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row["id"]) : ($thirdsPP == null || $pintsPP == null);
+                        $thirdsPP = $isSelected ? $row["thirds_pp"] : $thirdsPP;
+                        $pintsPP = $isSelected ? $row["pints_pp"] : $pintsPP;
+                        $thirdPrice = $isSelected ? $row["third_price"] : $thirdPrice;
+                        $pintPrice = $isSelected ? $row["pint_price"] : $pintPrice;
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row["thirds_pp"] . " data-pints-per-person=" . $row["pints_pp"] . "
+                            data-third-price=" . $row["third_price"] . " data-pint-price=" . $row["pint_price"] . ">" . $row["label"] . " (" . $row["beerLabel"] . ", " . $row["created"] . ")</option>";
                     }
-                    mysqli_free_result($result);
                 }
                 ?>
             </select>
@@ -74,14 +74,14 @@ if (!isset($_SESSION["currentUser"])) {
             echo '<div class="mb-3 form-floating">
                 <select class="form-select" id="user" name="user">';
             $selectedMail;
-            $sql = "SELECT id, f_name, l_name, mail FROM user;";
-            if ($result = mysqli_query($link, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
-                    $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["customer"]["id"] == $row[0]) : ($selectedMail == null);
-                    $selectedMail = $isSelected ? $row[3] : $selectedMail;
-                    echo "<option value='" . $row[0] . "'" . ($isSelected ? " selected" : "") . " data-customer-email='" . $row[3] . "'>" . $row[1] . " " . $row[2] . "</option>";
+            $stmt = $link->prepare("SELECT id, f_name, l_name, mail FROM user;");
+            $stmt->execute();
+            if ($result = $stmt->get_result()) {
+                while ($row = $result->fetch_assoc()) {
+                    $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["customer"]["id"] == $row["id"]) : ($selectedMail == null);
+                    $selectedMail = $isSelected ? $row["mail"] : $selectedMail;
+                    echo "<option value='" . $row["id"] . "'" . ($isSelected ? " selected" : "") . " data-customer-email='" . $row["mail"] . "'>" . $row["f_name"] . " " . $row["l_name"] . "</option>";
                 }
-                mysqli_free_result($result);
             }
             echo '</select>
                 <label for="user" class="form-label">Zákazník</label>
@@ -94,12 +94,12 @@ if (!isset($_SESSION["currentUser"])) {
             echo '<div class="mb-3 form-floating">
                 <select class="form-select" id="employee" name="employee">';
             echo "<option value='0' selected></option>";
-            $sql = "SELECT id, f_name, l_name FROM user WHERE employee=1;";
-            if ($result = mysqli_query($link, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
-                    echo "<option value='" . $row[0] . "'" . ((!isset($_GET["add"]) && $_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] != null) ? ($_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . " " . $row[2] . "</option>";
+            $stmt = $link->prepare("SELECT id, f_name, l_name FROM user WHERE employee=1;");
+            $stmt->execute();
+            if ($result = $stmt->get_result()) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value='" . $row["id"] . "'" . ((!isset($_GET["add"]) && $_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] != null) ? ($_SESSION["orders"][$_GET["orderId"]]["employee"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["f_name"] . " " . $row["l_name"] . "</option>";
                 }
-                mysqli_free_result($result);
             }
             echo '</select>
                 <label for="employee" class="form-label">Řeší</label>
@@ -107,12 +107,12 @@ if (!isset($_SESSION["currentUser"])) {
 
             echo '<div class="mb-3 form-floating">
                 <select class="form-select" id="status" name="status">';
-            $sql = "SELECT id, label FROM status_order";
-            if ($result = mysqli_query($link, $sql)) {
-                while ($row = mysqli_fetch_row($result)) {
-                    echo "<option value='" . $row[0] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["status"]["id"] == $row[0] ? " selected" : "") : "") . ">" . $row[1] . "</option>";
+            $stmt = $link->prepare("SELECT id, label FROM status_order;");
+            $stmt->execute();
+            if ($result = $stmt->get_result()) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["status"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                 }
-                mysqli_free_result($result);
             }
             echo '</select>
                 <label for="status" class="form-label">Status</label>
@@ -120,11 +120,11 @@ if (!isset($_SESSION["currentUser"])) {
         }
         ?>
         <div class="form-floating mb-3">
-            <input type="number" class="form-control" readonly id="priceField" name="priceField" value="<?php echo isset($_GET["add"]) ? "" : ($_SESSION["orders"][$_GET["orderId"]]["pints"] * $pintPrice + $_SESSION["orders"][$_GET["orderId"]]["thirds"] * $thirdPrice)?>">
+            <input type="number" class="form-control" readonly id="priceField" name="priceField" value="<?php echo isset($_GET["add"]) ? "" : ($_SESSION["orders"][$_GET["orderId"]]["pints"] * $pintPrice + $_SESSION["orders"][$_GET["orderId"]]["thirds"] * $thirdPrice) ?>">
             <label for="priceField" class="form-label">Cena celkem [Kč]</label>
         </div>
         <p id="priceText"><?php echo isset($_GET["add"]) ? "" : ($_SESSION["orders"][$_GET["orderId"]]["thirds"] > 0 ? "třetinky: " . $_SESSION["orders"][$_GET["orderId"]]["thirds"] . " ks (celkem za " . $thirdPrice . " Kč), " : "") .
-            ($_SESSION["orders"][$_GET["orderId"]]["pints"] > 0 ? "půllitry: " . $_SESSION["orders"][$_GET["orderId"]]["pints"] . " ks (celkem za " . $pintPrice . " Kč)" : "")?></p>
+                                ($_SESSION["orders"][$_GET["orderId"]]["pints"] > 0 ? "půllitry: " . $_SESSION["orders"][$_GET["orderId"]]["pints"] . " ks (celkem za " . $pintPrice . " Kč)" : "") ?></p>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</button>
         <?php if (!$_SESSION["currentUser"]["employee"]) {
             echo "<p>Upozorňujeme, že objednávku po odeslání nelze upravit, jedině zrušit</p>";
@@ -153,7 +153,7 @@ if (!isset($_SESSION["currentUser"])) {
             $("#pintsLabel").text('Půllitrů [ks] (rozmezí od 0 do ' + pintsPP + ', pokud nemáš zájem, vyplň nulu), ' + pintPrice + ' Kč/ks');
         });
 
-        $("#batch, #thirds, #pints").on("input", function(){
+        $("#batch, #thirds, #pints").on("input", function() {
             let thirds = $("#thirds").val();
             let pints = $("#pints").val();
             let thirdsPrice = $("#thirds").val() * thirdPrice;

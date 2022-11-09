@@ -1,40 +1,40 @@
 <?php
 require_once "config.php";
 session_start();
-if (!isset($_SESSION["currentUser"])) {
+if (!isset($_SESSION["currentUser"]["id"])) {
     header("Location: user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id, b.label, bs.label, bs.color, os.id, os.label, os.color, b.third_price, b.pint_price
-        FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id
-        WHERE id_customer=" . $_SESSION["currentUser"]["id"] . ";";
 $myOrders = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $myOrders[$row[0]] = [
-            "thirds" => $row[1],
-            "pints" => $row[2],
-            "created" => $row[3],
+$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id AS batchId, b.label AS batchLabel, b.third_price, b.pint_price, bs.label AS batchStatusLabel, bs.color AS batchStatusColor,
+    os.id AS ordedStatusId, os.label AS ordedStatusLabel, os.color AS ordedStatusColor FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id 
+    INNER JOIN status_order os ON bo.id_status=os.id WHERE id_customer=?;");
+$stmt->bind_param("i", $_SESSION["currentUser"]["id"]);
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $myOrders[$row["id"]] = [
+            "thirds" => $row["thirds"],
+            "pints" => $row["pints"],
+            "created" => $row["created"],
             "batch" => [
-                "id" => $row[4],
-                "label" => $row[5],
-                "thirdPrice" => $row[11],
-                "pintPrice" => $row[12],
+                "id" => $row["batchId"],
+                "label" => $row["batchLabel"],
+                "thirdPrice" => $row["third_price"],
+                "pintPrice" => $row["pint_price"],
                 "status" => [
-                    "label" => $row[6],
-                    "color" => $row[7]
+                    "label" => $row["batchStatusLabel"],
+                    "color" => $row["batchStatusColor"]
                 ]
             ],
             "status" => [
-                "id" => $row[8],
-                "label" => $row[9],
-                "color" => $row[10]
+                "id" => $row["ordedStatusId"],
+                "label" => $row["ordedStatusLabel"],
+                "color" => $row["ordedStatusColor"]
             ]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -52,15 +52,16 @@ mysqli_close($link);
     <p>Přihlášen jako <span class="text-primary"><?php echo $_SESSION["currentUser"]["mail"] ?></span></p>
     <a class="btn btn-outline-danger" href="user/logoutScript.php"><i class="bi bi-x-circle pe-2"></i>Odhlásit se</a>
     <?php
-    echo '<a class="btn btn-primary m-1" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>';
+    echo '<a class="btn btn-primary m-1" href="beer/beerList.php"><i class="bi bi-activity pe-2"></i>Piva</a>
+            <a class="btn btn-primary m-1" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>';
     if ($_SESSION["currentUser"]["employee"]) {
-        echo '<a class="btn btn-primary m-1" href="batch/batchList.php"><i class="bi bi-cup pe-2"></i>Várky</a>
-                <a class="btn btn-primary m-1" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
+        echo '<a class="btn btn-primary m-1" href="order/orderList.php"><i class="bi bi-cash-coin pe-2"></i>Objednávky</a>
                 <a class="btn btn-primary m-1" href="user/userList.php"><i class="bi bi-person pe-2"></i>Uživatelé</a>
                 <a class="btn btn-primary m-1" href="feedback/feedbackList.php"><i class="bi bi-graph-up-arrow pe-2"></i>Zpětná vazba</a>
+                <a class="btn btn-primary m-1" href="qr/formQr.php"><i class="bi bi-qr-code pe-2"></i>Generátor etiket</a>
                 <a class="btn btn-primary m-1" href="settings/settings.php"><i class="bi bi-gear pe-2"></i>Nastavení</a>';
     } else {
-        echo '<a class="btn btn-primary m-1" href="order/formOrder.php?add=1"><i class="bi bi-cup pe-2"></i>Objednat</a>';
+        echo '<a class="btn btn-primary m-1" href="order/formOrder.php?add=1"><i class="bi bi-cart pe-2"></i>Objednat</a>';
     }
     ?>
 
@@ -84,9 +85,9 @@ mysqli_close($link);
                 <?php
                 foreach ($myOrders as $key => $myOrder) {
                     $btn = "";
-                    if($myOrder["status"]["id"] == 3){
+                    if ($myOrder["status"]["id"] == 3) {
                         $btn = '<form action="feedback/formFeedback.php" method="post"><button class="btn btn-primary" name="orderId" value="' . $key . '"><i class="bi bi-graph-up-arrow pe-2"></i>Ohodnotit</button></form>';
-                    }else if($myOrder["status"]["id"] == 1){
+                    } else if ($myOrder["status"]["id"] == 1) {
                         $btn = '<a class="btn btn-outline-danger deleteBtn" data-order-id=' . $key . '><i class="bi bi-trash"></i></a>';
                     }
 
@@ -100,7 +101,7 @@ mysqli_close($link);
                             <td>' . $myOrder["thirds"] . "<br>" . $thirdsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["thirdPrice"] . "&nbsp;Kč/ks" . '</td>
                             <td>' . $myOrder["pints"] . "<br>" . $pintsPrice . "&nbsp;Kč<br>" . $myOrder["batch"]["pintPrice"] . "&nbsp;Kč/ks" . '</td>
                             <td><span class="text-primary fw-bold">' . $pintsPrice + $thirdsPrice . '&nbsp;Kč</span></td>
-                            <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</td>
+                            <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $myOrder["status"]["color"] . ';">' . $myOrder["status"]["label"] . '</span></td>
                             <td>' . $btn . '</td>
                         </tr>';
                 }

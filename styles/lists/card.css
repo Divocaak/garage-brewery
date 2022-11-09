@@ -1,0 +1,53 @@
+.card-body{
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+    box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+    padding: 0;
+    transition: all .25s;
+    cursor: pointer;
+}
+
+.card-wrapper{
+    max-height: 30vh;
+    height: 30vh;
+    max-width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-background-image {
+    pointer-events: auto;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;   
+    height: 100%;
+    transition: all .25s;
+}
+
+.card-fade {
+    pointer-events: none;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(33, 37, 41, 1) 0%, rgba(33, 37, 41, .9) 20%, rgba(0, 0, 0, 0) 100%);
+}
+
+.card-body h2 {
+    pointer-events: none;
+    bottom: .5em;
+    position: relative;
+    width: 100%;
+    transition: all .25s;
+}
+
+.card-body:hover h2 {
+    transform: scale(1.25);
+}
+
+.card-body:hover .card-background-image {
+    transform: scale(105%);
+}
+
+.card-body:hover{
+    -webkit-box-shadow: 0px 10px 15px 0px rgba(255, 193, 7, 0.75);
+    -moz-box-shadow: 0px 10px 15px 0px rgba(255, 193, 7, 0.75);
+    box-shadow: 0px 10px 15px 0px rgba(255, 193, 7, 0.75);
+}

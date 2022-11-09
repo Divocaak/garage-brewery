@@ -1,16 +1,8 @@
 <?php
 require_once "../config.php";
-
-$e = "";
-$sql = "UPDATE beer SET label='" . $_POST["label"] . "' WHERE id=" . $_GET["beerId"] . ";";
-if (mysqli_query($link, $sql)) {
-    $json = json_decode(file_get_contents("../beers.json"), true);
-    $json[$_GET["beerId"]] = ["shortDesc" => $_POST["shortDesc"], "longDesc" => $_POST["longDesc"]];
-    file_put_contents("../beers.json", json_encode($json));
-}else{
-    $e = $sql . "<br>" . mysqli_error($link);
-}
-mysqli_close($link);
+$stmt = $link->prepare("UPDATE beer SET label=?, thumbnail_name=?, short_desc=?, long_desc=?, id_type=? WHERE id=?;");
+$stmt->bind_param("ssssii", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"], $_POST["type"], $_GET["beerId"]);
+$stmt->execute();
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +18,7 @@ mysqli_close($link);
 
 <body class="text-center m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1 class="pb-3 ms-2">Odpověď ze serveru</h1>
-    <p><?php echo $e == "" ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Pivo bylo upraveno' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $e) ?></p>
+    <p><?php echo !$stmt->error ? '<i class="pe-2 bi bi-check-circle-fill text-success"></i>Pivo bylo upraveno' : ('<i class="pe-2 bi bi-exclamation-circle-fill text-danger"></i>' . $stmt->error) ?></p>
     <a class="btn btn-primary" href="beerList.php"><i class="pe-2 bi bi-arrow-left-circle"></i>Přejít na seznam piv</a>
 </body>
 

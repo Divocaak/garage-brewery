@@ -6,20 +6,21 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
 }
 
 $feedbacksSorted = [];
-$sql = "SELECT f.id, o.id_batch, f.g_temperature, f.date_consumed, f.date_added, f.g_taste, f.n_taste, f.g_bitterness, f.n_bitterness, f.g_scent, f.n_scent, f.g_fullness,
-        f.n_fullness, f.g_frothiness, f.n_frothiness, f.g_clarity, f.n_clarity, f.g_overall, f.n_overall, f.id_order, b.label, b.created, b.thirds, b.pints, o.thirds, o.pints, o.created,
-        c.id, c.f_name, c.l_name, c.mail, c.instagram, e.f_name, e.l_name
-        FROM feedback f INNER JOIN beer_order o ON f.id_order=o.id INNER JOIN batch b ON o.id_batch=b.id INNER JOIN user c ON o.id_customer=c.id LEFT JOIN user e ON o.id_employee=e.id;";
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        if (!isset($feedbacksSorted[$row[1]])) {
-            $feedbacksSorted[$row[1]] = [
+$stmt = $link->prepare("SELECT f.id, o.id_batch AS batchId, f.g_temperature, f.date_consumed, f.date_added, f.g_taste, f.n_taste, f.g_bitterness, f.n_bitterness, f.g_scent, f.n_scent, f.g_fullness,
+    f.n_fullness, f.g_frothiness, f.n_frothiness, f.g_clarity, f.n_clarity, f.g_overall, f.n_overall, f.id_order AS orderId, b.label, b.created AS batchCreated, b.thirds AS batchThirds, b.pints AS batchPints, o.thirds, o.pints, o.created,
+    c.id AS customerId, c.f_name AS customerFName, c.l_name AS customerLName, c.mail, c.instagram, e.f_name, e.l_name FROM feedback f INNER JOIN beer_order o ON f.id_order=o.id INNER JOIN batch b ON o.id_batch=b.id
+    INNER JOIN user c ON o.id_customer=c.id LEFT JOIN user e ON o.id_employee=e.id;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        if (!isset($feedbacksSorted[$row["batchId"]])) {
+            $feedbacksSorted[$row["batchId"]] = [
                 "batch" => [
-                    "id" => $row[1],
-                    "label" => $row[20],
-                    "created" => $row[21],
-                    "thirds" => $row[22],
-                    "pints" => $row[23]
+                    "id" => $row["batchId"],
+                    "label" => $row["label"],
+                    "created" => $row["batchCreated"],
+                    "thirds" => $row["batchThirds"],
+                    "pints" => $row["batchPints"]
                 ],
                 "feedbacks" => [],
                 "sums" => [
@@ -34,67 +35,64 @@ if ($result = mysqli_query($link, $sql)) {
             ];
         }
 
-        $feedbacksSorted[$row[1]]["feedbacks"][$row[0]] = [
+        $feedbacksSorted[$row["batchId"]]["feedbacks"][$row["id"]] = [
             "data" => [
-                "temperature" => $row[2],
-                "dateConsumed" => $row[3],
-                "dateAdded" => $row[4],
+                "temperature" => $row["g_temperature"],
+                "dateConsumed" => $row["date_consumed"],
+                "dateAdded" => $row["date_added"],
                 "taste" => [
-                    "guess" => $row[5],
-                    "note" => $row[6]
+                    "guess" => $row["g_taste"],
+                    "note" => $row["n_taste"]
                 ],
                 "bitterness" => [
-                    "guess" => $row[7],
-                    "note" => $row[8]
+                    "guess" => $row["g_bitterness"],
+                    "note" => $row["n_bitterness"]
                 ],
                 "scent" => [
-                    "guess" => $row[9],
-                    "note" => $row[10]
+                    "guess" => $row["g_scent"],
+                    "note" => $row["n_scent"]
                 ],
                 "fullness" => [
-                    "guess" => $row[11],
-                    "note" => $row[12]
+                    "guess" => $row["g_fullness"],
+                    "note" => $row["n_fullness"]
                 ],
                 "frothiness" => [
-                    "guess" => $row[13],
-                    "note" => $row[14]
+                    "guess" => $row["g_frothiness"],
+                    "note" => $row["n_frothiness"]
                 ],
                 "clarity" => [
-                    "guess" => $row[15],
-                    "note" => $row[16]
+                    "guess" => $row["g_clarity"],
+                    "note" => $row["n_clarity"]
                 ],
                 "overall" => [
-                    "guess" => $row[17],
-                    "note" => $row[18]
+                    "guess" => $row["g_overall"],
+                    "note" => $row["n_overall"]
                 ],
             ],
             "customer" => [
-                "id" => $row[27],
-                "name" => $row[28] . " " . $row[29],
-                "mail" => $row[30],
-                "instagram" => $row[31]
+                "id" => $row["customerId"],
+                "name" => $row["customerFName"] . " " . $row["customerLName"],
+                "mail" => $row["mail"],
+                "instagram" => $row["instagram"]
             ],
-            "employee" => $row[32] . " " . $row[33],
+            "employee" => $row["f_name"] . " " . $row["l_name"],
             "order" => [
-                "id" => $row[19],
-                "thirds" => $row[24],
-                "pints" => $row[25],
-                "created" => $row[26],
+                "id" => $row["orderId"],
+                "thirds" => $row["thirds"],
+                "pints" => $row["pints"],
+                "created" => $row["created"],
             ]
         ];
 
-        array_push($feedbacksSorted[$row[1]]["sums"]["taste"], $row[5]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["bitterness"], $row[7]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["scent"], $row[9]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["fullness"], $row[11]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["frothiness"], $row[13]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["clarity"], $row[15]);
-        array_push($feedbacksSorted[$row[1]]["sums"]["overall"], $row[17]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["taste"], $row["g_taste"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["bitterness"], $row["g_bitterness"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["scent"], $row["g_scent"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["fullness"], $row["g_fullness"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["frothiness"], $row["g_frothiness"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["clarity"], $row["g_clarity"]);
+        array_push($feedbacksSorted[$row["batchId"]]["sums"]["overall"], $row["g_overall"]);
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
-
 $_SESSION["feedbacks"] = $feedbacksSorted;
 ?>
 <!DOCTYPE html>
@@ -131,7 +129,6 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
             </thead>
             <tbody>
                 <?php
-                // <td>' . date_format(date_create($feedback["dateAdded"]), 'd. m. Y H:i:s') . '</td>
                 $noteBadge = '<span class="ms-2 badge badge-primary bg-secondary"><i class="bi bi-chat-left-dots-fill"></i></span>';
                 foreach ($feedbacksSorted as $batchKey => $feedbackSorted) {
                     echo '<tr><th scope="row" colspan="11" class="text-primary">' . $feedbackSorted["batch"]["label"] . " (vařeno " . date_format(date_create($feedbackSorted["batch"]["created"]), 'd. m. Y') . ")" . '</th></tr>';
@@ -289,7 +286,9 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                         var jsonKey = scoreKeys[i].toLowerCase();
                         $("#detail" + scoreKeys[i] + "Guess").text(scoreTrans[i] + ": " + dataDecoded["feedback"]["data"][jsonKey]["guess"]);
                         var sum = 0;
-                        $.each(dataDecoded["sums"][jsonKey],function(){sum += parseFloat(this) || 0;})
+                        $.each(dataDecoded["sums"][jsonKey], function() {
+                            sum += parseFloat(this) || 0;
+                        })
                         $("#detail" + scoreKeys[i] + "Average").text("⌀ " + (sum / dataDecoded["sums"][jsonKey].length));
                         $("#detail" + scoreKeys[i] + "Note").text(dataDecoded["feedback"]["data"][jsonKey]["note"]);
                     }

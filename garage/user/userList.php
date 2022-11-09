@@ -1,25 +1,24 @@
 <?php
 require_once "../config.php";
 session_start();
-if(!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]){
+if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: login.php");
 }
 
-$sql = "SELECT id, mail, f_name, l_name, instagram, created, employee FROM user;";
 $users = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $users[$row[0]] = [
-            "mail" => $row[1],
-            "name" => ($row[2] . " " . $row[3]),
-            "instagram" => $row[4],
-            "created" => $row[5],
-            "employee" => $row[6]
+$stmt = $link->prepare("SELECT id, mail, f_name, l_name, instagram, created, employee FROM user;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $users[$row["id"]] = [
+            "mail" => $row["mail"],
+            "name" => ($row["f_name"] . " " . $row["l_name"]),
+            "instagram" => $row["instagram"],
+            "created" => $row["created"],
+            "employee" => $row["employee"]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">

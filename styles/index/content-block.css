@@ -1,6 +1,7 @@
 .content-block {
     position: relative;
-    height: 100vh;
+    height: auto;
+    min-height: 100vh;
     width: 100vw;
 }
 
@@ -54,19 +55,3 @@
     clip-path: polygon(49% 0, 100% 0, 100% 100%, 99% 100%);
     float: right;
 }
-
-/* .car-img {
-    position: relative;
-    left: 50vw;
-    top: 5vh;
-}
-
-.content-shape-left-car {
-    clip-path: polygon(80% 0%, 100% 50%, 100% 100%, 0 100%, 0 0);
-    background: linear-gradient(37deg, #212529 0%, #212529 70%, rgba(0, 212, 255, 0) 51%, rgba(0, 212, 255, 0) 100%) !important;
-}
-
-.content-mask-left-car {
-    clip-path: polygon(50% 0, 80% 0, 100% 50%, 100% 100%);
-    background: linear-gradient(37deg, rgba(255, 193, 7, 1) 0%, rgba(255, 193, 7, 1) 70%, rgba(0, 212, 255, 0) 70%, rgba(0, 212, 255, 0) 100%) !important;
-} */

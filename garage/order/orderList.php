@@ -5,49 +5,48 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
 
-$sql = "SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id, c.mail, c.f_name, c.l_name, c.instagram, e.id, e.f_name, e.l_name,
-        b.id, b.label, b.thirds, b.pints, bs.label, bs.color, os.id, os.label, os.color, b.third_price, b.pint_price
-        FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
-        INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;";
 $orders = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $orders[$row[0]] = [
-            "thirds" => $row[1],
-            "pints" => $row[2],
-            "created" => $row[3],
+$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id AS customerId, c.mail, c.f_name, c.l_name, c.instagram, e.id AS empId, e.f_name AS empFName, e.l_name AS empLName,
+    b.id AS batchId, b.label, b.thirds AS batchThirds, b.pints AS batchPints, bs.label, bs.color, os.id AS statusOrderId, os.label AS statusOrderLabel, os.color AS statusOrderColor, b.third_price, b.pint_price
+    FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
+    INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $orders[$row["id"]] = [
+            "thirds" => $row["thirds"],
+            "pints" => $row["pints"],
+            "created" => $row["created"],
             "customer" => [
-                "id" => $row[4],
-                "mail" => $row[5],
-                "name" => ($row[6] . " " . $row[7]),
-                "instagram" => $row[8]
+                "id" => $row["customerId"],
+                "mail" => $row["mail"],
+                "name" => ($row["f_name"] . " " . $row["l_name"]),
+                "instagram" => $row["instagram"]
             ],
             "employee" => [
-                "id" => $row[9],
-                "name" => ($row[10] . " " . $row[11]),
+                "id" => $row["empId"],
+                "name" => ($row["empFName"] . " " . $row["empLName"]),
             ],
             "batch" => [
-                "id" => $row[12],
-                "label" => $row[13],
-                "thirds" => $row[14],
-                "pints" => $row[15],
-                "thirdPrice" => $row[21],
-                "pintPrice" => $row[22],
+                "id" => $row["batchId"],
+                "label" => $row["label"],
+                "thirds" => $row["batchThirds"],
+                "pints" => $row["batchPints"],
+                "thirdPrice" => $row["third_price"],
+                "pintPrice" => $row["pint_price"],
                 "status" => [
-                    "label" => $row[16],
-                    "color" => $row[17]
+                    "label" => $row["label"],
+                    "color" => $row["color"]
                 ]
             ],
             "status" => [
-                "id" => $row[18],
-                "label" => $row[19],
-                "color" => $row[20]
+                "id" => $row["statusOrderId"],
+                "label" => $row["statusOrderLabel"],
+                "color" => $row["statusOrderColor"]
             ]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
 ?>
 <!DOCTYPE html>
 <html lang="cz">

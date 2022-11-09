@@ -5,21 +5,26 @@ if (!isset($_SESSION["currentUser"])) {
     header("Location: ../user/login.php");
 }
 
-$json = json_decode(file_get_contents("../beers.json"), true);
-$sql = "SELECT id, label, emailed FROM beer;";
 $beers = [];
-if ($result = mysqli_query($link, $sql)) {
-    while ($row = mysqli_fetch_row($result)) {
-        $beers[$row[0]] = [
-            "label" => $row[1],
-            "shortDesc" => isset($json[$row[0]]) ? $json[$row[0]]["shortDesc"] : "",
-            "longDesc" => isset($json[$row[0]]) ? $json[$row[0]]["longDesc"] : "",
-            "emailed" => $row[2]
+$stmt = $link->prepare("SELECT b.id, b.label, b.emailed, b.thumbnail_name, b.short_desc, b.long_desc, t.id AS typeId, t.label AS typeLabel, t.badge_color FROM beer b INNER JOIN beer_type t ON b.id_type=t.id;");
+$stmt->execute();
+if ($result = $stmt->get_result()) {
+    while ($row = $result->fetch_assoc()) {
+        $beers[$row["id"]] = [
+            "label" => $row["label"],
+            "emailed" => $row["emailed"],
+            "thumbnailName" => $row["thumbnail_name"],
+            "shortDesc" => $row["short_desc"],
+            "longDesc" => $row["long_desc"],
+            "type" => [
+                "id" => $row["typeId"],
+                "label" => $row["typeLabel"],
+                "color" => $row["badge_color"]
+            ]
         ];
     }
-    mysqli_free_result($result);
 }
-mysqli_close($link);
+$_SESSION["beers"] = $beers;
 ?>
 <!DOCTYPE html>
 <html lang="cz">
@@ -30,6 +35,7 @@ mysqli_close($link);
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
+    <link href="../../styles/lists/card.css" rel="stylesheet">
 </head>
 
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
@@ -40,45 +46,31 @@ mysqli_close($link);
         echo '<a class="btn btn-outline-success" href="formBeer.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>';
     }
     ?>
-    <div class="table-responsive">
-        <table class="mt-3 table table-striped table-hover table-dark">
-            <caption>Seznam piv</caption>
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Jméno</th>
-                    <th scope="col">Krátký popis</th>
-                    <th scope="col"></th>
-                    <?php
-                    if ($_SESSION["currentUser"]["employee"]) {
-                        echo '<th scope="col"></th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>';
-                    }
-                    ?>
-                </tr>
-            </thead>
-            <tbody>
-                <?php
-                $_SESSION["beers"] = $beers;
-                foreach ($beers as $key => $beer) {
-                    echo '<tr>
-                            <th scope="row">' . $key . '</th>
-                            <td>' . $beer["label"] . '</td>
-                            <td>' . ($beer["shortDesc"] != "" ? $beer["shortDesc"] : "-") . '</td>
-                            <td><a class="btn btn-outline-info beerDetailBtn" data-beer-id=' . $key . ' data-beer-name="' . $beer["label"] . '"><i class="bi bi-search"></i></a></td>';
-                    if ($_SESSION["currentUser"]["employee"]) {
-                            echo '<td><a class="btn btn-outline-light' . ($beer["emailed"] ? " disabled" : "") . '" href="beerMail.php?beerId=' . $key . '"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat</a></td>';
-
-                        echo '<td><a class="btn btn-outline-secondary" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a></td>
-                                <td><a class="btn btn-outline-danger deleteBtn" data-beer-id=' . $key . '><i class="bi bi-trash"></i></a></td>';
-                    }
-
-                    echo '</tr>';
+    <div class="row">
+        <?php
+        if (count($beers) > 0) {
+            foreach ($beers as $key => $beer) {
+                echo '<div class="col-12 col-md-6 p-2 text-center">
+                        <div class="card-body">
+                            <div class="card-wrapper" onclick="window.open(\'../../lists/beerDetail.php?id=' . $key . '&bckBtn=0\', \'_blank\');">
+                                <div class="card-background-image" style="background-image: url(\'../../imgs/bank/' . $beer["thumbnailName"] . '\');">
+                                    <div class="card-fade"></div>
+                                </div>            
+                            </div>
+                            <h2 class="text-primary"><span class="me-2 badge rounded-pill" style="background-color:#' . $beer["type"]["color"] . ';">' . $beer["type"]["label"] . '</span>' . $beer["label"] . '</h2>';
+                if ($_SESSION["currentUser"]["employee"]) {
+                    echo '<a class="btn btn-outline-light mb-3' . ($beer["emailed"] ? " disabled" : "") . '" href="beerMail.php?beerId=' . $key . '"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat</a>
+                            <a class="btn btn-outline-secondary mb-3" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a>
+                            <a class="btn btn-outline-danger mb-3 deleteBtn" data-beer-id=' . $key . '><i class="bi bi-trash"></i></a>';
                 }
-                ?>
-            </tbody>
-        </table>
+                echo '
+                        </div>
+                    </div>';
+            }
+        } else {
+            echo '<p class="pt-3"> No, jak vidíš, moc toho tady není. Ale ono to přijde, neboj. Jenom se nesmí nikam spěchat.</p>';
+        }
+        ?>
     </div>
 
     <div class="modal fade" id="confDeleteModal" tabindex="-1" aria-labelledby="confDeleteModalLabel" aria-hidden="true">
@@ -98,52 +90,12 @@ mysqli_close($link);
         </div>
     </div>
 
-    <div class="modal fade" id="beerDetailModal" tabindex="-1" aria-labelledby="beerDetailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail piva</h5>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <h3 id="beerName"></h3>
-                        <p id="beerShortDesc"></p>
-                        <p id="beerLongDesc"></p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function() {
-            var beerId;
-            $(".deleteBtn, .beerDetailBtn").click(function() {
-                beerId = $(this).data("beerId");
-            });
-
-            $(".beerDetailBtn").click(function() {
-                let beerName = $(this).data("beerName");
-                $("#beerShortDesc").html("");
-                $("#beerLongDesc").html("");
-                $.getJSON("../beers.json", function(data) {
-                    $("#beerName").text(beerName);
-                    if (data[beerId] != null) {
-                        $("#beerShortDesc").html(data[beerId]["shortDesc"]);
-                        $("#beerLongDesc").html(data[beerId]["longDesc"]);
-                    }
-                    $('#beerDetailModal').modal('show');
-                }).fail(function() {
-                    alert("Při načítání dat se vyskytla chyba.");
-                });
-            });
-
             $(".deleteBtn").click(function() {
+                beerId = $(this).data("beerId");
                 $('#confDeleteModal').modal('show');
             });
 
