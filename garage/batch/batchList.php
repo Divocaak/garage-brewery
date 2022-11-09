@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
 session_start();
-if (!isset($_SESSION["currentUser"])) {
+if (!isset($_SESSION["currentUser"]["id"])) {
     header("Location: ../user/login.php");
 }
 

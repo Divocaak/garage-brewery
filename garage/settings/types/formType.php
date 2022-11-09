@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
+if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../../user/login.php");
 }
 ?>
