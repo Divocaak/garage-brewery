@@ -6,7 +6,7 @@ if (!isset($_SESSION["currentUser"])) {
 }
 
 $beers = [];
-$stmt = $link->prepare("SELECT id, label, emailed, thumbnail_name, short_desc, long_desc FROM beer;");
+$stmt = $link->prepare("SELECT b.id, b.label, b.emailed, b.thumbnail_name, b.short_desc, b.long_desc, t.id AS typeId, t.label AS typeLabel, t.badge_color FROM beer b INNER JOIN beer_type t ON b.id_type=t.id;");
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
@@ -15,7 +15,12 @@ if ($result = $stmt->get_result()) {
             "emailed" => $row["emailed"],
             "thumbnailName" => $row["thumbnail_name"],
             "shortDesc" => $row["short_desc"],
-            "longDesc" => $row["long_desc"]
+            "longDesc" => $row["long_desc"],
+            "type" => [
+                "id" => $row["typeId"],
+                "label" => $row["typeLabel"],
+                "color" => $row["badge_color"]
+            ]
         ];
     }
 }
@@ -52,7 +57,7 @@ $_SESSION["beers"] = $beers;
                                     <div class="card-fade"></div>
                                 </div>            
                             </div>
-                            <h2 class="text-primary">' . $beer["label"] . '</h2>';
+                            <h2 class="text-primary"><span class="me-2 badge rounded-pill" style="background-color:#' . $beer["type"]["color"] . ';">' . $beer["type"]["label"] . '</span>' . $beer["label"] . '</h2>';
                 if ($_SESSION["currentUser"]["employee"]) {
                     echo '<a class="btn btn-outline-light mb-3' . ($beer["emailed"] ? " disabled" : "") . '" href="beerMail.php?beerId=' . $key . '"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat</a>
                             <a class="btn btn-outline-secondary mb-3" href="formBeer.php?beerId=' . $key . '"><i class="bi bi-pencil"></i></a>

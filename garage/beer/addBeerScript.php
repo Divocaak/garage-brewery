@@ -1,8 +1,8 @@
 <?php
 require_once "../config.php";
 require_once "../mail/mail.php";
-$stmt = $link->prepare("INSERT INTO beer (label, thumbnail_name, short_desc, long_desc) VALUES (?, ?, ?, ?);");
-$stmt->bind_param("ssss", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"]);
+$stmt = $link->prepare("INSERT INTO beer (label, thumbnail_name, short_desc, long_desc, id_type) VALUES (?, ?, ?, ?, ?);");
+$stmt->bind_param("ssssi", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"], $_POST["type"]);
 $stmt->execute();
 ?>
 

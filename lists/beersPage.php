@@ -2,13 +2,17 @@
 require_once "../garage/config.php";
 
 $beers = [];
-$stmt = $link->prepare("SELECT id, label, thumbnail_name FROM beer;");
+$stmt = $link->prepare("SELECT b.id, b.label, b.thumbnail_name, t.label AS typeLabel, t.badge_color FROM beer b INNER JOIN beer_type t ON b.id_type=t.id;");
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         $beers[$row["id"]] = [
             "label" => $row["label"],
-            "thumbnailName" => $row["thumbnail_name"]
+            "thumbnailName" => $row["thumbnail_name"],
+            "type" => [
+                "label" => $row["typeLabel"],
+                "color" => $row["badge_color"]
+            ]
         ];
     }
 }
@@ -40,7 +44,7 @@ if ($result = $stmt->get_result()) {
                                     <div class="card-fade"></div>
                                 </div>            
                             </div>
-                            <h2 class="text-primary">' . $beer["label"] . '</h2>
+                            <h2 class="text-primary"><span class="me-2 badge rounded-pill" style="background-color:#' . $beer["type"]["color"] . ';">' . $beer["type"]["label"] . '</span>' . $beer["label"] . '</h2>
                         </div>
                     </div>';
             }

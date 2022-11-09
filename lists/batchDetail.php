@@ -3,8 +3,8 @@ require_once "../garage/config.php";
 
 $batch;
 $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, be.thumbnail_name AS beerThumbnailName, be.short_desc, be.long_desc, ba.label, ba.created, ba.thirds, ba.pints, ba.third_price, ba.pint_price, ba.thumbnail_name,
-    ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, s.label AS statusLabel, s.color AS statusColor 
-    FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id WHERE ba.id=?");
+    ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, s.label AS statusLabel, s.color AS statusColor, t.label AS typeLabel, t.description AS typeDesc, t.badge_color 
+    FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id INNER JOIN beer_type t ON be.id_type=t.id WHERE ba.id=?");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
 if ($result = $stmt->get_result()) {
@@ -23,6 +23,11 @@ if ($result = $stmt->get_result()) {
                 "thumbnailName" => $row["beerThumbnailName"],
                 "shortDesc" => $row["short_desc"],
                 "longDesc" => $row["long_desc"],
+                "type" => [
+                    "label" => $row["typeLabel"],
+                    "desc" => $row["typeDesc"],
+                    "color" => $row["badge_color"]
+                ]
             ],
             "status" => [
                 "label" => $row["statusLabel"],
@@ -148,7 +153,7 @@ function writeTableData($data, $suffix = "")
     <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : '';?>
     <div class="m-md-5 p-md-5 p-3 ">
         <p class="text-muted">Uvařeno z piva</p>
-        <h1><?php echo $batch["beer"]["id"] . ": " . "<span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
+        <h1><?php echo "<span class='me-2 badge rounded-pill' style='background-color:#" . $batch["beer"]["type"]["color"] . ";'>" . $batch["beer"]["type"]["label"] . "</span>" . $batch["beer"]["id"] . ": <span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
         <?php
         if (!isset($_GET["bckBtn"])) {
             echo '<a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Přejít na seznam piv</a>';
@@ -158,6 +163,8 @@ function writeTableData($data, $suffix = "")
         <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
         <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
+        <h3 class="text-primary pt-4">Co je to <span class='badge rounded-pill' style='background-color:#<?php echo $batch["beer"]["type"]["color"];?>;'><?php echo $batch["beer"]["type"]["label"];?></span>?</h3>
+        <p><?php echo $batch["beer"]["type"]["desc"] != "" ? $batch["beer"]["type"]["desc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Další várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
         <div class="row">

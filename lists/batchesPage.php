@@ -2,14 +2,18 @@
 require_once "../garage/config.php";
 
 $batchesSorted = [];
-$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thumbnail_name, s.label AS statusLabel, s.color 
-    FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
+$stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thumbnail_name, s.label AS statusLabel, s.color, t.label AS typeLabel, t.badge_color
+    FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id INNER JOIN beer_type t ON be.id_type=t.id;");
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         if (!isset($batchesSorted[$row["beerId"]])) {
             $batchesSorted[$row["beerId"]] = [
                 "label" => $row["beerLabel"],
+                "type" => [
+                    "label" => $row["typeLabel"],
+                    "color" => $row["badge_color"]
+                ],
                 "batches" => []
             ];
         }
@@ -44,7 +48,7 @@ if ($result = $stmt->get_result()) {
     <?php
     if (count($batchesSorted) > 0) {
         foreach ($batchesSorted as $key => $beer) {
-            echo '<h2 class="pt-5">' . $beer["label"] . '</h2><div class="row">';
+            echo '<h2 class="pt-5"><span class="me-2 badge rounded-pill" style="background-color:#' . $beer["type"]["color"] . ';">' . $beer["type"]["label"] . '</span>' . $beer["label"] . '</h2><div class="row">';
             foreach ($beer["batches"] as $key => $batch) {
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">

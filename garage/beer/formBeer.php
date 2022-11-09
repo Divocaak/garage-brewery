@@ -20,6 +20,20 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> pivo</h1>
     <a class="btn btn-outline-primary" href="beerList.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addBeerScript.php" : "editBeerScript.php?beerId=" . $_GET["beerId"]; ?> method="post">
+        <div class="mb-3 form-floating">
+            <select class="form-select" id="type" name="type">
+                <?php
+                $stmt = $link->prepare("SELECT id, label FROM beer_type;");
+                $stmt->execute();
+                if ($result = $stmt->get_result()) {
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["beers"][$_GET["beerId"]]["type"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
+                    }
+                }
+                ?>
+            </select>
+            <label for="beer" class="form-label">Pivo</label>
+        </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="label" name="label" required maxlength="50" value="<?php echo !isset($_GET["add"]) ? $_SESSION["beers"][$_GET["beerId"]]["label"] : ""; ?>">
             <label for="label" class="form-label">Název</label>

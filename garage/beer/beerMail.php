@@ -8,8 +8,11 @@ $stmt->bind_param("i", $_GET["beerId"]);
 $stmt->execute();
 if (!$stmt->error) {
     sendMail(
-        "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["beers"][$_GET["beerId"]]["label"] . "</span>! Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
-        "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_SESSION["beers"][$_GET["beerId"]]["label"] . "! Neboj, až z něj uvaříme várku, dáme vědět.",
+        "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme <span style='color: #ffc107'>nový recept, nové pivo!</span>. Jmenuje se 
+        <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["beers"][$_GET["beerId"]]["label"] . "</span> a je typu <span style='color: #ffc107;'>" . $_SESSION["beers"][$_GET["beerId"]]["type"]["label"] . "</span>! 
+        Neboj, až z něj uvaříme várku, <span style='color: #ffc107'>dáme vědět</span>.",
+        "S ohromnou hrdostí si dovolujeme Ti oznámit, že máme nový recept, nové pivo!. Jmenuje se " . $_SESSION["beers"][$_GET["beerId"]]["label"] . " a je typu " . $_SESSION["beers"][$_GET["beerId"]]["type"]["label"] . "! 
+        Neboj, až z něj uvaříme várku, dáme vědět.",
         "Máme nový recept!",
         "Nový recept, nové pivo",
         getAllEmails($link)

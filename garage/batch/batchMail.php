@@ -11,25 +11,28 @@ if (!$stmt->error) {
     if ($_GET["mail"] == "n") {
         sendMail(
             "Tak se nám to pro Tebe <span style='color: #ffc107'>narodilo</span>! Jo, chápeš to správně, uvařili jsme <span style='color: #ffc107'>novou várku</span>, 
-        jmenuje se <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] . "</span> a je uvařená z našeho piva 
-        <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beerLabel"] . "</span>. Až bude připravená k distribuci, zase se Ti ozveme. Tak zatím!",
+        jmenuje se <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["batches"][$_GET["batchId"]]["label"] . "</span> a je uvařená z našeho piva 
+        <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beer"]["label"] . "</span> typu <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beer"]["type"]["label"] . "</span>. 
+        Až bude připravená k distribuci, zase se Ti ozveme. Tak zatím!",
             "Tak se nám to pro Tebe narodilo! Jo, chápeš to správně, uvařili jsme novou várku, 
-        jmenuje se " . $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] . " a je uvařená z našeho piva " . $_SESSION["batches"][$_GET["batchId"]]["beerLabel"] . ". Až bude připravená k distribuci, zase se Ti ozveme. Tak zatím!",
+        jmenuje se " . $_SESSION["batches"][$_GET["batchId"]]["label"] . " a je uvařená z našeho piva " . $_SESSION["batches"][$_GET["batchId"]]["beer"]["label"] . " typu " . $_SESSION["batches"][$_GET["batchId"]]["beer"]["type"]["label"] . ". 
+        Až bude připravená k distribuci, zase se Ti ozveme. Tak zatím!",
             "A je na světě!",
             "Uvařili jsme novou várku",
             getAllEmails($link)
         );
     } else if ($_GET["mail"] == "s") {
         sendMail(
-            "Čus! Holky (kvasnice) zapracovaly a dokvasily nám várku piva <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beerLabel"] . "</span>, 
-        která se jmenuje <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] . "</span>. My holkám samozřejmě děkujeme a práci po nich zase přebíráme, 
+            "Čus! Holky (kvasnice) zapracovaly a dokvasily nám várku piva <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beer"]["label"] . "</span> 
+            typu <span style='color: #ffc107'>" . $_SESSION["batches"][$_GET["batchId"]]["beer"]["type"]["label"] . "</span>, 
+        která se jmenuje <span style='color: #ffc107; font-weight: bold;'>" . $_SESSION["batches"][$_GET["batchId"]]["label"] . "</span>. My holkám samozřejmě děkujeme a práci po nich zase přebíráme, 
         protože to někdo musí <span style='color: #ffc107'>stočit do lahví</span>. Ty už si ale <span style='color: #ffc107'>můžeš</span> nějaký kuželky <span style='color: #ffc107'>objednat</span>, 
         tak na nic nečekej, aby Ti je někdo nevyfouknul.",
-            "Čus! Holky (kvasnice) zapracovaly a dokvasily nám várku piva " . $_SESSION["batches"][$_GET["batchId"]]["beerLabel"] . ", 
-        která se jmenuje " . $_SESSION["batches"][$_GET["batchId"]]["batchLabel"] . ". My holkám samozřejmě děkujeme a práci po nich zase přebíráme, 
+            "Čus! Holky (kvasnice) zapracovaly a dokvasily nám várku piva " . $_SESSION["batches"][$_GET["batchId"]]["beer"]["label"] . " typu " . $_SESSION["batches"][$_GET["batchId"]]["beer"]["type"]["label"] . ", 
+        která se jmenuje " . $_SESSION["batches"][$_GET["batchId"]]["label"] . ". My holkám samozřejmě děkujeme a práci po nich zase přebíráme, 
         protože to někdo musí stočit do lahví. Ty už si ale můžeš nějaký kuželky objednat, tak na nic nečekej, aby Ti je někdo nevyfouknul.",
             "A je to tady!",
-            ($_SESSION["batches"][$_GET["batchId"]]["batchLabel"] . " je k prodeji"),
+            ($_SESSION["batches"][$_GET["batchId"]]["label"] . " je k prodeji"),
             getAllEmails($link)
         );
     }

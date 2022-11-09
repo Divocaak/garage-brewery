@@ -1,7 +1,7 @@
 <?php
 require_once "../config.php";
-$stmt = $link->prepare("UPDATE beer SET label=?, thumbnail_name=?, short_desc=?, long_desc=? WHERE id=?;");
-$stmt->bind_param("ssssi", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"], $_GET["beerId"]);
+$stmt = $link->prepare("UPDATE beer SET label=?, thumbnail_name=?, short_desc=?, long_desc=?, id_type=? WHERE id=?;");
+$stmt->bind_param("ssssii", $_POST["label"], $_POST["thumbnailName"], $_POST["shortDesc"], $_POST["longDesc"], $_POST["type"], $_GET["beerId"]);
 $stmt->execute();
 ?>
 

@@ -27,7 +27,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
                 $stmt->execute();
                 if ($result = $stmt->get_result()) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beerId"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["beer"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
                 }
                 ?>

@@ -2,7 +2,7 @@
 require_once "../garage/config.php";
 
 $beer;
-$stmt = $link->prepare("SELECT id, label, thumbnail_name, short_desc, long_desc FROM beer WHERE id=?");
+$stmt = $link->prepare("SELECT b.id, b.label, b.thumbnail_name, b.short_desc, b.long_desc, t.label AS typeLabel, t.description, t.badge_color FROM beer b INNER JOIN beer_type t ON b.id_type=t.id WHERE b.id=?");
 $stmt->bind_param("i", $_GET["id"]);
 $stmt->execute();
 if ($result = $stmt->get_result()) {
@@ -12,7 +12,12 @@ if ($result = $stmt->get_result()) {
             "label" => $row["label"],
             "thumbnailName" => $row["thumbnail_name"],
             "shortDesc" => $row["short_desc"],
-            "longDesc" => $row["long_desc"]
+            "longDesc" => $row["long_desc"],
+            "type" => [
+                "label" => $row["typeLabel"],
+                "desc" => $row["description"],
+                "color" => $row["badge_color"]
+            ]
         ];
     }
 }
@@ -33,7 +38,7 @@ if ($result = $stmt->get_result()) {
 <body class="text-light bg-dark text-center">
     <?php echo $beer["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $beer["thumbnailName"] . '\');"></div>' : '';?>
     <div class="m-md-5 p-md-5 p-3 ">
-        <h1><?php echo $beer["id"] . ": " . "<span class='text-primary'>" . $beer["label"] . "</span>"; ?></h1>
+        <h1><?php echo "<span class='me-2 badge rounded-pill' style='background-color:#" . $beer["type"]["color"] . ";'>" . $beer["type"]["label"] . "</span>" . $beer["id"] . ": <span class='text-primary'>" . $beer["label"] . "</span>"; ?></h1>
         <?php
         if (!isset($_GET["bckBtn"])) {
             echo '<a class="btn btn-outline-primary" href="beersPage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět na seznam</a>';
@@ -43,6 +48,8 @@ if ($result = $stmt->get_result()) {
         <p><?php echo $beer["shortDesc"] != "" ? $beer["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
         <p><?php echo $beer["longDesc"] != "" ? $beer["longDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
+        <h3 class="text-primary pt-4">Co je to <span class='badge rounded-pill' style='background-color:#<?php echo $beer["type"]["color"];?>;'><?php echo $beer["type"]["label"];?></span>?</h3>
+        <p><?php echo $beer["type"]["desc"] != "" ? $beer["type"]["desc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
         <div class="row">

@@ -10,13 +10,18 @@ $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba
     ba.thumbnail_name, ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, 
     s.id AS statusId, s.label AS statusLabel, s.color AS statusColor,
     (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered, (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
-    ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id INNER JOIN status_batch s ON ba.id_status=s.id;");
+    ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price, t.label AS typeLabel, t.badge_color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id 
+    INNER JOIN status_batch s ON ba.id_status=s.id INNER JOIN beer_type t ON be.id_type=t.id;");
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
         if (!isset($batchesSorted[$row["beerId"]])) {
             $batchesSorted[$row["beerId"]] = [
                 "label" => $row["beerLabel"],
+                "type" => [
+                    "label" => $row["typeLabel"],
+                    "color" => $row["badge_color"]
+                ],
                 "batches" => []
             ];
         }
@@ -44,6 +49,14 @@ if ($result = $stmt->get_result()) {
                 "id" => $row["statusId"],
                 "label" => $row["statusLabel"],
                 "color" => $row["statusColor"]
+            ],
+            "beer" => [
+                "id" => $row["beerId"],
+                "label" => $row["beerLabel"],
+                "type" => [
+                    "label" => $row["typeLabel"],
+                    "color" => $row["badge_color"]
+                ],
             ]
         ];
     }
@@ -73,7 +86,7 @@ if ($result = $stmt->get_result()) {
 
     if (count($batchesSorted) > 0) {
         foreach ($batchesSorted as $key => $beer) {
-            echo '<h2 class="pt-5">' . $beer["label"] . '</h2><div class="row">';
+            echo '<h2 class="pt-5"><span class="me-2 badge rounded-pill" style="background-color:#' . $beer["type"]["color"] . ';">' . $beer["type"]["label"] . '</span>' . $beer["label"] . '</h2><div class="row">';
             foreach ($beer["batches"] as $key => $batch) {
                 $thirdsRemaining = $batch["thirds"] - $batch["thirdsOrdered"];
                 $pintsRemaining = $batch["pints"] - $batch["pintsOrdered"];
