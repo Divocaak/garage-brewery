@@ -28,6 +28,27 @@ $_SESSION["types"] = $types;
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="../../styles/custom.min.css" rel="stylesheet">
+    <style>
+        .imgThumbnailWrapper {
+            max-height: 25vh;
+            height: 25vh;
+            max-width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .imgThumbnailWrapper div {
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            height: 100%;
+        }
+
+        .imgThumbnailWrapper a {
+            position: absolute;
+            right: 0;
+        }
+    </style>
 </head>
 
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
@@ -63,6 +84,39 @@ $_SESSION["types"] = $types;
         </table>
     </div>
 
+    <h3>Banka obrázků a etiket</h3>
+    <div class="row">
+        <?php
+        $files = scandir("../../imgs/bank");
+        foreach ($files as $file) {
+            if (strlen($file) > 2) {
+                $path = "../../imgs/bank/" . $file;
+                echo '<div class="col-12 col-md-4 my-2">
+                <div class="imgThumbnailWrapper">
+                <div style="background-image: url(\'' . $path . '\');">
+                <a class="btn btn-danger m-2 deleteImgBtn" data-path=' . $path . '><i class="bi bi-trash"></i></a>
+                </div>
+                </div>
+                </div>';
+            }
+        }
+        
+        $files = scandir("../../imgs/stickers");
+        foreach ($files as $file) {
+            if (strlen($file) > 2) {
+                $path = "../../imgs/stickers/" . $file;
+                echo '<div class="col-12 col-md-4 my-2">
+                        <div class="imgThumbnailWrapper">
+                            <div style="background-image: url(\'' . $path . '\');">
+                                <a class="btn btn-danger m-2 deleteImgBtn" data-path=' . $path . '><i class="bi bi-trash"></i></a>
+                            </div>
+                        </div>
+                    </div>';
+            }
+        }
+        ?>
+    </div>
+
     <div class="modal fade" id="confDeleteModal" tabindex="-1" aria-labelledby="confDeleteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
@@ -80,6 +134,23 @@ $_SESSION["types"] = $types;
         </div>
     </div>
 
+    <div class="modal fade" id="confDeleteImgModal" tabindex="-1" aria-labelledby="confDeleteImgModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Opravdu?</h5>
+                </div>
+                <div class="modal-body">
+                    Skutečně chcete odstranit tuto fotku ze systému? Operace je nevratná, pokud je obrázek někde používaný, nebude se na jeho místě zobrazovat nic.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zavřít</button>
+                    <button type="button" class="btn btn-outline-danger" id="confDeleteImgBtn">Odstranit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -92,6 +163,16 @@ $_SESSION["types"] = $types;
 
             $("#confDeleteBtn").click(function() {
                 window.location = "types/delTypeScript.php?id=" + typeId;
+            });
+
+            var path;
+            $(".deleteImgBtn").click(function() {
+                path = $(this).data("path");
+                $('#confDeleteImgModal').modal('show');
+            });
+
+            $("#confDeleteImgBtn").click(function() {
+                window.location = "bank/delImageScript.php?path=" + path;
             });
         });
     </script>
