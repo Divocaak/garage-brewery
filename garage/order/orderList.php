@@ -7,7 +7,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
 
 $orders = [];
 $stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id AS customerId, c.mail, c.f_name, c.l_name, c.instagram, e.id AS empId, e.f_name AS empFName, e.l_name AS empLName,
-    b.id AS batchId, b.label, b.thirds AS batchThirds, b.pints AS batchPints, bs.label, bs.color, os.id AS statusOrderId, os.label AS statusOrderLabel, os.color AS statusOrderColor, b.third_price, b.pint_price
+    b.id AS batchId, b.label AS batchLabel, b.thirds AS batchThirds, b.pints AS batchPints, bs.label, bs.color, os.id AS statusOrderId, os.label AS statusOrderLabel, os.color AS statusOrderColor, b.third_price, b.pint_price
     FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
     INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;");
 $stmt->execute();
@@ -29,7 +29,7 @@ if ($result = $stmt->get_result()) {
             ],
             "batch" => [
                 "id" => $row["batchId"],
-                "label" => $row["label"],
+                "label" => $row["batchLabel"],
                 "thirds" => $row["batchThirds"],
                 "pints" => $row["batchPints"],
                 "thirdPrice" => $row["third_price"],

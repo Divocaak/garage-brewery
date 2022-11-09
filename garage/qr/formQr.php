@@ -24,11 +24,11 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
             <select class="form-select" id="batch" name="batch">
                 <option selected></option>
                 <?php
-                $stmt = $link->prepare("SELECT id, label, created FROM batch;");
+                $stmt = $link->prepare("SELECT id, label, created, alcohol FROM batch;");
                 $stmt->execute();
                 if ($result = $stmt->get_result()) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "' data-created='" . $row["created"] . "'>" . $row["label"] . "</option>";
+                        echo "<option value='" . $row["id"] . "' data-created='" . $row["created"] . "' data-alc=" . $row["alcohol"] . ">" . $row["label"] . "</option>";
                     }
                 }
                 ?>
@@ -47,6 +47,10 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
             <input type="date" class="form-control" readonly id="created" name="created">
             <label for="created" class="form-label">Vytvořeno</label>
         </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" readonly id="alc" name="alc">
+            <label for="alc" class="form-label">Podíl alkoholu</label>
+        </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-plus-circle"></i>Vytvořit etiketu</button>
     </form>
 </body>
@@ -59,6 +63,7 @@ if (!isset($_SESSION["currentUser"]) || !$_SESSION["currentUser"]["employee"]) {
             $("#label").val($(this).find(":selected").text());
             $("#id").val($(this).find(":selected").attr("value"));
             $("#created").val($(this).find(":selected").data("created"));
+            $("#alc").val($(this).find(":selected").data("alc") + " %");
         });
     });
 
