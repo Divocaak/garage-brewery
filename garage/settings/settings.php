@@ -48,6 +48,12 @@ $_SESSION["types"] = $types;
             position: absolute;
             right: 0;
         }
+
+        .imgThumbnailWrapper p {
+            position: absolute;
+            bottom: 0;
+            background-color: black;
+        }
     </style>
 </head>
 
@@ -85,6 +91,17 @@ $_SESSION["types"] = $types;
     </div>
 
     <h3>Banka obrázků a etiket</h3>
+    <form enctype="multipart/form-data" class="needs-validation mt-3" novalidate action="bank/addImageScript.php" method="post">
+        <div class="mb-3">
+            <label for="image" class="form-label text-light">Nahrát obrázek</label>
+            <input class="form-control" type="file" id="image" name="image" required>
+        </div>
+        <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="sticker" name="sticker">
+            <label class="form-check-label" for="sticker">Etiketa (zakliknout, pokud ano)</label>
+        </div>
+        <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-plus-circle"></i>Uložit obrázek</button>
+    </form>
     <div class="row">
         <?php
         $files = scandir("../../imgs/bank");
@@ -92,15 +109,16 @@ $_SESSION["types"] = $types;
             if (strlen($file) > 2) {
                 $path = "../../imgs/bank/" . $file;
                 echo '<div class="col-12 col-md-4 my-2">
-                <div class="imgThumbnailWrapper">
-                <div style="background-image: url(\'' . $path . '\');">
-                <a class="btn btn-danger m-2 deleteImgBtn" data-path=' . $path . '><i class="bi bi-trash"></i></a>
-                </div>
-                </div>
-                </div>';
+                        <div class="imgThumbnailWrapper">
+                            <div style="background-image: url(\'' . $path . '\');">
+                                <a class="btn btn-danger m-2 deleteImgBtn" data-path=' . $path . '><i class="bi bi-trash"></i></a>
+                                <p class="ms-2">bank/' . $file . '</p>
+                            </div>
+                        </div>
+                    </div>';
             }
         }
-        
+
         $files = scandir("../../imgs/stickers");
         foreach ($files as $file) {
             if (strlen($file) > 2) {
@@ -109,6 +127,7 @@ $_SESSION["types"] = $types;
                         <div class="imgThumbnailWrapper">
                             <div style="background-image: url(\'' . $path . '\');">
                                 <a class="btn btn-danger m-2 deleteImgBtn" data-path=' . $path . '><i class="bi bi-trash"></i></a>
+                                <p class="ms-2">stickers/' . $file . '</p>
                             </div>
                         </div>
                     </div>';
@@ -175,6 +194,22 @@ $_SESSION["types"] = $types;
                 window.location = "bank/delImageScript.php?path=" + path;
             });
         });
+
+        (function() {
+        "use strict"
+        var forms = document.querySelectorAll(".needs-validation")
+        Array.prototype.slice.call(forms)
+            .forEach(function(form) {
+                form.addEventListener("submit", function(event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add("was-validated")
+                }, false)
+            })
+    })()
     </script>
 </body>
 
