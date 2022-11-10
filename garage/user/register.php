@@ -44,7 +44,13 @@ session_start();
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" value="" id="acceptCheck" required>
             <label class="form-check-label" for="acceptCheck">
-                Souhlasím se zpracováním mnou poskytnutých dat
+                <span class="text-primary">Souhlasím</span> se zpracováním mnou poskytnutých dat
+            </label>
+        </div>
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" value="" id="ageCheck" required>
+            <label class="form-check-label" for="ageCheck">
+                Zaškrtnutím prohlašuji, že <span class="text-primary">jsem plnoletý</span>, tudíž zaměstnancům pivovaru nehrozí žádný problém se zákonem.
             </label>
         </div>
         <button type="submit" class="btn btn-primary"><i class="pe-2 bi bi-door-open"></i>Registrovat se</button>
