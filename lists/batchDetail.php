@@ -72,8 +72,8 @@ if ($batch["color"] != "") {
 
 function writeTableData($data, $suffix = "")
 {
-    if ($data != "") {
-        return $data . " " . $suffix;
+    if ($data != "" && $data != 0) {
+        return $data . $suffix;
     }
     return "Zatím nevíme";
 }
@@ -107,20 +107,20 @@ function writeTableData($data, $suffix = "")
                     <p>Stupňovitost (extrakt původní)</p>
                 </div>
                 <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
-                    <p><?php echo writeTableData($batch["gradation"], "%"); ?></p>
+                    <p><?php echo writeTableData($batch["gradation"], "°"); ?></p>
                 </div>
                 <div class="col-12 col-md-6 text-start">
                     <p>Podíl alkoholu</p>
                 </div>
                 <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
-                    <p><?php echo writeTableData($batch["alcohol"], "%"); ?></p>
+                    <p><?php echo writeTableData($batch["alcohol"], " %"); ?></p>
                 </div>
                 <div class="col-12 col-md-6 text-start">
                     <p>Barva</p>
                 </div>
                 <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
-                    <p><?php echo $colorHex != null ? '<i class="bi bi-circle-fill" style="color:' . $colors[$colorHex] . '"></i>' : '';
-                        echo writeTableData($batch["color"], "EBC"); ?></p>
+                    <p><?php echo $colorHex != null ? '<i class="bi bi-circle-fill pe-1" style="color:' . $colors[$colorHex] . '"></i>' : '';
+                        echo writeTableData($batch["color"], " EBC"); ?></p>
                 </div>
                 <div class="col-12 col-md-6 text-start">
                     <p>pH</p>
@@ -132,7 +132,7 @@ function writeTableData($data, $suffix = "")
                     <p>Hořkost</p>
                 </div>
                 <div class="col-12 col-md-6 text-end">
-                    <p><?php echo writeTableData($batch["bitterness"], "IBU"); ?></p>
+                    <p><?php echo writeTableData($batch["bitterness"], " IBU"); ?></p>
                 </div>
             </div>
         </div>

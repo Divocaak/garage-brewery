@@ -2,6 +2,13 @@
 require_once "../config.php";
 $stmt = $link->prepare("UPDATE batch SET id_beer=?, label=?, created=?, thirds=?, pints=?, thirds_pp=?, pints_pp=?, id_status=?, third_price=?, pint_price=?,
     thumbnail_name=?, sticker_name=?, gradation=?, alcohol=?, color=?, ph=?, bitterness=?, description=? WHERE id=?;");
+
+$gradation = isset($_POST["gradation"]) ? $_POST["gradation"] : NULL;
+$alcohol = isset($_POST["alcohol"]) ? $_POST["alcohol"] : NULL;
+$color = isset($_POST["color"]) ? $_POST["color"] : NULL;
+$ph = isset($_POST["ph"]) ? $_POST["ph"] : NULL;
+$bitternes = isset($_POST["bitternes"]) ? $_POST["bitternes"] : NULL;
+
 $stmt->bind_param(
     "issiiiiiiissididisi",
     $_POST["beer"],
@@ -16,11 +23,11 @@ $stmt->bind_param(
     $_POST["pintPrice"],
     $_POST["thumbnailName"],
     $_POST["stickerName"],
-    $_POST["gradation"],
-    $_POST["alcohol"],
-    $_POST["color"],
-    $_POST["ph"],
-    $_POST["bitterness"],
+    $gradation,
+    $alcohol,
+    $color,
+    $ph,
+    $bitterness,
     $_POST["desc"],
     $_GET["batchId"]
 );
