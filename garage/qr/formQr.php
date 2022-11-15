@@ -4,6 +4,9 @@ session_start();
 if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employee"]) {
     header("Location: ../user/login.php");
 }
+if(file_exists("sticker.png")){
+    unlink("sticker.png");
+}
 ?>
 <!DOCTYPE html>
 <html lang="cz">
