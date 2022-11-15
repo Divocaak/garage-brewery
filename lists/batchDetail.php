@@ -103,35 +103,35 @@ function writeTableData($data, $suffix = "")
         <h3 class="text-primary pt-4">Data z laborky</h3>
         <div class="d-flex justify-content-center mt-3">
             <div class="row my-data-table w-50 pt-3">
-                <div class="col-6 text-start">
+                <div class="col-12 col-md-6 text-start">
                     <p>Stupňovitost (extrakt původní)</p>
                 </div>
-                <div class="col-6 text-end">
+                <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
                     <p><?php echo writeTableData($batch["gradation"], "%"); ?></p>
                 </div>
-                <div class="col-6 text-start">
+                <div class="col-12 col-md-6 text-start">
                     <p>Podíl alkoholu</p>
                 </div>
-                <div class="col-6 text-end">
+                <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
                     <p><?php echo writeTableData($batch["alcohol"], "%"); ?></p>
                 </div>
-                <div class="col-6 text-start">
+                <div class="col-12 col-md-6 text-start">
                     <p>Barva</p>
                 </div>
-                <div class="col-6 text-end">
+                <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
                     <p><?php echo $colorHex != null ? '<i class="bi bi-circle-fill" style="color:' . $colors[$colorHex] . '"></i>' : '';
                         echo writeTableData($batch["color"], "EBC"); ?></p>
                 </div>
-                <div class="col-6 text-start">
+                <div class="col-12 col-md-6 text-start">
                     <p>pH</p>
                 </div>
-                <div class="col-6 text-end">
+                <div class="col-12 col-md-6 mb-4 mb-md-0 text-end">
                     <p><?php echo writeTableData($batch["ph"]); ?></p>
                 </div>
-                <div class="col-6 text-start">
+                <div class="col-12 col-md-6 text-start">
                     <p>Hořkost</p>
                 </div>
-                <div class="col-6 text-end">
+                <div class="col-12 col-md-6 text-end">
                     <p><?php echo writeTableData($batch["bitterness"], "IBU"); ?></p>
                 </div>
             </div>
