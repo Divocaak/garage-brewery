@@ -51,7 +51,7 @@ imagecopyresampled($out, $qr, $qrPosX, $qrPosY, 0, 0, $size, $size, $size, $size
 $label = $_POST["id"] . ": " . $_POST["label"];
 drawText($out, $label, $qrPosX - 100, $qrPosY - 15, 450, 65);
 drawText($out, $_POST["created"], $qrPosX + 120, $qrPosY + 380, 250, 65, angle: -5);
-drawText($out, $_POST["alc"], 600, 737, 50, 20);
+drawText($out, $_POST["alc"], 595, 740, 80, 35, defaultFontSize:25);
 
 imagepng($out, "sticker.png");
 ?>
