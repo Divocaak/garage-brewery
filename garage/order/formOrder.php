@@ -19,6 +19,16 @@ if (!isset($_SESSION["currentUser"]["id"])) {
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
     <a class="btn btn-outline-primary" href="<?php echo ($_SESSION["currentUser"]["employee"]) ? "orderList.php" : "../homepage.php"; ?>"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
+    <?php
+    $stmt = $link->prepare("SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;");
+    $stmt->execute();
+    if ($result = $stmt->get_result()) {
+        if ($result->num_rows <= 0) {
+            echo '<p class="m-5">Ale ne, vypadá to, že nemáme žádnou várku k prodeji. Zkus se vrátit někdy jindy. Až budeme mít várku připravenou k distribuci, dáme Ti vědět mailem, tak tam občas koukni.</p>';
+            exit;
+        }
+    }
+    ?>
     <form class="needs-validation mt-3" novalidate action=<?php echo isset($_GET["add"]) ? "addOrderScript.php" : "editOrderScript.php?orderId=" . $_GET["orderId"]; ?> method="post">
         <div class="mb-3 form-floating">
             <select class="form-select" id="batch" name="batch">
@@ -27,18 +37,14 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                 $pintsPP;
                 $thirdPrice;
                 $pintPrice;
-                $stmt = $link->prepare("SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;");
-                $stmt->execute();
-                if ($result = $stmt->get_result()) {
-                    while ($row = $result->fetch_assoc()) {
-                        $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row["id"]) : ($thirdsPP == null || $pintsPP == null);
-                        $thirdsPP = $isSelected ? $row["thirds_pp"] : $thirdsPP;
-                        $pintsPP = $isSelected ? $row["pints_pp"] : $pintsPP;
-                        $thirdPrice = $isSelected ? $row["third_price"] : $thirdPrice;
-                        $pintPrice = $isSelected ? $row["pint_price"] : $pintPrice;
-                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row["thirds_pp"] . " data-pints-per-person=" . $row["pints_pp"] . "
-                            data-third-price=" . $row["third_price"] . " data-pint-price=" . $row["pint_price"] . ">" . $row["label"] . " (" . $row["beerLabel"] . ", " . $row["created"] . ")</option>";
-                    }
+                while ($row = $result->fetch_assoc()) {
+                    $isSelected = !isset($_GET["add"]) ? ($_SESSION["orders"][$_GET["orderId"]]["batch"]["id"] == $row["id"]) : ($thirdsPP == null || $pintsPP == null);
+                    $thirdsPP = $isSelected ? $row["thirds_pp"] : $thirdsPP;
+                    $pintsPP = $isSelected ? $row["pints_pp"] : $pintsPP;
+                    $thirdPrice = $isSelected ? $row["third_price"] : $thirdPrice;
+                    $pintPrice = $isSelected ? $row["pint_price"] : $pintPrice;
+                    echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($isSelected ? " selected" : "") : "") . " data-thirds-per-person=" . $row["thirds_pp"] . " data-pints-per-person=" . $row["pints_pp"] . "
+                        data-third-price=" . $row["third_price"] . " data-pint-price=" . $row["pint_price"] . ">" . $row["label"] . " (" . $row["beerLabel"] . ", " . $row["created"] . ")</option>";
                 }
                 ?>
             </select>
