@@ -162,7 +162,8 @@ function writeTableData($data, $suffix = "")
         <h3 class="text-primary pt-4">Popis</h3>
         <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Detailní popis</h3>
-        <p><?php echo $batch["beer"]["shortDesc"] != "" ? $batch["beer"]["shortDesc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
+        <p><?php echo $batch["beer"]["longDesc"] != "" ? $batch["beer"]["longDesc"] : "Něco tady chybí, brzo to ale někdo z nás 
+dopíše."; ?></p>
         <h3 class="text-primary pt-4">Co je to <span class='badge rounded-pill' style='background-color:#<?php echo $batch["beer"]["type"]["color"];?>;'><?php echo $batch["beer"]["type"]["label"];?></span>?</h3>
         <p><?php echo $batch["beer"]["type"]["desc"] != "" ? $batch["beer"]["type"]["desc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Další várky</h3>
