@@ -42,7 +42,8 @@ if ($result = $stmt->get_result()) {
 </head>
 
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
-    <h1><span class="text-primary">Várky</h1>
+    <?php echo (isset($_GET["wrongRedirect"]) && $_GET["wrongRedirect"] == 1) ? "<p class='text-danger'>Někde se stala chyba, prevděpodobně tebou rozkliknutá nebo naskenovaná várka neexistuje. Tady je seznam várek, které máme k dispozici:</p>" : ""; ?>
+    <h1><span class="text-primary">Várky</span></h1>
     <p class="text-muted">Várky jsou seřazené podle piv, ze kterých jsou uvařené.</p>
     <a class="btn btn-outline-primary" href="../index.html"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <?php

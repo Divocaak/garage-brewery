@@ -61,6 +61,12 @@ $colors = [
     79 => "#030403"
 ];
 
+
+if (!isset($batch)) {
+    header("Location: batchesPage.php?wrongRedirect=1");
+    die();
+}
+
 $colorHex = null;
 if ($batch["color"] != "") {
     foreach ($colors as $key => $color) {
@@ -145,12 +151,12 @@ function writeTableData($data, $suffix = "")
                     <img src="../imgs/stickers/' . $batch["stickerName"] . '" class="figure-img img-fluid rounded" alt="...">
                     <figcaption class="figure-caption">Etiketa vytvořena <span class="text-primary">speciálně</span> pro tuto várku</figcaption>
                 </figure>';
-        }else{
+        } else {
             echo '<p>Etiketa je zatím ve výrobě</p>';
         }
         ?>
     </div>
-    <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : '';?>
+    <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : ''; ?>
     <div class="m-md-5 p-md-5 p-3 ">
         <p class="text-muted">Uvařeno z piva</p>
         <h1><?php echo "<span class='me-2 badge rounded-pill' style='background-color:#" . $batch["beer"]["type"]["color"] . ";'>" . $batch["beer"]["type"]["label"] . "</span>" . $batch["beer"]["id"] . ": <span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
@@ -164,7 +170,7 @@ function writeTableData($data, $suffix = "")
         <h3 class="text-primary pt-4">Detailní popis</h3>
         <p><?php echo $batch["beer"]["longDesc"] != "" ? $batch["beer"]["longDesc"] : "Něco tady chybí, brzo to ale někdo z nás 
 dopíše."; ?></p>
-        <h3 class="text-primary pt-4">Co je to <span class='badge rounded-pill' style='background-color:#<?php echo $batch["beer"]["type"]["color"];?>;'><?php echo $batch["beer"]["type"]["label"];?></span>?</h3>
+        <h3 class="text-primary pt-4">Co je to <span class='badge rounded-pill' style='background-color:#<?php echo $batch["beer"]["type"]["color"]; ?>;'><?php echo $batch["beer"]["type"]["label"]; ?></span>?</h3>
         <p><?php echo $batch["beer"]["type"]["desc"] != "" ? $batch["beer"]["type"]["desc"] : "Něco tady chybí, brzo to ale někdo z nás dopíše."; ?></p>
         <h3 class="text-primary pt-4">Další várky</h3>
         <p class="text-muted">Tady je seznam várek, který jsme uvařili z tohohle receptu</p>
