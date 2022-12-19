@@ -6,7 +6,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
 }
 
 $orders = [];
-$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id AS customerId, c.mail, c.f_name, c.l_name, c.instagram, e.id AS empId, e.f_name AS empFName, e.l_name AS empLName,
+$stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, c.id AS customerId, c.mail, c.f_name, c.l_name, c.instagram, c.legal, c.known, e.id AS empId, e.f_name AS empFName, e.l_name AS empLName,
     b.id AS batchId, b.label AS batchLabel, b.thirds AS batchThirds, b.pints AS batchPints, bs.label, bs.color, os.id AS statusOrderId, os.label AS statusOrderLabel, os.color AS statusOrderColor, b.third_price, b.pint_price
     FROM beer_order bo INNER JOIN user c ON bo.id_customer=c.id LEFT JOIN user e ON bo.id_employee=e.id INNER JOIN batch b ON bo.id_batch=b.id
     INNER JOIN status_batch bs ON b.id_status=bs.id INNER JOIN status_order os ON bo.id_status=os.id;");
@@ -21,7 +21,9 @@ if ($result = $stmt->get_result()) {
                 "id" => $row["customerId"],
                 "mail" => $row["mail"],
                 "name" => ($row["f_name"] . " " . $row["l_name"]),
-                "instagram" => $row["instagram"]
+                "instagram" => $row["instagram"],
+                "legal" => $row["legal"],
+                "known" => $row["known"]
             ],
             "employee" => [
                 "id" => $row["empId"],
@@ -63,6 +65,7 @@ if ($result = $stmt->get_result()) {
     <h1>Objednávky</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <a class="btn btn-outline-success" href="formOrder.php?add=1"><i class="bi bi-plus-circle pe-2"></i>Přidat</a>
+    <p class="pt-3">18+ (ověřeno):<i class="bi bi-patch-check text-primary ps-2"></i><br>Někdo od někoho: <i class="bi bi-patch-check-fill text-primary ps-2"></i></p>
     <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
             <caption>Seznam objednávek</caption>
@@ -92,7 +95,7 @@ if ($result = $stmt->get_result()) {
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
                             <td>' . date_format(date_create($order["created"]), 'd. m. Y H:i:s') . '</td>
-                            <td>' . $order["customer"]["name"] . '</td>
+                            <td>' . $order["customer"]["name"] . getUserChecks($order["customer"]["legal"], $order["customer"]["known"]) . '</td>
                             <td><a class="btn btn-outline-info customerDetailBtn" data-customer-name="' . $order["customer"]["name"] . '" data-customer-mail="' . $order["customer"]["mail"] . '" data-customer-instagram="' . $order["customer"]["instagram"] . '"><i class="bi bi-search"></i></a></td>
                             <td>' . $order["batch"]["label"] . '</td>
                             <td><span class="ms-2 badge rounded-pill" style="background-color:#' . $order["batch"]["status"]["color"] . ';">' . $order["batch"]["status"]["label"] . '</td>
