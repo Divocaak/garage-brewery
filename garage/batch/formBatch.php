@@ -73,7 +73,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                 $stmt->execute();
                 if ($result = $stmt->get_result()) {
                     while ($row = $result->fetch_assoc()) {
-                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["statusId"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
+                        echo "<option value='" . $row["id"] . "'" . (!isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["status"]["id"] == $row["id"] ? " selected" : "") : "") . ">" . $row["label"] . "</option>";
                     }
                 }
                 ?>
