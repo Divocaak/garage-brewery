@@ -18,11 +18,13 @@ if (!$stmt->error) {
             nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko, 
             bude Tě to stát totiž přesně <span style='color: #ffc107'>" . $_POST["priceField"] . "&nbsp;Kč</span>. Co na tom stojí zrovna tolik samozřejmě najdeš u svojí objednávky v Garáži. 
             S tím přichází i upozornění, <span style='color: #dc3545'>karty bohužel nebereme</span>, díky za pochopení. Dovolím si ještě malou poznámku, my z těch peněz <span style='color: #ffc107'>nijak neprofitujeme</span>, 
-            zase je otočíme na <span style='color: #ffc107'>nákup potřebných surovin</span> pro další várku. <span style='color: #ffc107'>Nejsme komerční, nejsme korporát</span>.",
+            zase je otočíme na <span style='color: #ffc107'>nákup potřebných surovin</span> pro další várku. Ohledně dopravy - preferujeme <span style='color: #ffc107'>osobní předání</span> někým z pivovaru, posílat poštou 
+            tyhle skvosty je trochu rizikové. Někdo od nás Tě brzo <span style='color: #ffc107'>kontaktuje</span>, nebo <span style='color: #ffc107'>napiš</span> ty nám! <span style='color: #ffc107'>Nejsme komerční, nejsme korporát</span>.",
         "Jo, vidíme to tady. Nová objednávka číslo " . $orderId . ". Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou chodit do mailu, 
             nebo je můžeš sledovat přímo v Elekrtronické Garáži. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko, 
             bude Tě to stát totiž přesně " . $_POST["priceField"] . "&nbsp;Kč. Co na tom stojí zrovna tolik samozřejmě najdeš u svojí objednávky v Garáži. 
-            S tím přichází i upozornění, karty bohužel nebereme, díky za pochopení. Dovolím si ještě malou poznámku, my z těch peněz nijak neprofitujeme, zase je otočíme na nákup potřebných surovin pro další várku. 
+            S tím přichází i upozornění, karty bohužel nebereme, díky za pochopení. Ohledně dopravy - preferujeme osobní předání někým z pivovaru, posílat poštou tyhle skvosty je trochu rizikové. Někdo od nás Tě brzo kontaktuje, 
+            nebo napiš ty nám! Dovolím si ještě malou poznámku, my z těch peněz nijak neprofitujeme, zase je otočíme na nákup potřebných surovin pro další várku. 
             Nejsme komerční, nejsme korporát.",
         "Tvoje objednávka už je u nás",
         ("Objednávka číslo " . $orderId),

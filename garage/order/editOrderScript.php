@@ -55,9 +55,12 @@ if (!$stmt->error) {
         if ($_POST["status"] == 3) {
             sendMail(
                 "Ahoj! Chceme Ti ještě jednou <span style='color: #ffc107'>poděkovat</span>, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
-                u objednávky <span style='color: #ffc107'>číslo " . $_GET["orderId"] . "</span> jsme Ti změnili stav, takže teď můžeš pivo <span style='color: #ffc107'>ohodnotit</span>. Díky!",
+                u objednávky <span style='color: #ffc107'>číslo " . $_GET["orderId"] . "</span> jsme Ti změnili stav, takže teď můžeš pivo <span style='color: #ffc107'>ohodnotit</span>. 
+                No a až ho dopiješ, <span style='color: #ffc107'>ozvi se</span> nám, <span style='color: #ffc107'>lahve</span> jsou totiž pro účel zajištění hladkého chodu pivovaru <span style='color: #ffc107'>vratné</span> 
+                (ale s dostatečně projeveným zájmem o lahev se můžeme nějak domluvit). Díky!",
                 "Ahoj! Chceme Ti ještě jednou poděkovat, že jsi si koupil naše pivko. Až ho ochutnáš, koukni prosím do Elektronické Garáže, 
-                u objednávky číslo " . $_GET["orderId"] . " jsme Ti změnili stav, takže teď můžeš pivo ohodnotit. Díky!",
+                u objednávky číslo " . $_GET["orderId"] . " jsme Ti změnili stav, takže teď můžeš pivo ohodnotit. No a až ho dopiješ, ozvi se nám, lahve jsou totiž pro účel zajištění hladkého chodu pivovaru vratné 
+                (ale s dostatečně projeveným zájmem o lahev se můžeme nějak domluvit). Díky!",
                 "Tak jak ti chutnalo?",
                 ("Ohodnoť objednávku číslo " . $_GET["orderId"]),
                 $mailToSend
