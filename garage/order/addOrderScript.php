@@ -17,7 +17,7 @@ if (!$stmt->error) {
         "Jo, vidíme to tady. Nová <span style='color: #ffc107'>objednávka číslo " . $orderId . "</span>. Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou <span style='color: #ffc107'>chodit do mailu</span>, 
             nebo je můžeš sledovat přímo v <span style='color: #ffc107'>Elekrtronické Garáži</span>. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko, 
             bude Tě to stát totiž přesně <span style='color: #ffc107'>" . $_POST["priceField"] . "&nbsp;Kč</span>. Co na tom stojí zrovna tolik samozřejmě najdeš u svojí objednávky v Garáži. 
-            S tím přichází i upozornění, <span style='color: #dc3545'>karty bohužel nebereme</span>, díky za pochopení. Dovolím si ještě malou poznámku, my z těch peněz <span style='color: #ffc107'>nijak neprofitujeme</span, 
+            S tím přichází i upozornění, <span style='color: #dc3545'>karty bohužel nebereme</span>, díky za pochopení. Dovolím si ještě malou poznámku, my z těch peněz <span style='color: #ffc107'>nijak neprofitujeme</span>, 
             zase je otočíme na <span style='color: #ffc107'>nákup potřebných surovin</span> pro další várku. <span style='color: #ffc107'>Nejsme komerční, nejsme korporát</span>.",
         "Jo, vidíme to tady. Nová objednávka číslo " . $orderId . ". Je trochu speciální, patří totiž Tobě! Změny ohledně objednávky Ti budou chodit do mailu, 
             nebo je můžeš sledovat přímo v Elekrtronické Garáži. Tak zatím, my to jdeme vyřídit! Ty můžeš zatím rozbít prasátko, 

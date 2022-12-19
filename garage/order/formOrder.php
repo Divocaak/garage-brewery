@@ -20,10 +20,12 @@ if (!isset($_SESSION["currentUser"]["id"])) {
     <h1><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> objednávku</h1>
     <a class="btn btn-outline-primary" href="<?php echo ($_SESSION["currentUser"]["employee"]) ? "orderList.php" : "../homepage.php"; ?>"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
     <?php
-    $stmt = $link->prepare("SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;");
+    $stmt = $link->prepare(isset($_GET["add"])
+        ? "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id WHERE ba.id_status=2;"
+        : "SELECT ba.id, ba.label, ba.created, ba.thirds_pp, ba.pints_pp, be.label AS beerLabel, ba.third_price, ba.pint_price FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id;");
     $stmt->execute();
     if ($result = $stmt->get_result()) {
-        if ($result->num_rows <= 0) {
+        if ($result->num_rows <= 0 && isset($_GET["add"])) {
             echo '<p class="m-5">Ale ne, vypadá to, že nemáme žádnou várku k prodeji. Zkus se vrátit někdy jindy. Až budeme mít várku připravenou k distribuci, dáme Ti vědět mailem, tak tam občas koukni.</p>';
             exit;
         }
