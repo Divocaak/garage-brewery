@@ -7,10 +7,10 @@ $gradation = isset($_POST["gradation"]) ? $_POST["gradation"] : NULL;
 $alcohol = isset($_POST["alcohol"]) ? $_POST["alcohol"] : NULL;
 $color = isset($_POST["color"]) ? $_POST["color"] : NULL;
 $ph = isset($_POST["ph"]) ? $_POST["ph"] : NULL;
-$bitternes = isset($_POST["bitternes"]) ? $_POST["bitternes"] : NULL;
+$bitterness = isset($_POST["bitterness"]) ? $_POST["bitterness"] : NULL;
 
 $stmt->bind_param(
-    "issiiiiiiissididis",
+    "issiiiiiiissididds",
     $_POST["beer"],
     $_POST["label"],
     $_POST["created"],

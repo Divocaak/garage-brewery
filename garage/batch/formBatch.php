@@ -133,7 +133,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
             <label for="gradation" class="form-label">Stupňovitost [°]</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="number" step="0.1" class="form-control" id="alcohol" name="alcohol" step="0.1" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["alcohol"] : ""; ?>">
+            <input type="number" step="0.1" class="form-control" id="alcohol" name="alcohol" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["alcohol"] : ""; ?>">
             <label for="alcohol" class="form-label">Podíl alkoholu [v %]</label>
         </div>
         <div class="form-floating mb-3">
@@ -141,11 +141,11 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
             <label for="color" class="form-label">Barva [EBC]</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="number" step="0.1" class="form-control" id="ph" name="ph" step="0.1" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["ph"] : ""; ?>">
+            <input type="number" step="0.1" class="form-control" id="ph" name="ph" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["ph"] : ""; ?>">
             <label for="ph" class="form-label">pH</label>
         </div>
         <div class="form-floating mb-3">
-            <input type="number" class="form-control" id="bitterness" name="bitterness" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["bitterness"] : ""; ?>">
+            <input type="number" step="0.1" class="form-control" id="bitterness" name="bitterness" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["bitterness"] : ""; ?>">
             <label for="bitterness" class="form-label">Hořkost [IBU]</label>
         </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> várku</button>
