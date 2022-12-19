@@ -6,7 +6,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
 }
 
 $users = [];
-$stmt = $link->prepare("SELECT id, mail, f_name, l_name, instagram, created, employee FROM user;");
+$stmt = $link->prepare("SELECT id, mail, f_name, l_name, instagram, created, employee, legal, known FROM user;");
 $stmt->execute();
 if ($result = $stmt->get_result()) {
     while ($row = $result->fetch_assoc()) {
@@ -15,7 +15,9 @@ if ($result = $stmt->get_result()) {
             "name" => ($row["f_name"] . " " . $row["l_name"]),
             "instagram" => $row["instagram"],
             "created" => $row["created"],
-            "employee" => $row["employee"]
+            "employee" => $row["employee"],
+            "legal" => $row["legal"],
+            "known" => $row["known"]
         ];
     }
 }
@@ -34,6 +36,7 @@ if ($result = $stmt->get_result()) {
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Uživatelé</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
+    <p class="pt-3">18+ (ověřeno):<i class="bi bi-patch-check text-primary ps-2"></i><br>Někdo od někoho: <i class="bi bi-patch-check-fill text-primary ps-2"></i></p>
     <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
             <caption>Seznam uživatelů</caption>
@@ -52,7 +55,7 @@ if ($result = $stmt->get_result()) {
                 foreach ($users as $key => $user) {
                     echo '<tr>
                             <th scope="row">' . $key . '</th>
-                            <td>' . $user["name"] . '</td>
+                            <td>' . $user["name"] . getUserChecks($user["legal"], $user["known"]) . '</td>
                             <td>' . $user["mail"] . '</td>
                             <td>' . $user["instagram"] . '</td>
                             <td>' . date_format(date_create($user["created"]), 'd. m. Y H:i:s') . '</td>
