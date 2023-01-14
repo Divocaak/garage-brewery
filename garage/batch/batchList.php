@@ -9,7 +9,10 @@ $batchesSorted = [];
 $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, ba.thumbnail_name,
     ba.thumbnail_name, ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, 
     s.id AS statusId, s.label AS statusLabel, s.color AS statusColor,
-    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered, (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
+    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered,
+    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
+    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1) AS thirdsMoney,
+    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1) AS pintsMoney,
     ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price, t.label AS typeLabel, t.badge_color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id 
     INNER JOIN status_batch s ON ba.id_status=s.id INNER JOIN beer_type t ON be.id_type=t.id;");
 $stmt->execute();
@@ -57,6 +60,10 @@ if ($result = $stmt->get_result()) {
                     "label" => $row["typeLabel"],
                     "color" => $row["badge_color"]
                 ],
+            ],
+            "money" => [
+                "expected" => ($row["thirds"] * $row["third_price"]) + ($row["pints"] * $row["pint_price"]),
+                "current" => ($row["thirdsMoney"] * $row["third_price"]) + ($row["pintsMoney"] * $row["pint_price"])
             ]
         ];
     }
@@ -101,8 +108,10 @@ if ($result = $stmt->get_result()) {
                 if ($_SESSION["currentUser"]["employee"]) {
                     echo ($batch["thirdsOrdered"] ? $batch["thirdsOrdered"] : "0") . "/" . $batch["thirds"] . " => <span class='text-" . ($thirdsRemaining < 0 ? "danger" : "primary") . "'>" . $thirdsRemaining . "</span> (" . $batch["thirdsPerPerson"] . ', ' . $batch["thirdPrice"] . ' Kč/ks)<br>
                     ' . ($batch["pintsOrdered"] ? $batch["pintsOrdered"] : "0") . "/" . $batch["pints"] . " => <span class='text-" . ($pintsRemaining < 0 ? "danger" : "primary") . "'>" . $pintsRemaining . "</span> (" . $batch["pintsPerPerson"] . ', ' . $batch["pintPrice"] . ' Kč/ks)<br>';
-                    echo ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '
-                    ' . ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '
+                    echo ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light my-2' . (str_contains($batch["emailed"], "n") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=n"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o várce</a>') : "") . '
+                    ' . ($batch["status"]["id"] != 3 ? ('<a class="btn btn-outline-light my-2' . (str_contains($batch["emailed"], "s") ? " disabled" : "") . '" href="batchMail.php?batchId=' . $key . '&mail=s"><i class="bi bi-envelope pe-1"></i><i class="bi bi-send pe-2"></i>Informovat o prodeji</a>') : "") . '
+                    <p>Očekávaný zisk: <b>' . $batch["money"]["expected"] . ' Kč</b><br>
+                    Aktuální zisk (status Zaplacené a vyšší): <b><span class="text-primary">' . $batch["money"]["current"] . ' Kč</span></b></p>
                     <a class="btn btn-outline-secondary" href="formBatch.php?batchId=' . $key . '"><i class="bi bi-pencil"></i></a>
                     <a class="btn btn-outline-danger deleteBtn" data-batch-id=' . $key . '><i class="bi bi-trash"></i></a>';
                 }
