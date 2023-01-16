@@ -30,6 +30,7 @@ if (!$stmt->error) {
         ("Objednávka číslo " . $orderId),
         $email
     );
+    sendToEmployees($link, "Máme novou objednávku! Koukněte na to a přiřaďte ji k tomu, pro koho bude nejjednodušší to řešit", "PG - Nová objednávka");
 }
 ?>
 

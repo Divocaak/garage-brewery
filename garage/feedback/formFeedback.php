@@ -30,7 +30,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
             </div>
             <div class="col-12">
                 <div class="form-floating mt-3">
-                    <input type="number" class="form-control" id="temp" name="temp" required>
+                    <input type="number" class="form-control" id="temp" name="temp" required step="0.1">
                     <label for="temp" class="text-dark">Odhadovaná teplota piva při konzumaci [°C]</label>
                     <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v závislosti na teplotě</div>
                 </div>
@@ -46,7 +46,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="taste" name="taste">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_taste" name="n_taste" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_taste" name="n_taste" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_taste" class="text-dark">Poznámky k chuti</label>
                 </div>
             </div>
@@ -56,7 +56,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="bitterness" name="bitterness">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_bitterness" name="n_bitterness" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_bitterness" name="n_bitterness" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_bitterness" class="text-dark">Poznámky k hořkosti</label>
                 </div>
             </div>
@@ -66,7 +66,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="scent" name="scent">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_scent" name="n_scent" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_scent" name="n_scent" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_scent" class="text-dark">Poznámky k vůni</label>
                 </div>
             </div>
@@ -76,7 +76,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="fullness" name="fullness">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_fullness" name="n_fullness" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_fullness" name="n_fullness" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_fullness" class="text-dark">Poznámky k plnosti</label>
                 </div>
             </div>
@@ -86,7 +86,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="frothiness" name="frothiness">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_frothiness" name="n_frothiness" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_frothiness" name="n_frothiness" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_frothiness" class="text-dark">Poznámky k pěnivosti</label>
                 </div>
             </div>
@@ -96,7 +96,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="clarity" name="clarity">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_clarity" name="n_clarity" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_clarity" name="n_clarity" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_clarity" class="text-dark">Poznámky k čirosti</label>
                 </div>
             </div>
@@ -106,7 +106,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
                     <input type="range" class="form-range" min="0" max="10" value="5" id="overall" name="overall">
                 </div>
                 <div class="form-floating">
-                    <textarea class="form-control" id="n_overall" name="n_overall" style="height: 100px"></textarea>
+                    <textarea class="form-control" id="n_overall" name="n_overall" style="height: 100px" maxlength="100"></textarea>
                     <label for="n_overall" class="text-dark">Poznámky k pivu celkově</label>
                 </div>
             </div>

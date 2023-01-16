@@ -40,7 +40,7 @@ if ($result = $stmt->get_result()) {
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body" onclick="window.location = \'beerDetail.php?id=' . $key . '\';">
                             <div class="card-wrapper">
-                                <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $beer["thumbnailName"] . '\');">
+                                <div class="card-background-image" style="background-image: url(\'../imgBank/bank/' . $beer["thumbnailName"] . '\');">
                                     <div class="card-fade"></div>
                                 </div>            
                             </div>

@@ -18,6 +18,7 @@ if ($_POST["password"] == $_POST["passwordCheck"]) {
             "Vítej v Elektronické Garáži",
             $_POST["email"]
         );
+        sendToEmployees($link, "Právě teď se někdo registroval, prosím, zkontrolujte ho a pokud je to možné, upravte mu záznam v databázi (někdo od někoho, 18+)", "PG - Nový uživatel");
     } else {
         $e = $stmt->error;
     }

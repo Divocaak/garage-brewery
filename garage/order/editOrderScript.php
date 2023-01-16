@@ -50,6 +50,7 @@ if (!$stmt->error) {
                 ("Zrušení objednávky číslo " . $_GET["orderId"]),
                 $mailToSend
             );
+            sendToEmployees($link, "Někdo si zrušil objednávku (nebo mu jí někdo zrušil?). Koukněte na to a kdyžtak upravte počty", "PG - Zrušená objednávka");
         }
 
         if ($_POST["status"] == 3) {

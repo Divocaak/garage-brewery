@@ -60,7 +60,8 @@ $_SESSION["types"] = $types;
 <body class="m-md-5 p-md-5 p-3 text-light bg-dark">
     <h1>Nastavení</h1>
     <a class="btn btn-outline-primary" href="../homepage.php"><i class="bi bi-arrow-left-circle pe-2"></i>Zpět</a>
-    <a class="btn btn-primary m-1" href="testMail.php"><i class="bi bi-send pe-2"></i>test mail</a>
+    <a class="btn btn-primary m-1" href="testMail.php"><i class="bi bi-send pe-2"></i>test mail divokyvojta@gmail.com</a>
+    <a class="btn btn-primary m-1" href="testEmpMail.php"><i class="bi bi-send pe-2"></i>test mail employees</a>
 
     <div class="table-responsive">
         <table class="mt-3 table table-striped table-hover table-dark">
@@ -104,10 +105,10 @@ $_SESSION["types"] = $types;
     </form>
     <div class="row">
         <?php
-        $files = scandir("../../imgs/bank");
+        $files = scandir("../../imgBank/bank");
         foreach ($files as $file) {
             if (strlen($file) > 2) {
-                $path = "../../imgs/bank/" . $file;
+                $path = "../../imgBank/bank/" . $file;
                 echo '<div class="col-12 col-md-4 my-2">
                         <div class="imgThumbnailWrapper">
                             <div style="background-image: url(\'' . $path . '\');">
@@ -119,10 +120,10 @@ $_SESSION["types"] = $types;
             }
         }
 
-        $files = scandir("../../imgs/stickers");
+        $files = scandir("../../imgBank/stickers");
         foreach ($files as $file) {
             if (strlen($file) > 2) {
-                $path = "../../imgs/stickers/" . $file;
+                $path = "../../imgBank/stickers/" . $file;
                 echo '<div class="col-12 col-md-4 my-2">
                         <div class="imgThumbnailWrapper">
                             <div style="background-image: url(\'' . $path . '\');">

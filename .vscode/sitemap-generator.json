@@ -1,0 +1,26 @@
+{
+  "sitemap.xml": {
+    "Protocol": "https",
+    "DomainName": "pivovargaraz.cz",
+    "Root": "./",
+    "IncludeExt": [
+      ".html",
+      ".php"
+    ],
+    "Exclude": [
+      "vendor/*",
+      "*/config.php"
+    ],
+    "TagsToInclude": [
+      "priority",
+      "lastmod"
+    ],
+    "DefaultChangeFrequency": "monthly",
+    "TabCharacters": "\t",
+    "bIncludeWWW": true,
+    "bRemoveFileExtentions": false,
+    "bUseTrailingSlash": false,
+    "bAutomaticallyUpdateSitemap": true,
+    "bMinimized": false
+  }
+}

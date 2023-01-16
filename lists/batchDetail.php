@@ -98,7 +98,7 @@ function writeTableData($data, $suffix = "")
 </head>
 
 <body class="text-light bg-dark text-center">
-    <?php echo $batch["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');"></div>' : ''; ?>
+    <?php echo $batch["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgBank/bank/' . $batch["thumbnailName"] . '\');"></div>' : ''; ?>
     <div class="m-md-5 p-md-5 p-3">
         <h1><?php echo $batch["id"] . ": " . "<span class='text-primary'>" . $batch["label"] . "</span>"; ?></h1>
         <?php
@@ -148,7 +148,7 @@ function writeTableData($data, $suffix = "")
         <?php
         if ($batch["stickerName"] != "") {
             echo '<figure class="figure">
-                    <img src="../imgs/stickers/' . $batch["stickerName"] . '" class="figure-img img-fluid rounded" alt="...">
+                    <img src="../imgBank/stickers/' . $batch["stickerName"] . '" class="figure-img img-fluid rounded" alt="...">
                     <figcaption class="figure-caption">Etiketa vytvořena <span class="text-primary">speciálně</span> pro tuto várku</figcaption>
                 </figure>';
         } else {
@@ -156,7 +156,7 @@ function writeTableData($data, $suffix = "")
         }
         ?>
     </div>
-    <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgs/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : ''; ?>
+    <?php echo $batch["beer"]["thumbnailName"] != "" ? '<div class="cover-image" style="background-image: url(\'../imgBank/bank/' . $batch["beer"]["thumbnailName"] . '\');"></div>' : ''; ?>
     <div class="m-md-5 p-md-5 p-3 ">
         <p class="text-muted">Uvařeno z piva</p>
         <h1><?php echo "<span class='me-2 badge rounded-pill' style='background-color:#" . $batch["beer"]["type"]["color"] . ";'>" . $batch["beer"]["type"]["label"] . "</span>" . $batch["beer"]["id"] . ": <span class='text-primary'>" . $batch["beer"]["label"] . "</span>"; ?></h1>
@@ -199,7 +199,7 @@ dopíše."; ?></p>
                     echo '<div class="col-12 col-md-6 p-2 text-center">
                             <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
                                 <div class="card-wrapper">
-                                    <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');">
+                                    <div class="card-background-image" style="background-image: url(\'../imgBank/bank/' . $batch["thumbnailName"] . '\');">
                                         <div class="card-fade"></div>
                                     </div>            
                                 </div>

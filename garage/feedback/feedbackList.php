@@ -150,7 +150,7 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                     echo '<tr class="fw-bold"><th scope="row" colspan="3"></th>';
                     foreach ($feedbackSorted["sums"] as $key => $sum) {
                         if ($key != "temperature") {
-                            echo "<td class='text-primary'>⌀ " . array_sum($sum) / count($feedbackSorted["sums"][$key]) . "</td>";
+                            echo "<td class='text-primary'>⌀ " . round(array_sum($sum) / count($feedbackSorted["sums"][$key]), 1) . "</td>";
                         }
                     }
                     echo '<td></td></tr>';
