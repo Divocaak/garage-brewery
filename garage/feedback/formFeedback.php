@@ -30,7 +30,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
             </div>
             <div class="col-12">
                 <div class="form-floating mt-3">
-                    <input type="number" class="form-control" id="temp" name="temp" required>
+                    <input type="number" class="form-control" id="temp" name="temp" required step="0.1">
                     <label for="temp" class="text-dark">Odhadovaná teplota piva při konzumaci [°C]</label>
                     <div id="tempHelp" class="form-text">Pomůže nám zjistit, jak se naše pivo mění v závislosti na teplotě</div>
                 </div>

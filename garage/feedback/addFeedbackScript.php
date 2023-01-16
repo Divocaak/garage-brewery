@@ -9,7 +9,7 @@ try {
     $link->autocommit(false);
     $stmt = $link->prepare("INSERT INTO feedback (id_order, g_temperature, date_consumed, g_taste, g_bitterness, g_scent, g_fullness, g_frothiness, g_clarity, g_overall, n_taste, n_bitterness, n_scent, n_fullness, n_frothiness, n_clarity, n_overall)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-    $stmt->bind_param("iisiiiiiiisssssss", $_POST["orderId"], $_POST["temp"], $_POST["date"], $_POST["taste"], $_POST["bitterness"], $_POST["scent"], $_POST["fullness"], $_POST["frothiness"], $_POST["clarity"],  $_POST["overall"], $_POST["n_taste"], $_POST["n_bitterness"], $_POST["n_scent"], $_POST["n_fullness"], $_POST["n_frothiness"], $_POST["n_clarity"], $_POST["n_overall"]);
+    $stmt->bind_param("idsiiiiiiisssssss", $_POST["orderId"], $_POST["temp"], $_POST["date"], $_POST["taste"], $_POST["bitterness"], $_POST["scent"], $_POST["fullness"], $_POST["frothiness"], $_POST["clarity"],  $_POST["overall"], $_POST["n_taste"], $_POST["n_bitterness"], $_POST["n_scent"], $_POST["n_fullness"], $_POST["n_frothiness"], $_POST["n_clarity"], $_POST["n_overall"]);
     $stmt->execute();
 
     $stmt = $link->prepare("UPDATE beer_order SET id_status=5 WHERE id=?;");
