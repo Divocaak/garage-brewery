@@ -53,7 +53,7 @@ $_SESSION["beers"] = $beers;
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body">
                             <div class="card-wrapper" onclick="window.open(\'../../lists/beerDetail.php?id=' . $key . '&bckBtn=0\', \'_blank\');">
-                                <div class="card-background-image" style="background-image: url(\'../../imgs/bank/' . $beer["thumbnailName"] . '\');">
+                                <div class="card-background-image" style="background-image: url(\'../../imgBank/bank/' . $beer["thumbnailName"] . '\');">
                                     <div class="card-fade"></div>
                                 </div>            
                             </div>

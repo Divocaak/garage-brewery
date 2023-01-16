@@ -105,10 +105,10 @@ $_SESSION["types"] = $types;
     </form>
     <div class="row">
         <?php
-        $files = scandir("../../imgs/bank");
+        $files = scandir("../../imgBank/bank");
         foreach ($files as $file) {
             if (strlen($file) > 2) {
-                $path = "../../imgs/bank/" . $file;
+                $path = "../../imgBank/bank/" . $file;
                 echo '<div class="col-12 col-md-4 my-2">
                         <div class="imgThumbnailWrapper">
                             <div style="background-image: url(\'' . $path . '\');">
@@ -120,10 +120,10 @@ $_SESSION["types"] = $types;
             }
         }
 
-        $files = scandir("../../imgs/stickers");
+        $files = scandir("../../imgBank/stickers");
         foreach ($files as $file) {
             if (strlen($file) > 2) {
-                $path = "../../imgs/stickers/" . $file;
+                $path = "../../imgBank/stickers/" . $file;
                 echo '<div class="col-12 col-md-4 my-2">
                         <div class="imgThumbnailWrapper">
                             <div style="background-image: url(\'' . $path . '\');">

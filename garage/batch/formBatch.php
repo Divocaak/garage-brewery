@@ -93,7 +93,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                 <option selected value=""></option>
                 <?php
                 $selectedImage;
-                $files = scandir("../../imgs/bank");
+                $files = scandir("../../imgBank/bank");
                 foreach ($files as $file) {
                     if (strlen($file) > 2) {
                         $isSelected = !isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["thumbnailName"] == $file) : (isset($selectedImage));
@@ -106,14 +106,14 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
             <label for="thumbnailName" class="form-label">Jméno obrázku</label>
         </div>
         <div class="mb-3 <?php echo $selectedImage == null ? "d-none" : "d-flex"; ?>">
-            <img id="thumbnailPreview" src="../../imgs/bank/<?php echo $selectedImage; ?>" class="w-50">
+            <img id="thumbnailPreview" src="../../imgBank/bank/<?php echo $selectedImage; ?>" class="w-50">
         </div>
         <div class="mb-3 form-floating">
             <select class="form-select" id="stickerName" name="stickerName">
                 <option selected value=""></option>
                 <?php
                 $selectedSticker;
-                $files = scandir("../../imgs/stickers");
+                $files = scandir("../../imgBank/stickers");
                 foreach ($files as $file) {
                     if (strlen($file) > 2) {
                         $isSelected = !isset($_GET["add"]) ? ($_SESSION["batches"][$_GET["batchId"]]["stickerName"] == $file) : (isset($selectedSticker));
@@ -126,7 +126,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
             <label for="stickerName" class="form-label">Jméno etikety</label>
         </div>
         <div class="mb-3 <?php echo $selectedSticker == null ? "d-none" : "d-flex"; ?>">
-            <img id="stickerPreview" src="../../imgs/stickers/<?php echo $selectedSticker; ?>" class="w-50">
+            <img id="stickerPreview" src="../../imgBank/stickers/<?php echo $selectedSticker; ?>" class="w-50">
         </div>
         <div class="form-floating mb-3">
             <input type="number" class="form-control" id="gradation" name="gradation" min="0" value="<?php echo !isset($_GET["add"]) ? $_SESSION["batches"][$_GET["batchId"]]["gradation"] : ""; ?>">
@@ -163,7 +163,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                     $("#thumbnailPreview").parent().removeClass("d-none");
                 }
 
-                $("#thumbnailPreview").attr("src", "../../imgs/bank/" + imgName);
+                $("#thumbnailPreview").attr("src", "../../imgBank/bank/" + imgName);
             }
             if (imgName == "" && !$("#thumbnailPreview").parent().hasClass("d-none")) {
                 $("#thumbnailPreview").parent().addClass("d-none");
@@ -177,7 +177,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                     $("#stickerPreview").parent().removeClass("d-none");
                 }
 
-                $("#stickerPreview").attr("src", "../../imgs/stickers/" + stickerName);
+                $("#stickerPreview").attr("src", "../../imgBank/stickers/" + stickerName);
             }
             if (stickerName == "" && !$("#stickerPreview").parent().hasClass("d-none")) {
                 $("#stickerPreview").parent().addClass("d-none");

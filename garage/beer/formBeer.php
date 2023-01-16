@@ -54,7 +54,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                 <option selected value=""></option>
                 <?php
                 $selectedImage;
-                $files = scandir("../../imgs/bank");
+                $files = scandir("../../imgBank/bank");
                 foreach ($files as $file) {
                     if (strlen($file) > 2) {
                         $isSelected = !isset($_GET["add"]) ? ($_SESSION["beers"][$_GET["beerId"]]["thumbnailName"] == $file) : (isset($selectedImage));
@@ -67,7 +67,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
             <label for="thumbnailName" class="form-label">Jméno obrázku</label>
         </div>
         <div class="mb-3 <?php echo $selectedImage == null ? "d-none" : "d-flex"; ?>">
-            <img id="thumbnailPreview" src="../../imgs/bank/<?php echo $selectedImage; ?>" class="w-50">
+            <img id="thumbnailPreview" src="../../imgBank/bank/<?php echo $selectedImage; ?>" class="w-50">
         </div>
         <button type="submit" class="btn btn-success"><i class="pe-2 bi bi-<?php echo isset($_GET["add"]) ? "plus-circle" : "pencil"; ?>"></i><?php echo isset($_GET["add"]) ? "Přidat" : "Upravit"; ?> Pivo</button>
     </form>
@@ -84,7 +84,7 @@ if (!isset($_SESSION["currentUser"]["id"]) || !$_SESSION["currentUser"]["employe
                     $("#thumbnailPreview").parent().removeClass("d-none");
                 }
 
-                $("#thumbnailPreview").attr("src", "../../imgs/bank/" + imgName);
+                $("#thumbnailPreview").attr("src", "../../imgBank/bank/" + imgName);
             }
             if (imgName == "" && !$("#thumbnailPreview").parent().hasClass("d-none")) {
                 $("#thumbnailPreview").parent().addClass("d-none");

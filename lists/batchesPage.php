@@ -54,7 +54,7 @@ if ($result = $stmt->get_result()) {
                 echo '<div class="col-12 col-md-6 p-2 text-center">
                         <div class="card-body" onclick="window.location = \'batchDetail.php?id=' . $key . '\';">
                             <div class="card-wrapper">
-                                <div class="card-background-image" style="background-image: url(\'../imgs/bank/' . $batch["thumbnailName"] . '\');">
+                                <div class="card-background-image" style="background-image: url(\'../imgBank/bank/' . $batch["thumbnailName"] . '\');">
                                 <div class="card-fade"></div>
                             </div>            
                         </div>

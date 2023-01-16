@@ -1,4 +1,3 @@
 config.php
 vendor/
-imgs/bank/
-imgs/stickers/
+imgBank/
