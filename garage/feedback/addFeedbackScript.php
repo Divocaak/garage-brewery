@@ -29,6 +29,7 @@ try {
         ("Hodnocení objednávky číslo " . $_POST["orderId"]),
         $_SESSION["currentUser"]["mail"]
     );
+    sendToEmployees($link, "Do Elektronické Garáže přistálo nové hodnocení, koukněte na to", "PG - Nové hodnocení");
 
     isset($stmt) && $stmt->close();
     $link->autocommit(true);

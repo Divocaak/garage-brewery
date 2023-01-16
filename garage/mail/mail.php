@@ -20,6 +20,48 @@ function getAllEmails($link)
     return $emails;
 }
 
+function sendToEmployees($link, $body, $title)
+{
+    $emails = [];
+    $stmt = $link->prepare("SELECT mail FROM user WHERE employee=1;");
+    $stmt->execute();
+    if ($result = $stmt->get_result()) {
+        while ($row = $result->fetch_assoc()) {
+            $emails[] = $row["mail"];
+        }
+    }
+
+    $mail = new PHPMailer(true);
+    try {
+        $mail->CharSet = 'UTF-8';
+        $mail->isSMTP();
+        $mail->Host = SMTP_HOST;
+        $mail->SMTPAuth = true;
+        $mail->Username = SMTP_EMAIL;
+        $mail->Password = SMTP_PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465;
+
+        $mail->addReplyTo(SMTP_EMAIL, "Pivovar Garáž - Elektronická Garáž");
+        $mail->setFrom(SMTP_EMAIL, 'Pivovar Garáž - Elektronická Garáž');
+        $mail->addAddress(SMTP_EMAIL);
+        foreach ($emails as $add) {
+            $mail->addBCC($add);
+        }
+
+        $mail->Subject = $title;
+        $mail->isHTML(true);
+        $message = '<h2>' . $title . '</h2><p>' . $body . '</p>';
+        $mail->Body = $message;
+        $mail->AltBody = $message;
+
+        $mail->send();
+        echo '<script>alert("Notifikace do emailu byla odeslána!");</script>';
+    } catch (Exception $e) {
+        echo '<script>alert("Email se nepodařilo odeslat: ' . $mail->ErrorInfo . '");</script>';
+    }
+}
+
 function sendMail($body, $bodyAlt, $title, $subject, $address)
 {
     $mail = new PHPMailer(true);
