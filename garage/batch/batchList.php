@@ -9,10 +9,10 @@ $batchesSorted = [];
 $stmt = $link->prepare("SELECT ba.id, be.id AS beerId, be.label AS beerLabel, ba.label AS batchLabel, ba.created, ba.thirds, ba.pints, ba.thumbnail_name,
     ba.thumbnail_name, ba.sticker_name, ba.description, ba.gradation, ba.alcohol, ba.color, ba.ph, ba.bitterness, 
     s.id AS statusId, s.label AS statusLabel, s.color AS statusColor,
-    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS thirdsOrdered,
-    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status<>4) AS pintsOrdered,
-    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1) AS thirdsMoney,
-    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1) AS pintsMoney,
+    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status <> 4) AS thirdsOrdered,
+    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status <> 4) AS pintsOrdered,
+    (SELECT SUM(o.thirds) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1 AND o.id_status <> 4) AS thirdsMoney,
+    (SELECT SUM(o.pints) FROM beer_order o WHERE o.id_batch=ba.id AND o.id_status > 1 AND o.id_status <> 4) AS pintsMoney,
     ba.emailed, ba.thirds_pp, ba.pints_pp, ba.third_price, ba.pint_price, t.label AS typeLabel, t.badge_color FROM batch ba INNER JOIN beer be ON ba.id_beer=be.id 
     INNER JOIN status_batch s ON ba.id_status=s.id INNER JOIN beer_type t ON be.id_type=t.id;");
 $stmt->execute();
