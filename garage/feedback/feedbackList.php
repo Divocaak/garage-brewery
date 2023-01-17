@@ -289,7 +289,7 @@ $_SESSION["feedbacks"] = $feedbacksSorted;
                         $.each(dataDecoded["sums"][jsonKey], function() {
                             sum += parseFloat(this) || 0;
                         })
-                        $("#detail" + scoreKeys[i] + "Average").text("⌀ " + (sum / dataDecoded["sums"][jsonKey].length));
+                        $("#detail" + scoreKeys[i] + "Average").text("⌀ " + (sum / dataDecoded["sums"][jsonKey].length).toFixed(1));
                         $("#detail" + scoreKeys[i] + "Note").text(dataDecoded["feedback"]["data"][jsonKey]["note"]);
                     }
                 });

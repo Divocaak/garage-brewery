@@ -8,7 +8,7 @@ if (!isset($_SESSION["currentUser"]["id"])) {
 $myOrders = [];
 $stmt = $link->prepare("SELECT bo.id, bo.thirds, bo.pints, bo.created, b.id AS batchId, b.label AS batchLabel, b.third_price, b.pint_price, bs.label AS batchStatusLabel, bs.color AS batchStatusColor,
     os.id AS ordedStatusId, os.label AS ordedStatusLabel, os.color AS ordedStatusColor FROM beer_order bo INNER JOIN batch b ON bo.id_batch=b.id INNER JOIN status_batch bs ON b.id_status=bs.id 
-    INNER JOIN status_order os ON bo.id_status=os.id WHERE id_customer=?;");
+    INNER JOIN status_order os ON bo.id_status=os.id WHERE id_customer=? ORDER BY os.id ASC");
 $stmt->bind_param("i", $_SESSION["currentUser"]["id"]);
 $stmt->execute();
 if ($result = $stmt->get_result()) {

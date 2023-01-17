@@ -3,15 +3,15 @@
 	<url>
 		<loc>https://www.pivovargaraz.cz</loc>
 		<priority>1.00</priority>
-		<lastmod>2023-01-16</lastmod>
+		<lastmod>2023-01-17</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/lists/beersPage.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/homepage.php</loc>
 		<priority>0.60</priority>
-		<lastmod>2023-01-16</lastmod>
+		<lastmod>2023-01-17</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/lists/beerDetail.php</loc>
+		<loc>https://www.pivovargaraz.cz/lists/batchDetail.php</loc>
 		<priority>0.60</priority>
 		<lastmod>2023-01-16</lastmod>
 	</url>
@@ -21,142 +21,42 @@
 		<lastmod>2023-01-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/lists/batchDetail.php</loc>
+		<loc>https://www.pivovargaraz.cz/lists/beerDetail.php</loc>
 		<priority>0.60</priority>
 		<lastmod>2023-01-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/homepage.php</loc>
+		<loc>https://www.pivovargaraz.cz/lists/beersPage.php</loc>
 		<priority>0.60</priority>
-		<lastmod>2022-11-15</lastmod>
+		<lastmod>2023-01-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/userList.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/addBatchScript.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-12-19</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/registerScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/batchList.php</loc>
 		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
+		<lastmod>2023-01-17</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/register.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/logoutScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/batchMail.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/loginScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/delBatchScript.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/user/login.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/testMail.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/testEmpMail.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/settings.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/qr/generateScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/qr/formQr.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/order/orderList.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/order/formOrder.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/editBatchScript.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-12-19</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/order/editOrderScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/order/delOrderScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/order/addOrderScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/mail/mail.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/feedback/getFeedbackData.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/feedback/formFeedback.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/feedback/feedbackList.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/feedback/addFeedbackScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/beer/formBeer.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2023-01-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/beer/editBeerScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/beer/delBeerScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/beer/beerMail.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-12-16</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/beer/beerList.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/batch/formBatch.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2023-01-16</lastmod>
 	</url>
@@ -166,52 +66,137 @@
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/formBatch.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/beer/beerList.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2023-01-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/editBatchScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/beer/beerMail.php</loc>
 		<priority>0.40</priority>
-		<lastmod>2022-12-19</lastmod>
+		<lastmod>2022-12-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/delBatchScript.php</loc>
-		<priority>0.40</priority>
-		<lastmod>2022-11-15</lastmod>
-	</url>
-	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/batchMail.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/beer/delBeerScript.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/batchList.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/beer/editBeerScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/beer/formBeer.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2023-01-16</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/batch/addBatchScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/feedback/addFeedbackScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/feedback/feedbackList.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-17</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/feedback/formFeedback.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/feedback/getFeedbackData.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/mail/mail.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/order/addOrderScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/order/delOrderScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/order/editOrderScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/order/formOrder.php</loc>
 		<priority>0.40</priority>
 		<lastmod>2022-12-19</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/types/formType.php</loc>
-		<priority>0.20</priority>
+		<loc>https://www.pivovargaraz.cz/garage/order/orderList.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/qr/formQr.php</loc>
+		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/types/editTypeScript.php</loc>
-		<priority>0.20</priority>
+		<loc>https://www.pivovargaraz.cz/garage/qr/generateScript.php</loc>
+		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/types/delTypeScript.php</loc>
-		<priority>0.20</priority>
+		<loc>https://www.pivovargaraz.cz/garage/settings/settings.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/testEmpMail.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/testMail.php</loc>
+		<priority>0.40</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/types/addTypeScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/user/login.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/user/loginScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/user/logoutScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/user/register.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/user/registerScript.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2023-01-16</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/user/userList.php</loc>
+		<priority>0.40</priority>
+		<lastmod>2022-12-19</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/bank/addImageScript.php</loc>
 		<priority>0.20</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>
@@ -221,7 +206,22 @@
 		<lastmod>2022-11-15</lastmod>
 	</url>
 	<url>
-		<loc>https://www.pivovargaraz.cz/garage/settings/bank/addImageScript.php</loc>
+		<loc>https://www.pivovargaraz.cz/garage/settings/types/addTypeScript.php</loc>
+		<priority>0.20</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/types/delTypeScript.php</loc>
+		<priority>0.20</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/types/editTypeScript.php</loc>
+		<priority>0.20</priority>
+		<lastmod>2022-11-15</lastmod>
+	</url>
+	<url>
+		<loc>https://www.pivovargaraz.cz/garage/settings/types/formType.php</loc>
 		<priority>0.20</priority>
 		<lastmod>2022-11-15</lastmod>
 	</url>

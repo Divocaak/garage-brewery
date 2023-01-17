@@ -56,8 +56,15 @@
     float: right;
 }
 
-.glow{
+.glow {
     -webkit-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
     -moz-box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
     box-shadow: 0px 0px 10px 0px rgba(108, 117, 125, 0.75);
+}
+
+.right-content{
+    position: relative;
+    /* same as ms-5 my-5 */
+    right: 3rem;
+    top: 3rem;
 }
