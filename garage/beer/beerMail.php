@@ -3,6 +3,10 @@ require_once "../config.php";
 require_once "../mail/mail.php";
 session_start();
 
+if (!isset($_SESSION["currentUser"]["id"]) || !isset($_GET["beerId"])) {
+    header("Location: ../user/login.php");
+}
+
 $stmt = $link->prepare("UPDATE beer SET emailed=1 WHERE id=?;");
 $stmt->bind_param("i", $_GET["beerId"]);
 $stmt->execute();
