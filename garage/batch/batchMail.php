@@ -3,6 +3,10 @@ require_once "../config.php";
 require_once "../mail/mail.php";
 session_start();
 
+if (!isset($_SESSION["currentUser"]["id"]) || !isset($_GET["mail"]) || !isset($_GET["batchId"])) {
+    header("Location: ../user/login.php");
+}
+
 $stmt = $link->prepare("UPDATE batch SET emailed=? WHERE id=?;");
 $val = $_SESSION["batches"][$_GET["batchId"]]["emailed"] . $_GET["mail"];
 $stmt->bind_param("si", $val, $_GET["batchId"]);
